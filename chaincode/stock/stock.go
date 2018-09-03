@@ -24,8 +24,6 @@ type Product struct {
 	Num string `json:"num"`
 	// 规格
 	Spec string `json:"spec"`
-	// 最小包装
-	MinPack float64 `json:"minPack"`
 	// 组别、类目
 	Group string `json:"group"`
 	// 描述
@@ -162,7 +160,7 @@ func (s *StockContract) createWarehouse(stub shim.ChaincodeStubInterface, args [
 {"Args":["createLocation","新宁","1-1","1-1"]}
  */
 func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	if len(args) != 2 || len(args) != 3 {
+	if len(args) != 2 && len(args) != 3 {
 		return shim.Error("Incorrect number of arguments. Expecting 2 or 3")
 	}
 	warehouseName := args[0]
@@ -201,12 +199,12 @@ func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []
 
 /**
 创建物料
-{"Args":["createProduct",num,spec,group,desc,brand,unit,minpack]}
-{"Args":["createProduct","EMVA500ADA470MF80G","EMVA500ADA470MF80G","电容","铝电解电容","贵弥功NCC","PCS","900"]}
+{"Args":["createProduct",num,spec,group,desc,brand,unit]}
+{"Args":["createProduct","EMVA500ADA470MF80G","EMVA500ADA470MF80G","电容","铝电解电容","贵弥功NCC","PCS"]}
  */
 func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	if len(args) != 7 {
-		return shim.Error("Incorrect number of arguments. Expecting 7")
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
 	productBytes, err := stub.GetState(args[0])
 	if err != nil {
@@ -215,10 +213,6 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 	if productBytes != nil {
 		return shim.Error("The product already exists")
 	}
-	minPack, err := strconv.ParseFloat(args[6], 64)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
 	product := Product{
 		Num: args[0],
 		Spec: args[1],
@@ -226,7 +220,6 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 		Desc: args[3],
 		Brand: args[4],
 		Unit: args[5],
-		MinPack: minPack,
 	}
 	productBytes, err = json.Marshal(product)
 	if err != nil {

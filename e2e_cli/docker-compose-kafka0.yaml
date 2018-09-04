@@ -8,6 +8,7 @@ version: '2'
 services:
   kafka0:
     container_name: kafka0
+    hostname: kafka0
     extends:
       file: base/docker-compose-base.yaml
       service: kafka

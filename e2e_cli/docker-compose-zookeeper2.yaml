@@ -8,6 +8,7 @@ version: '2'
 services:
   zookeeper2:
     container_name: zookeeper2
+    hostname: zookeeper2
     extends:
       file: base/docker-compose-base.yaml
       service: zookeeper

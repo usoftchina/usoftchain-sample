@@ -44,10 +44,7 @@
 
 ### 2.环境配置
 ```shell
-#go
-wget https://studygolang.com/dl/golang/go1.10.3.linux-amd64.tar.gz
-tar -C /usr/local/ -xzf go1.10.3.linux-amd64.tar.gz
-#vi /etc/profile
+#先安装go、docker环境
 go get github.com/hyperledger/fabric
 #按官方教程编译
 cd go/src/github.com/hyperledger/fabric/examples/e2e_cli

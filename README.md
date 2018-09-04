@@ -1,6 +1,8 @@
-## 调试
+## 单机调试
 
 ```shell
+   # 开发环境在192.168.0.174
+   ssh root@192.168.0.174
    go get github.com/usoftchina/usoftchain-sample
    cd go/src/github.com/usoftchina/usoftchain-sample/chaincode-docker-devmode/
    docker-compose -f docker-compose-simple.yaml up -d
@@ -20,9 +22,24 @@
      peer chaincode invoke -n stockcontract -c '{"Args":["createLocation","天派材料良品仓","1-1"]}' -C myc
      peer chaincode invoke -n stockcontract -c '{"Args":["createProduct","EMVA500ADA470MF80G","EMVA500ADA470MF80G","电容","铝电解电容","贵弥功NCC","PCS"]}' -C myc
      peer chaincode invoke -n stockcontract -c '{"Args":["initStock","91440300319521190W","EMVA500ADA470MF80G","新宁","1-1","1000.00"]}' -C myc
-     # return stock record
-     peer chaincode invoke -n stockcontract -c '{"Args":["transferStock","91440300778798789B","天派材料良品仓","1-1",(stock record number),"800.00"]}' -C myc
-     # return stock record
-     peer chaincode invoke -n stockcontract -c '{"Args":["queryStock",(stock record number)]}' -C myc
+     # "{\"num\":\"201809039811064342\",\"accountNum\":\"91440300319521190W\",\"productNum\":\"EMVA500ADA470MF80G\",\"quantity\":1000,\"warehouseName\":\"\346\226\260\345\256\201\",\"locationName\":\"1-1\",\"preNum\":\"\",\"Indate\":\"2018-09-03T13:25:06.654982388Z\",\"stockType\":\"init\"}"
+     peer chaincode invoke -n stockcontract -c '{"Args":["transferStock","91440300778798789B","天派材料良品仓","1-1","201809039811064342","800.00"]}' -C myc
+     # "{\"num\":\"201809039812049459\",\"accountNum\":\"91440300778798789B\",\"productNum\":\"EMVA500ADA470MF80G\",\"quantity\":800,\"warehouseName\":\"\345\244\251\346\264\276\346\235\220\346\226\231\350\211\257\345\223\201\344\273\223\",\"locationName\":\"1-1\",\"preNum\":\"201809039811064342\",\"Indate\":\"2018-09-03T13:26:44.315009078Z\",\"stockType\":\"trade\"}"
+     peer chaincode invoke -n stockcontract -c '{"Args":["queryStock","201809039811064342"]}' -C myc
+     # "{\"num\":\"201809039811064342\",\"accountNum\":\"91440300319521190W\",\"productNum\":\"EMVA500ADA470MF80G\",\"quantity\":200,\"warehouseName\":\"\346\226\260\345\256\201\",\"locationName\":\"1-1\",\"preNum\":\"\",\"Indate\":\"2018-09-03T13:25:06.654982388Z\",\"stockType\":\"init\"}"
+     peer chaincode invoke -n stockcontract -c '{"Args":["queryStock","201809039812049459"]}' -C myc
+     # "{\"num\":\"201809039812049459\",\"accountNum\":\"91440300778798789B\",\"productNum\":\"EMVA500ADA470MF80G\",\"quantity\":800,\"warehouseName\":\"\345\244\251\346\264\276\346\235\220\346\226\231\350\211\257\345\223\201\344\273\223\",\"locationName\":\"1-1\",\"preNum\":\"201809039811064342\",\"Indate\":\"2018-09-03T13:26:44.315009078Z\",\"stockType\":\"trade\"}"
 
 ```
+
+## 多节点集群环境
+
+### 1.节点配置
+| IP        | Host   |  Organization  |
+| --------   | -----:  | :----:  |
+| 192.168.0.176  | orderer.example.com | Orderer |
+| 192.168.0.177  | peer0.org1.example.com   | Org1 |
+| 192.168.0.178  | peer1.org1.example.com   | Org1 |
+| 192.168.0.179  | peer0.org2.example.com   | Org2 |
+| 192.168.0.180  | peer1.org2.example.com   | Org2 |
+

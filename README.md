@@ -34,6 +34,20 @@
 ## 多节点集群环境
 
 ### 1.节点配置
+
+| IP        | Host   |
+| --------   | :-----: |
+| 192.168.0.176  | zookeeper0 |
+| 192.168.0.177  | zookeeper1   |
+| 192.168.0.178  | zookeeper2   |
+
+| IP        | Host   |
+| --------   | :-----: |
+| 192.168.0.176  | kafka0 |
+| 192.168.0.177  | kafka1   |
+| 192.168.0.178  | kafka2   |
+| 192.168.0.179  | kafka3   |
+
 | IP        | Host   |  Organization  |
 | --------   | -----:  | :----:  |
 | 192.168.0.176  | orderer.example.com | Orderer |
@@ -41,6 +55,8 @@
 | 192.168.0.178  | peer1.org1.example.com   | Org1 |
 | 192.168.0.179  | peer0.org2.example.com   | Org2 |
 | 192.168.0.180  | peer1.org2.example.com   | Org2 |
+
+
 
 ### 2.环境配置
 ```shell
@@ -55,12 +71,18 @@ cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
 ### 3.启动节点
 
 ```shell
+#分别登录192.168.0.176,177,178启动zookeeper
+cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+docker-compose -f docker-compose-zookeeper{0,1,2}.yaml up -d
+#分别登录192.168.0.176,177,178,179启动kafka
+cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+docker-compose -f docker-compose-kafka{0,1,2,3}.yaml up -d
 #登录192.168.0.176
-cd go/src/github.com/hyperledger/fabric/examples/e2e_cli/
+cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
 docker-compose -f docker-compose-orderer.yaml up -d
 #分别登录192.168.0.177,178,179,180
-cd go/src/github.com/hyperledger/fabric/examples/e2e_cli/
-docker-compose -f docker-compose-peer.yaml up -d
+cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+docker-compose -f docker-compose-peer{0,1}-org{1,2}.yaml up -d
 ```
 
 ### 4.创建channel

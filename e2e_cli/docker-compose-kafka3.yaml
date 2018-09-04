@@ -16,10 +16,6 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_DEFAULT_REPLICATION_FACTOR=3
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
-    depends_on:
-      - zookeeper0
-      - zookeeper1
-      - zookeeper2
     extra_hosts:
       - "zookeeper0:192.168.0.176"
       - "zookeeper1:192.168.0.177"

@@ -12,14 +12,6 @@ services:
       file:   base/docker-compose-base.yaml
       service: orderer.example.com
     container_name: orderer.example.com
-    depends_on:
-      - zookeeper0
-      - zookeeper1
-      - zookeeper2
-      - kafka0
-      - kafka1
-      - kafka2
-      - kafka3
     extra_hosts:
       - "zookeeper0:192.168.0.176"
       - "zookeeper1:192.168.0.177"

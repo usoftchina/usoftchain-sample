@@ -46,13 +46,10 @@
 ```shell
 #先安装go、docker环境
 go get github.com/hyperledger/fabric
-#按官方教程编译
-cd go/src/github.com/hyperledger/fabric/examples/e2e_cli
+go get github.com/usoftchina/usoftchain-sample
+cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
 ./generateArtifacts.sh
 #将crypto-config和channel-artifacts文件夹scp -rp到其他4台服务器
-go get github.com/usoftchina/usoftchain-sample
-#usoftchain-sample/e2e_cli的yaml是基于docker-compose-cli.yaml修改而来
-#复制到对应节点的go/src/github.com/hyperledger/fabric/examples/e2e_cli目录
 ```
 
 ### 3.启动节点

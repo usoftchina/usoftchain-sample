@@ -1,8 +1,7 @@
 ## 单机调试
 
 ```shell
-   # 开发环境在192.168.0.174
-   ssh root@192.168.0.174
+   # 登录开发环境192.168.0.174
    go get github.com/usoftchina/usoftchain-sample
    cd go/src/github.com/usoftchina/usoftchain-sample/chaincode-docker-devmode/
    docker-compose -f docker-compose-simple.yaml up -d
@@ -43,3 +42,31 @@
 | 192.168.0.179  | peer0.org2.example.com   | Org2 |
 | 192.168.0.180  | peer1.org2.example.com   | Org2 |
 
+### 2.环境配置
+```shell
+#go
+wget https://studygolang.com/dl/golang/go1.10.3.linux-amd64.tar.gz
+tar -C /usr/local/ -xzf go1.10.3.linux-amd64.tar.gz
+#vi /etc/profile
+go get github.com/hyperledger/fabric
+#按官方教程编译
+cd go/src/github.com/hyperledger/fabric/examples/e2e_cli
+./generateArtifacts.sh
+#将crypto-config和channel-artifacts文件夹scp -rp到其他4台服务器
+go get github.com/usoftchina/usoftchain-sample
+#usoftchain-sample/e2e_cli的yaml是基于docker-compose-cli.yaml修改而来
+#复制到对应节点的go/src/github.com/hyperledger/fabric/examples/e2e_cli目录
+```
+
+### 3.启动节点
+
+```shell
+#登录192.168.0.176
+cd go/src/github.com/hyperledger/fabric/examples/e2e_cli/
+docker-compose -f docker-compose-orderer.yaml up -d
+#分别登录192.168.0.177,178,179,180
+cd go/src/github.com/hyperledger/fabric/examples/e2e_cli/
+docker-compose -f docker-compose-peer.yaml up -d
+```
+
+### 4.创建channel

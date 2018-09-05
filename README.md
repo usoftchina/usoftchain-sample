@@ -81,4 +81,12 @@ cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
 bash network_setup.sh up
 ```
 
-### 4.创建channel
+### 4.测试
+
+```shell
+#登录192.168.0.177
+docker exec -it cli bash
+  #安装并测试chaincode/example
+  bash scripts/script.sh
+```
+

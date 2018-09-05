@@ -36,6 +36,7 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - /root/go/src/github.com/usoftchina/usoftchain-sample/chaincode:/opt/gopath/src/github.com/usoftchina/usoftchain-sample/chaincode
+        - ./examples:/opt/gopath/src/github.com/hyperledger/fabric/examples/
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts

@@ -160,7 +160,7 @@ installChaincode () {
 	PEER=$1
 	ORG=$2
 	setGlobals $PEER $ORG
-	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/example02/cmd >&log.txt
+	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/example02/cmd >&log.txt
 	res=$?
 	cat log.txt
 	verifyResult $res "Chaincode installation on peer peer${PEER}.org${ORG} has Failed"

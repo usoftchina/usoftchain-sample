@@ -414,12 +414,12 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 	if quantity <= 0 {
 		return shim.Error(fmt.Sprintf("Illegal argument, quantity should be greater than 0"))
 	}
-	fromStockBytes, err := stub.GetState(fromBatchNum)
+	fromStockBytes, err := stub.GetState(fromStockNum)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	if fromStockBytes == nil {
-		return shim.Error(fmt.Sprintf("The stock of %s does not exist", fromBatchNum))
+		return shim.Error(fmt.Sprintf("The stock of %s does not exist", fromStockNum))
 	}
 	fromStock := Stock{}
 	err = json.Unmarshal(fromStockBytes, &fromStock)

@@ -310,10 +310,6 @@ installChaincode 1 2
 echo "Querying chaincode on peer1.org2..."
 chaincodeQuery 1 2 90
 
-#Query on chaincode on peer1.org3 with idemix MSP type, check if the result is 90
-echo "Querying chaincode on peer1.org3..."
-chaincodeQuery 1 3 90
-
 echo
 echo "===================== All GOOD, End-2-End execution completed ===================== "
 echo

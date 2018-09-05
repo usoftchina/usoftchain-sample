@@ -63,9 +63,6 @@
 #先安装go、docker环境
 go get github.com/hyperledger/fabric
 go get github.com/usoftchina/usoftchain-sample
-cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
-./generateArtifacts.sh
-#将crypto-config和channel-artifacts文件夹scp -rp到其他4台服务器
 ```
 
 | IP        | Open Ports  |
@@ -79,18 +76,9 @@ cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
 ### 3.启动节点
 
 ```shell
-#分别登录192.168.0.176,177,178启动zookeeper
-cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
-docker-compose -f docker-compose-zookeeper{0,1,2}.yaml up -d
-#分别登录192.168.0.176,177,178,179启动kafka
-cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
-docker-compose -f docker-compose-kafka{0,1,2,3}.yaml up -d
 #登录192.168.0.176
 cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
-docker-compose -f docker-compose-orderer.yaml up -d
-#分别登录192.168.0.177,178,179,180
-cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
-docker-compose -f docker-compose-peer{0,1}-org{1,2}.yaml up -d
+./network_setup.sh up
 ```
 
 ### 4.创建channel

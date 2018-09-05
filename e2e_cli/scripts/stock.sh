@@ -214,6 +214,9 @@ installChaincode 0 2
 echo "Instantiating chaincode on peer0.org2..."
 instantiateChaincode 0 2
 
+# Install chaincode on peer1.org1 and peer1.org2
+echo "Installing chaincode on peer1.org1..."
+installChaincode 1 1
 # Install chaincode on peer1.org2
 echo "Installing chaincode on peer1.org2..."
 installChaincode 1 2

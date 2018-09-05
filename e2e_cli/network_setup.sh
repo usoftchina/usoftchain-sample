@@ -52,7 +52,7 @@ function startZookeeper () {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
-      EOF
+EOF
     done
 }
 
@@ -64,7 +64,7 @@ function stopZookeeper () {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit
-      EOF
+EOF
     done
 }
 
@@ -76,7 +76,7 @@ function startKafka () {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
-      EOF
+EOF
     done
 }
 
@@ -88,7 +88,7 @@ function stopKafka () {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit
-      EOF
+EOF
     done
 }
 
@@ -107,7 +107,7 @@ function clearConfig () {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
       rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
       exit
-      EOF
+EOF
     done
 }
 
@@ -119,7 +119,7 @@ function startOrderer() {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
-      EOF
+EOF
     done
 }
 
@@ -131,7 +131,7 @@ function stopOrderer() {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit
-      EOF
+EOF
     done
 }
 
@@ -143,7 +143,7 @@ function startPeer() {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
-      EOF
+EOF
     done
 }
 
@@ -155,7 +155,7 @@ function stopPeer() {
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit
-      EOF
+EOF
     done
 }
 

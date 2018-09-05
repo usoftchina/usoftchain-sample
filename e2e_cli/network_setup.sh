@@ -10,10 +10,10 @@ UP_DOWN="$1"
 CH_NAME="$2"
 
 HOSTS=("192.168.0.176" "192.168.0.177" "192.168.0.178" "192.168.0.179" "192.168.0.180")
-ZOOKEEPERS=(["192.168.0.176"]="zookeeper0" ["192.168.0.177"]="zookeeper1" ["192.168.0.178"]="zookeeper2")
-KAFKAS=(["192.168.0.176"]="kafka0" ["192.168.0.177"]="kafka1" ["192.168.0.178"]="kafka2" ["192.168.0.179"]="kafka3")
-ORDERERS=(["192.168.0.176"]="orderer")
-PEERS=(["192.168.0.177"]="peer0-org1" ["192.168.0.178"]="peer1-org1" ["192.168.0.179"]="peer0-org2" ["192.168.0.180"]="peer1-org2")
+declare -A ZOOKEEPERS=(["192.168.0.176"]="zookeeper0" ["192.168.0.177"]="zookeeper1" ["192.168.0.178"]="zookeeper2")
+declare -A KAFKAS=(["192.168.0.176"]="kafka0" ["192.168.0.177"]="kafka1" ["192.168.0.178"]="kafka2" ["192.168.0.179"]="kafka3")
+declare -A ORDERERS=(["192.168.0.176"]="orderer")
+declare -A PEERS=(["192.168.0.177"]="peer0-org1" ["192.168.0.178"]="peer1-org1" ["192.168.0.179"]="peer0-org2" ["192.168.0.180"]="peer1-org2")
 
 function printHelp () {
 	echo "Usage: ./network_setup <up|down|restart> <\$channel-name>"

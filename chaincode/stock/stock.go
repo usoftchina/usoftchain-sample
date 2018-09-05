@@ -1,23 +1,25 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/protos/peer"
-	"encoding/json"
-	"strconv"
 	"math/rand"
+	"strconv"
 	"time"
-	"fmt"
 )
 
 // 库存智能合约
 type StockContract struct {
 }
+
 // 账户
 type Account struct {
-	Num string `json:"num"`
+	Num  string `json:"num"`
 	Name string `json:"name"`
 }
+
 // 物料资料
 type Product struct {
 	// 编号、原厂型号
@@ -33,23 +35,25 @@ type Product struct {
 	// 单位
 	Unit string `json:"unit"`
 }
+
 // 仓库
 type Warehouse struct {
-	Name string `json:"name"`
-	Desc string `json:"desc"`
+	Name    string `json:"name"`
+	Desc    string `json:"desc"`
 	Address string `json:address`
-	Owner string `json:owner`
+	Owner   string `json:owner`
 	// 仓位
 	Locations map[string]string `json:"locations"`
 }
+
 // 库存交易操作
 type Stock struct {
-	Num string `json:"num"`
-	AccountNum string `json:"accountNum"`
-	ProductNum string `json:"productNum"`
-	Quantity float64 `json:"quantity"`
-	WarehouseName string `json:"warehouseName"`
-	LocationName string `json:"locationName"`
+	Num           string  `json:"num"`
+	AccountNum    string  `json:"accountNum"`
+	ProductNum    string  `json:"productNum"`
+	Quantity      float64 `json:"quantity"`
+	WarehouseName string  `json:"warehouseName"`
+	LocationName  string  `json:"locationName"`
 	// 来源
 	PreNum string `json:"preNum"`
 	// 入库日期
@@ -59,8 +63,8 @@ type Stock struct {
 }
 
 var (
-	formatDate = "20060102"
-	defaultLocation = "default"
+	formatDate          = "20060102"
+	defaultLocation     = "default"
 	defaultLocationDesc = "默认仓位"
 )
 
@@ -68,34 +72,36 @@ var (
 func (s *StockContract) Init(stub shim.ChaincodeStubInterface) peer.Response {
 	return shim.Success(nil)
 }
+
 // 执行操作
 func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	function, args := stub.GetFunctionAndParameters()
 	// Route to the appropriate handler function to interact with the ledger appropriately
-	if function == "createAccount" {// 创建账户
+	if function == "createAccount" { // 创建账户
 		return s.createAccount(stub, args)
-	} else if function == "createWarehouse" {// 创建仓库
+	} else if function == "createWarehouse" { // 创建仓库
 		return s.createWarehouse(stub, args)
-	} else if function == "createLocation" {// 创建仓位
+	} else if function == "createLocation" { // 创建仓位
 		return s.createLocation(stub, args)
-	} else if function == "createProduct" {// 创建物料
+	} else if function == "createProduct" { // 创建物料
 		return s.createProduct(stub, args)
-	} else if function == "initStock" {// 库存初始化
+	} else if function == "initStock" { // 库存初始化
 		return s.initStock(stub, args, "init")
-	} else if function == "completeStock" {// 完工入库
+	} else if function == "completeStock" { // 完工入库
 		return s.initStock(stub, args, "make")
-	} else if function == "transferStock" {// 库存转移
+	} else if function == "transferStock" { // 库存转移
 		return s.transferStock(stub, args)
-	} else if function == "queryStock" {// 库存查询
+	} else if function == "queryStock" { // 库存查询
 		return s.queryStock(stub, args)
 	}
 	return shim.Error("Invalid Stock Contract function name.")
 }
+
 /**
 创建账户
 {"Args":["createAccount",num,name]}
 {"Args":["createAccount","91441900760628116P","东莞市新宁仓储有限公司"]}
- */
+*/
 func (s *StockContract) createAccount(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
@@ -123,7 +129,7 @@ func (s *StockContract) createAccount(stub shim.ChaincodeStubInterface, args []s
 创建仓库
 {"Args":["createWarehouse",owner,name,desc,address]}
 {"Args":["createWarehouse","91441900760628116P","新宁","新宁仓","广东省东莞市长安镇乌沙第六工业区海滨路23号"]}
- */
+*/
 func (s *StockContract) createWarehouse(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 4 {
 		return shim.Error("Incorrect number of arguments. Expecting 4")
@@ -137,10 +143,10 @@ func (s *StockContract) createWarehouse(stub shim.ChaincodeStubInterface, args [
 	}
 	defaultLocations := map[string]string{defaultLocation: defaultLocationDesc}
 	warehouse := Warehouse{
-		Owner: args[0],
-		Name: args[1],
-		Desc: args[2],
-		Address: args[3],
+		Owner:     args[0],
+		Name:      args[1],
+		Desc:      args[2],
+		Address:   args[3],
 		Locations: defaultLocations,
 	}
 	warehouseBytes, err = json.Marshal(warehouse)
@@ -158,7 +164,7 @@ func (s *StockContract) createWarehouse(stub shim.ChaincodeStubInterface, args [
 创建仓位
 {"Args":["createLocation",warehouseName,locationName,(locationDesc)]}
 {"Args":["createLocation","新宁","1-1","1-1"]}
- */
+*/
 func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 2 && len(args) != 3 {
 		return shim.Error("Incorrect number of arguments. Expecting 2 or 3")
@@ -166,7 +172,7 @@ func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []
 	warehouseName := args[0]
 	locationName := args[1]
 	locationDesc := locationName
-	if len(args) == 3{
+	if len(args) == 3 {
 		locationDesc = args[2]
 	}
 	warehouseBytes, err := stub.GetState(warehouseName)
@@ -201,7 +207,7 @@ func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []
 创建物料
 {"Args":["createProduct",num,spec,group,desc,brand,unit]}
 {"Args":["createProduct","EMVA500ADA470MF80G","EMVA500ADA470MF80G","电容","铝电解电容","贵弥功NCC","PCS"]}
- */
+*/
 func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 6 {
 		return shim.Error("Incorrect number of arguments. Expecting 6")
@@ -214,12 +220,12 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 		return shim.Error("The product already exists")
 	}
 	product := Product{
-		Num: args[0],
-		Spec: args[1],
+		Num:   args[0],
+		Spec:  args[1],
 		Group: args[2],
-		Desc: args[3],
+		Desc:  args[3],
 		Brand: args[4],
-		Unit: args[5],
+		Unit:  args[5],
 	}
 	productBytes, err = json.Marshal(product)
 	if err != nil {
@@ -235,9 +241,10 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 // 产生唯一流水号
 func randNumber() string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	batchNum := time.Now().Format(formatDate) + strconv.FormatInt(time.Now().Unix(), 10)[4:] + strconv.Itoa(r.Intn(8999) + 1000)
+	batchNum := time.Now().Format(formatDate) + strconv.FormatInt(time.Now().Unix(), 10)[4:] + strconv.Itoa(r.Intn(8999)+1000)
 	return batchNum
 }
+
 // key-value保存库存数量，方便查询
 func queryStockQuantityByKey(stub shim.ChaincodeStubInterface, key string) (quantity float64, err error) {
 	quantityBytes, err := stub.GetState(key)
@@ -258,7 +265,7 @@ func modifyStockQuantityByKey(stub shim.ChaincodeStubInterface, key string, chan
 		return
 	}
 	quantity += changedQuantity
-	return stub.PutState(key, []byte(strconv.FormatFloat(quantity, 'g',30, 64)))
+	return stub.PutState(key, []byte(strconv.FormatFloat(quantity, 'g', 30, 64)))
 }
 
 // 查询仓库物料库存
@@ -288,7 +295,7 @@ func modifyAccountProductStock(stub shim.ChaincodeStubInterface, accountNum stri
 /**
 无来源入库：库存初始化、完工入库
 {"Args":["initStock","914403006658721616","NCC24","新宁","1-1","1000.00"]}
- */
+*/
 func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []string, stockType string) peer.Response {
 	if len(args) != 5 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
@@ -331,14 +338,14 @@ func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []strin
 		return shim.Error(err.Error())
 	}
 	stock := Stock{
-		Num: randNumber(),
-		AccountNum: args[0],
-		ProductNum: product.Num,
-		Quantity: quantity,
+		Num:           randNumber(),
+		AccountNum:    args[0],
+		ProductNum:    product.Num,
+		Quantity:      quantity,
 		WarehouseName: warehouse.Name,
-		LocationName: locationName,
-		Indate: time.Now(),
-		StockType: stockType,
+		LocationName:  locationName,
+		Indate:        time.Now(),
+		StockType:     stockType,
 	}
 	stockBytes, err := json.Marshal(stock)
 	if err != nil {
@@ -361,9 +368,9 @@ func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []strin
 
 /**
 库存转移：出货、采购验收
-{"Args":["transferStock",toAccountNum,toWarehouseName,toLocationName,fromBatchNum,quantity]}
+{"Args":["transferStock",toAccountNum,toWarehouseName,toLocationName,fromStockNum,quantity]}
 {"Args":["transferStock","91440300MA5DC1WL1W","格力","1-1","201809039382631161","1000.00"]}
- */
+*/
 func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 5 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
@@ -371,7 +378,7 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 	toAccountNum := args[0]
 	toWarehouseName := args[1]
 	toLocationName := args[2]
-	fromBatchNum := args[3]
+	fromStockNum := args[3]
 	quantityStr := args[4]
 	toAccountBytes, err := stub.GetState(toAccountNum)
 	if err != nil {
@@ -427,20 +434,20 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = stub.PutState(fromBatchNum, fromStockBytes)
+	err = stub.PutState(fromStockNum, fromStockBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	toStock := Stock{
-		Num: randNumber(),
-		AccountNum: toAccountNum,
-		ProductNum: fromStock.ProductNum,
-		Quantity: quantity,
+		Num:           randNumber(),
+		AccountNum:    toAccountNum,
+		ProductNum:    fromStock.ProductNum,
+		Quantity:      quantity,
 		WarehouseName: toWarehouseName,
-		LocationName: toLocationName,
-		Indate: time.Now(),
-		PreNum: fromStock.Num,
-		StockType: "trade",
+		LocationName:  toLocationName,
+		Indate:        time.Now(),
+		PreNum:        fromStock.Num,
+		StockType:     "trade",
 	}
 	toStockBytes, err := json.Marshal(toStock)
 	if err != nil {
@@ -468,11 +475,12 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 	}
 	return shim.Success(toStockBytes)
 }
+
 /**
 库存查询
 {"Args":["queryStock",stockNum]}
 {"Args":["queryStock","201809039382631161"]}
- */
+*/
 func (s *StockContract) queryStock(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")

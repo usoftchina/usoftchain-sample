@@ -1,10 +1,7 @@
 #!/bin/bash
 #
-# Copyright IBM Corp. All Rights Reserved.
+# setup e2e_cli_network
 #
-# SPDX-License-Identifier: Apache-2.0
-#
-
 
 UP_DOWN="$1"
 CH_NAME="$2"
@@ -194,7 +191,7 @@ function networkDown () {
 
 validateArgs
 
-#Create the network using docker compose, use at 192.168.0.176
+#Create the network using docker compose, run at 192.168.0.176
 if [ "${UP_DOWN}" == "up" ]; then
 	networkUp
 elif [ "${UP_DOWN}" == "down" ]; then ## Clear the network

@@ -10,3 +10,15 @@
 .DS_Store
 .project
 .idea
+*.iml
+target/
+target/*
+bin/
+
+*.class
+
+.DS_Store
+
+.project
+.settings
+.classpath

@@ -10,11 +10,11 @@ import (
 	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"github.com/hyperledger/fabric/examples/chaincode/go/example02"
+	"usoftchain-sample/chaincode/example"
 )
 
 func main() {
-	err := shim.Start(new(example02.SimpleChaincode))
+	err := shim.Start(new(example.SimpleChaincode))
 	if err != nil {
 		fmt.Printf("Error starting Simple chaincode: %s", err)
 	}

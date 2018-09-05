@@ -8,17 +8,15 @@
 
 UP_DOWN="$1"
 CH_NAME="$2"
-CLI_TIMEOUT="$3"
-IF_COUCHDB="$4"
 
-: ${CLI_TIMEOUT:="10000"}
-
-COMPOSE_FILE=docker-compose-cli.yaml
-COMPOSE_FILE_COUCH=docker-compose-couch.yaml
-#COMPOSE_FILE=docker-compose-e2e.yaml
+HOSTS=("192.168.0.176" "192.168.0.177" "192.168.0.178" "192.168.0.179" "192.168.0.180")
+ZOOKEEPERS=(["192.168.0.176"]="zookeeper0" ["192.168.0.177"]="zookeeper1" ["192.168.0.178"]="zookeeper2")
+KAFKAS=(["192.168.0.176"]="kafka0" ["192.168.0.177"]="kafka1" ["192.168.0.178"]="kafka2" ["192.168.0.179"]="kafka3")
+ORDERERS=(["192.168.0.176"]="orderer")
+PEERS=(["192.168.0.177"]="peer0-org1" ["192.168.0.178"]="peer1-org1" ["192.168.0.179"]="peer0-org2" ["192.168.0.180"]="peer1-org2")
 
 function printHelp () {
-	echo "Usage: ./network_setup <up|down> <\$channel-name> <\$cli_timeout> <couchdb>.\nThe arguments must be in order."
+	echo "Usage: ./network_setup <up|down|restart> <\$channel-name>"
 }
 
 function validateArgs () {
@@ -33,61 +31,170 @@ function validateArgs () {
 	fi
 }
 
-function clearContainers () {
-        CONTAINER_IDS=$(docker ps -aq)
-        if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" = " " ]; then
-                echo "---- No containers available for deletion ----"
-        else
-                docker rm -f $CONTAINER_IDS
-        fi
+function gitPull () {
+    for var in ${HOSTS[@]}
+    do
+      ssh -tt $var << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample
+      git reset --hard
+      git fetch
+      git pull
+      exit
+      EOF
+    done
 }
 
-function removeUnwantedImages() {
-        DOCKER_IMAGE_IDS=$(docker images | grep "dev\|none\|test-vp\|peer[0-9]-" | awk '{print $3}')
-        if [ -z "$DOCKER_IMAGE_IDS" -o "$DOCKER_IMAGE_IDS" = " " ]; then
-                echo "---- No images available for deletion ----"
-        else
-                docker rmi -f $DOCKER_IMAGE_IDS
-        fi
+function startZookeeper () {
+    for key in ${!ZOOKEEPERS[@]}
+    do
+      file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file up -d
+      exit
+      EOF
+    done
+}
+
+function stopZookeeper () {
+    for key in ${!ZOOKEEPERS[@]}
+    do
+      file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file down
+      exit
+      EOF
+    done
+}
+
+function startKafka () {
+    for key in ${!KAFKAS[@]}
+    do
+      file="docker-compose-${KAFKAS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file up -d
+      exit
+      EOF
+    done
+}
+
+function stopKafka () {
+    for key in ${!KAFKAS[@]}
+    do
+      file="docker-compose-${KAFKAS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file down
+      exit
+      EOF
+    done
+}
+
+function copyConfig () {
+    for key in ${!PEERS[@]}
+    do
+      scp -rp channel-artifacts $key:go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+      scp -rp crypto-config $key:go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+    done
+}
+
+function clearConfig () {
+    for var in ${HOSTS[@]}
+    do
+      ssh -tt $var << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+      rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
+      exit
+      EOF
+    done
+}
+
+function startOrderer() {
+    for key in ${!ORDERERS[@]}
+    do
+      file="docker-compose-${ORDERERS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file up -d
+      exit
+      EOF
+    done
+}
+
+function stopOrderer() {
+    for key in ${!ORDERERS[@]}
+    do
+      file="docker-compose-${ORDERERS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file down
+      exit
+      EOF
+    done
+}
+
+function startPeer() {
+    for key in ${!PEERS[@]}
+    do
+      file="docker-compose-${PEERS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file up -d
+      exit
+      EOF
+    done
+}
+
+function stopPeer() {
+    for key in ${!PEERS[@]}
+    do
+      file="docker-compose-${PEERS[$key]}.yaml"
+      ssh -tt $key << EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      docker-compose -f $file down
+      exit
+      EOF
+    done
 }
 
 function networkUp () {
+    gitPull
+
     if [ -d "./crypto-config" ]; then
       echo "crypto-config directory already exists."
     else
       #Generate all the artifacts that includes org certs, orderer genesis block,
       # channel configuration transaction
       source generateArtifacts.sh $CH_NAME
+      copyConfig
     fi
 
-    if [ "${IF_COUCHDB}" == "couchdb" ]; then
-      CHANNEL_NAME=$CH_NAME TIMEOUT=$CLI_TIMEOUT docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_COUCH up -d 2>&1
-    else
-      CHANNEL_NAME=$CH_NAME TIMEOUT=$CLI_TIMEOUT docker-compose -f $COMPOSE_FILE up -d 2>&1
-    fi
-    if [ $? -ne 0 ]; then
-	echo "ERROR !!!! Unable to pull the images "
-	exit 1
-    fi
-    docker logs -f cli
+    startZookeeper
+
+    startKafka
+
+    startOrderer
+
+    startPeer
 }
 
 function networkDown () {
-    docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_COUCH down
+    stopPeer
 
-    #Cleanup the chaincode containers
-    clearContainers
+    stopOrderer
 
-    #Cleanup images
-    removeUnwantedImages
+    stopKafka
 
-    # remove orderer block and other channel configuration transactions and certs
-    rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
+    stopZookeeper
+
+    clearConfig
 }
 
 validateArgs
 
-#Create the network using docker compose
+#Create the network using docker compose, use at 192.168.0.176
 if [ "${UP_DOWN}" == "up" ]; then
 	networkUp
 elif [ "${UP_DOWN}" == "down" ]; then ## Clear the network

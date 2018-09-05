@@ -34,7 +34,7 @@ function validateArgs () {
 function gitPull () {
     for var in ${HOSTS[@]}
     do
-      ssh -tt $var <<EOF
+      ssh -T $var <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample
       git reset --hard
       git fetch
@@ -48,7 +48,7 @@ function startZookeeper () {
     for key in ${!ZOOKEEPERS[@]}
     do
       file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
@@ -60,7 +60,7 @@ function stopZookeeper () {
     for key in ${!ZOOKEEPERS[@]}
     do
       file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit
@@ -72,7 +72,7 @@ function startKafka () {
     for key in ${!KAFKAS[@]}
     do
       file="docker-compose-${KAFKAS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
@@ -84,7 +84,7 @@ function stopKafka () {
     for key in ${!KAFKAS[@]}
     do
       file="docker-compose-${KAFKAS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit
@@ -103,7 +103,7 @@ function copyConfig () {
 function clearConfig () {
     for var in ${HOSTS[@]}
     do
-      ssh -tt $var <<EOF
+      ssh -T $var <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
       rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
       exit
@@ -115,7 +115,7 @@ function startOrderer() {
     for key in ${!ORDERERS[@]}
     do
       file="docker-compose-${ORDERERS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
@@ -127,7 +127,7 @@ function stopOrderer() {
     for key in ${!ORDERERS[@]}
     do
       file="docker-compose-${ORDERERS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit
@@ -139,7 +139,7 @@ function startPeer() {
     for key in ${!PEERS[@]}
     do
       file="docker-compose-${PEERS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file up -d
       exit
@@ -151,7 +151,7 @@ function stopPeer() {
     for key in ${!PEERS[@]}
     do
       file="docker-compose-${PEERS[$key]}.yaml"
-      ssh -tt $key <<EOF
+      ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
       exit

@@ -78,7 +78,7 @@ go get github.com/usoftchina/usoftchain-sample
 ```shell
 #登录192.168.0.176
 cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
-./network_setup.sh up
+bash network_setup.sh up
 ```
 
 ### 4.创建channel

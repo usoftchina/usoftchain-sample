@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"usoftchain-sample/chaincode/example"
+	"github.com/usoftchina/usoftchain-sample/chaincode/example"
 )
 
 func main() {

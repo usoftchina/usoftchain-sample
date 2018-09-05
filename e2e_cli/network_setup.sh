@@ -159,14 +159,14 @@ EOF
 function networkUp () {
     gitPull
 
-    if [ -d "./crypto-config" ]; then
-      echo "crypto-config directory already exists."
-    else
-      #Generate all the artifacts that includes org certs, orderer genesis block,
-      # channel configuration transaction
-      source generateArtifacts.sh $CH_NAME
-      copyConfig
-    fi
+#    if [ -d "./crypto-config" ]; then
+#      echo "crypto-config directory already exists."
+#    else
+#      #Generate all the artifacts that includes org certs, orderer genesis block,
+#      # channel configuration transaction
+#      source generateArtifacts.sh $CH_NAME
+#      copyConfig
+#    fi
 
     startZookeeper
 
@@ -186,7 +186,7 @@ function networkDown () {
 
     stopZookeeper
 
-    clearConfig
+#    clearConfig
 }
 
 validateArgs

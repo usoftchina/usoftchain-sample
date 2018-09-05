@@ -313,8 +313,8 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         // Verifying responses
         for (ProposalResponse proposal : responses) {
             if (!proposal.isVerified()) {
-                logger.warn("Invalid proposal {}", proposal);
-                throw new InvokeException(String.format("Invalid proposal %s", proposal));
+                logger.warn("Invalid proposal: {}, {}", proposal.getStatus(), proposal.getMessage());
+                throw new InvokeException(String.format("Invalid proposal: %s, %s", proposal.getStatus(), proposal.getMessage()));
             }
         }
         // Sending transaction to orderers

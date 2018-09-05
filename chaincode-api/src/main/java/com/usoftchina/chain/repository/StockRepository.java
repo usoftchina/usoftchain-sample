@@ -3,13 +3,14 @@ package com.usoftchina.chain.repository;
 import org.springframework.data.chaincode.repository.Chaincode;
 import org.springframework.data.chaincode.repository.ChaincodeInvoke;
 import org.springframework.data.chaincode.repository.ChaincodeQuery;
+import org.springframework.data.chaincode.repository.ChaincodeRepository;
 
 /**
  * @author yingp
  * @date 2018/9/5
  */
 @Chaincode(channel = "mychannel", name = "stockcontract", version = "1.0")
-public interface StockRepository {
+public interface StockRepository extends ChaincodeRepository {
     /**
      * 创建账户
      * {"Args":["createAccount",num,name]}

@@ -1,3 +1,0 @@
-# AutoConfiguration
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.springframework.data.chaincode.config.ChaincodeAutoConfiguration

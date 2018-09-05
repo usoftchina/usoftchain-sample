@@ -40,7 +40,7 @@ function gitPull () {
       git fetch
       git pull
       exit
-      EOF
+EOF
     done
 }
 

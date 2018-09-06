@@ -127,6 +127,12 @@ function stopOrderer() {
       ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
+      CONTAINER_IDS=$(docker ps -a|grep example.com|awk '{print $1}')
+      if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" = " " ]; then
+          echo "---- No containers available for deletion ----"
+      else
+          docker rm -f $CONTAINER_IDS
+      fi
       exit
 EOF
     done

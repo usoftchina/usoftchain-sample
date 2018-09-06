@@ -163,9 +163,6 @@ function stopPeer() {
       else
           ssh $key "docker rmi -f $DOCKER_IMAGE_IDS"
       fi
-
-      exit
-EOF
     done
 }
 

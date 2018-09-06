@@ -114,14 +114,18 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
 
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
-        return "network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp"
-                + "/keystore/8d02d093c9c17071c78efcf98fbe3d7fde3330f07da515cc7d40f93784183ce6_sk";
+//        return "network/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp"
+//                + "/keystore/8d02d093c9c17071c78efcf98fbe3d7fde3330f07da515cc7d40f93784183ce6_sk";
+        return "network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp"
+                + "/keystore/f3a62172ef10ecd8ef7c97b3cb057658968cdf962becb121801e00648c1df8de_sk";
     }
 
     @Bean(name = "userSigningCert")
     public String userSigningCert() {
+//        final String certificateFile = "classpath:network/crypto-config/peerOrganizations/org1.example.com/users"
+//                + "/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem";
         final String certificateFile = "classpath:network/crypto-config/peerOrganizations/org1.example.com/users"
-                + "/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem";
+                + "/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem";
         try (final InputStream in = new FileInputStream(ResourceUtils.getFile(certificateFile))) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {

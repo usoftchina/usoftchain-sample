@@ -119,4 +119,15 @@ public interface StockRepository extends ChaincodeRepository {
      */
     @ChaincodeQuery
     String queryStock(String stockNum);
+
+    /**
+     * 账户查询
+     * {"Args":["queryAccount",num]}
+     * {"Args":["queryAccount","91441900760628116P"]}
+     *
+     * @param num
+     * @return
+     */
+    @ChaincodeQuery
+    String queryAccount(String num);
 }

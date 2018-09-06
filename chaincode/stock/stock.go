@@ -93,6 +93,8 @@ func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return s.transferStock(stub, args)
 	} else if function == "queryStock" { // 库存查询
 		return s.queryStock(stub, args)
+	} else if function == "queryAccount" { // 账户查询
+		return s.queryAccount(stub, args)
 	}
 	return shim.Error("Invalid Stock Contract function name.")
 }
@@ -493,6 +495,25 @@ func (s *StockContract) queryStock(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error(fmt.Sprintf("The stock of %s does not exist", args[0]))
 	}
 	return shim.Success(stockBytes)
+}
+
+/**
+账户查询
+{"Args":["queryAccount",num]}
+{"Args":["queryAccount","91441900760628116P"]}
+*/
+func (s *StockContract) queryAccount(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+	accountBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	if accountBytes == nil {
+		return shim.Error(fmt.Sprintf("The stock of %s does not exist", args[0]))
+	}
+	return shim.Success(accountBytes)
 }
 
 func main() {

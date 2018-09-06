@@ -127,12 +127,6 @@ function stopOrderer() {
       ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
-      CONTAINER_IDS=$(docker ps -a|grep example.com|awk '{print $1}')
-      if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" = " " ]; then
-          echo "---- No containers available for deletion ----"
-      else
-          docker rm -f $CONTAINER_IDS
-      fi
       exit
 EOF
     done
@@ -157,6 +151,21 @@ function stopPeer() {
       ssh -T $key <<EOF
       cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
       docker-compose -f $file down
+      # clear unwanted containers
+      CONTAINER_IDS=$(docker ps -a | grep "dev\|none\|test-vp\|peer[0-9]-" | awk '{print $1}')
+      if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" = " " ]; then
+          echo "---- No containers available for deletion ----"
+      else
+          docker rm -f $CONTAINER_IDS
+      fi
+      # remove unwanted images
+      DOCKER_IMAGE_IDS=$(docker images | grep "dev\|none\|test-vp\|peer[0-9]-" | awk '{print $3}')
+      if [ -z "$DOCKER_IMAGE_IDS" -o "$DOCKER_IMAGE_IDS" = " " ]; then
+          echo "---- No images available for deletion ----"
+      else
+          docker rmi -f $DOCKER_IMAGE_IDS
+      fi
+
       exit
 EOF
     done

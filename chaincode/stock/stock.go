@@ -96,7 +96,7 @@ func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	} else if function == "queryAccount" { // 账户查询
 		return s.queryAccount(stub, args)
 	}
-	return shim.Error("Invalid Stock Contract function name.")
+	return shim.Error(fmt.Sprintf("Invalid Stock Contract function name %s, available functions (createAccount|createWarehouse|createLocation|createProduct|initStock|completeStock|transferStock|queryStock|queryAccount)", function))
 }
 
 /**

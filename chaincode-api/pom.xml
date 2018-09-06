@@ -23,7 +23,6 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-chaincode</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <systemPath>${project.basedir}/../spring-data-chaincode/pom.xml</systemPath>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

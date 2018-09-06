@@ -26,10 +26,10 @@ public class StockTest {
     public void testCreateAccount() throws Exception {
         Assert.assertNotNull(stockRepository);
         try {
-            String result = stockRepository.createAccount("91440300319521190W", "深圳市华商龙商务互联科技有限公司");
-            System.out.println(result);
+            String result = stockRepository.createAccount("91440300778798789B", "天派电子(深圳)有限公司");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + result);
         } catch (InvokeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
     }
@@ -38,11 +38,35 @@ public class StockTest {
     public void testQueryAccount() {
         Assert.assertNotNull(stockRepository);
         try {
-            String result = stockRepository.queryAccount("91440300319521190W");
+            String result = stockRepository.queryAccount("91440300778798789B");
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + result);
         } catch (InvokeException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    @Test
+    public void testCreateWarehouse() throws Exception {
+        Assert.assertNotNull(stockRepository);
+        try {
+            String result = stockRepository.createWarehouse("91440300778798789B", "新宁", "新宁仓", "广东省东莞市长安镇乌沙第六工业区海滨路23号");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + result);
+        } catch (InvokeException e) {
+            System.err.println(e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testCreateLocation() throws Exception {
+        Assert.assertNotNull(stockRepository);
+        try {
+            String result = stockRepository.createLocation("新宁", "1-1", "1-1");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + result);
+        } catch (InvokeException e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
 }

@@ -329,7 +329,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
         BlockEvent.TransactionEvent event = null;
         try {
-            event = txFuture.get(5000, TimeUnit.MILLISECONDS);
+            event = txFuture.get(15000, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             logger.warn("Exception during wait for transaction event", e);
             throw new InvokeException("Exception during wait", e);

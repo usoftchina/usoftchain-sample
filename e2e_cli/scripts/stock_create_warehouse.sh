@@ -105,9 +105,9 @@ chaincodeInvoke () {
         # it using the "-o" option
         echo $PEER_CONN_PARMS
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-            peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n stockcontract $PEER_CONN_PARMS -c '{"Args":["createAccount","91440300319521190W","深圳市华商龙商务互联科技有限公司"]}' >&log.txt
+            peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n stockcontract $PEER_CONN_PARMS -c '{"Args":["createWarehouse","91440300778798789B", "新宁", "新宁仓", "广东省东莞市长安镇乌沙第六工业区海滨路23号"]}' >&log.txt
         else
-            peer chaincode invoke -o orderer.example.com:7050  --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract $PEER_CONN_PARMS -c '{"Args":["createAccount","91440300319521190W","深圳市华商龙商务互联科技有限公司"]}' >&log.txt
+            peer chaincode invoke -o orderer.example.com:7050  --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract $PEER_CONN_PARMS -c '{"Args":["createWarehouse","91440300778798789B", "新宁", "新宁仓", "广东省东莞市长安镇乌沙第六工业区海滨路23号"]}' >&log.txt
         fi
         res=$?
         cat log.txt

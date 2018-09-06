@@ -72,7 +72,7 @@ chaincodeQuery () {
 	setGlobals $PEER $ORG
 
 	echo "===================== Querying on peer${PEER}.org${ORG} on channel '$CHANNEL_NAME'... ===================== "
-    peer chaincode query -C $CHANNEL_NAME -n stockcontract -c '{"Args":["queryAccount","91440300319521190W"]}' >&log.txt
+    peer chaincode query -C $CHANNEL_NAME -n stockcontract -c '{"Args":["queryWarehouse","新宁"]}' >&log.txt
     cat log.txt
 }
 

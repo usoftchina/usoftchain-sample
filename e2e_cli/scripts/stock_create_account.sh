@@ -116,7 +116,9 @@ chaincodeInvoke () {
         echo
 }
 
-chaincodeInvoke 0 1 1 1
+# Invoke on chaincode on peer0.org1 and peer0.org2
+echo "Sending invoke transaction on peer0.org1 and peer0.org2..."
+chaincodeInvoke 0 1 0 2
 
 echo
 echo "===================== Completed ===================== "

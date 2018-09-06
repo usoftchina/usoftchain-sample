@@ -3,7 +3,6 @@ package com.usoftchina.chain.test;
 import com.usoftchina.chain.config.NetworkConfig;
 import com.usoftchina.chain.repository.StockRepository;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class StockTest {
     public void testQueryAccount() {
         Assert.assertNotNull(stockRepository);
         try {
-            String result = stockRepository.queryAccount("91440300778798789B");
+            String result = stockRepository.queryAccount("91440300319521190W");
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + result);
         } catch (InvokeException e) {
             System.err.println(e.getMessage());

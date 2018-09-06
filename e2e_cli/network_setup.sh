@@ -38,7 +38,6 @@ function gitPull () {
       ssh -T $var <<EOF
       rm -rf go/src/github.com/usoftchina/usoftchain-sample
       go get github.com/usoftchina/usoftchain-sample
-      cd go/src/github.com/usoftchina/usoftchain-sample
       exit
 EOF
     done

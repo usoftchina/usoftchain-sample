@@ -29,13 +29,16 @@ function validateArgs () {
 }
 
 function gitPull () {
-    for var in ${HOSTS[@]}
+    git reset --hard
+    git fetch
+    git pull
+
+    for var in ${PEERS[@]}
     do
       ssh -T $var <<EOF
+      rm -rf go/src/github.com/usoftchina/usoftchain-sample
+      go get github.com/usoftchina/usoftchain-sample
       cd go/src/github.com/usoftchina/usoftchain-sample
-      git reset --hard
-      git fetch
-      git pull
       exit
 EOF
     done

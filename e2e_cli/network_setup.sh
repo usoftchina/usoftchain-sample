@@ -33,9 +33,9 @@ function gitPull () {
     git fetch
     git pull
 
-    for var in ${PEERS[@]}
+    for key in ${!PEERS[@]}
     do
-      ssh -T $var <<EOF
+      ssh -T $key <<EOF
       rm -rf go/src/github.com/usoftchina/usoftchain-sample
       go get github.com/usoftchina/usoftchain-sample
       exit

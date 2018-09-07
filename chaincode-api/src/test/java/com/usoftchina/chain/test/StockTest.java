@@ -1,6 +1,5 @@
 package com.usoftchina.chain.test;
 
-import com.usoftchina.chain.config.NetworkConfig;
 import com.usoftchina.chain.repository.StockRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author yingp
  * @date 2018/9/5
  */
-@ContextConfiguration(classes = {NetworkConfig.class})
+@ContextConfiguration(classes = {StandaloneNetworkConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class StockTest {
 

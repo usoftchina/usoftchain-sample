@@ -110,19 +110,20 @@ updateAnchorPeers 0 1
 echo "Updating anchor peers for org2..."
 updateAnchorPeers 0 2
 
-## Install chaincode on peer0.org1 and peer0.org2
+## Install chaincode
 echo "Installing chaincode on peer0.org1..."
 installChaincode 0 1
+echo "Install chaincode on peer1.org1..."
+installChaincode 1 1
 echo "Install chaincode on peer0.org2..."
 installChaincode 0 2
+## Install chaincode on peer1.org2
+echo "Installing chaincode on peer1.org2..."
+installChaincode 1 2
 
 # Instantiate chaincode on peer0.org2
 echo "Instantiating chaincode on peer0.org2..."
 instantiateChaincode 0 2
-
-## Install chaincode on peer1.org2
-echo "Installing chaincode on peer1.org2..."
-installChaincode 1 2
 
 echo
 echo "========= Completed =========== "

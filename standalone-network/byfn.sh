@@ -247,7 +247,7 @@ function networkDown() {
     #Cleanup images
     removeUnwantedImages
     # remove orderer block and other channel configuration transactions and certs
-    rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
+    # rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
     # remove the docker-compose yaml file that was customized to the example
     rm -f docker-compose-e2e.yaml
   fi
@@ -429,9 +429,6 @@ function generateChannelArtifacts() {
   echo
 }
 
-# Obtain the OS and Architecture string that will be used to select the correct
-# native binaries for your platform, e.g., darwin-amd64 or linux-amd64
-OS_ARCH=$(echo "$(uname -s | tr '[:upper:]' '[:lower:]' | sed 's/mingw64_nt.*/windows/')-$(uname -m | sed 's/x86_64/amd64/g')" | awk '{print tolower($0)}')
 # timeout duration - the duration the CLI should wait for a response from
 # another container before giving up
 CLI_TIMEOUT=10

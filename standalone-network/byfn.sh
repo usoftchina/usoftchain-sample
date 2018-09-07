@@ -28,7 +28,9 @@
 
 # prepending $PWD/../bin to PATH to ensure we are picking up the correct binaries
 # this may be commented out to resolve installed version of tools if desired
-export PATH=${PWD}/../bin:${PWD}:$PATH
+export FABRIC_ROOT=$PWD/../../../hyperledger/fabric
+OS_ARCH=$(echo "$(uname -s|tr '[:upper:]' '[:lower:]'|sed 's/mingw64_nt.*/windows/')-$(uname -m | sed 's/x86_64/amd64/g')" | awk '{print tolower($0)}')
+export PATH=$FABRIC_ROOT/release/$OS_ARCH/bin:$PATH
 export FABRIC_CFG_PATH=${PWD}
 export VERBOSE=false
 

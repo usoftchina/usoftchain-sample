@@ -37,7 +37,7 @@ public class StockTest {
     public void testQueryAccount() {
         Assert.assertNotNull(stockRepository);
         try {
-            String result = stockRepository.queryAccount("91440300319521190W");
+            String result = stockRepository.queryAccount("91440300778798789B");
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + result);
         } catch (InvokeException e) {
             System.err.println(e.getMessage());
@@ -53,7 +53,17 @@ public class StockTest {
         } catch (InvokeException e) {
             System.err.println(e.getMessage());
         }
+    }
 
+    @Test
+    public void testQueryWarehouse() throws Exception {
+        Assert.assertNotNull(stockRepository);
+        try {
+            String result = stockRepository.queryWarehouse("新宁");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>" + result);
+        } catch (InvokeException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Test

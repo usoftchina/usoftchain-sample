@@ -329,7 +329,7 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
         BlockEvent.TransactionEvent event = null;
         try {
-            event = txFuture.get(15000, TimeUnit.MILLISECONDS);
+            event = txFuture.get(5000, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             logger.warn("Exception during wait for transaction event", e);
             throw new InvokeException("Exception during wait", e);
@@ -342,10 +342,15 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
 
         for (ProposalResponse resp : responses) {
             if (resp.getProposalResponse().getResponse().getStatus() == Status.SUCCESS.getNumber()) {
-                logger.debug("Invoke response status {} msg {} payload {}", resp.getProposalResponse().getResponse().getStatus(),
+                logger.debug("Invoke response peer {} status {} msg {} payload {}", resp.getPeer().getName(),
+                        resp.getProposalResponse().getResponse().getStatus(),
                         resp.getProposalResponse().getResponse().getMessage(),
                         resp.getProposalResponse().getResponse().getPayload().toStringUtf8());
                 return resp.getProposalResponse().getResponse().getPayload().toStringUtf8();
+            } else {
+                logger.error("Invoke response peer {} status {} msg {}", resp.getPeer().getName(),
+                        resp.getProposalResponse().getResponse().getStatus(),
+                        resp.getProposalResponse().getResponse().getMessage());
             }
         }
 
@@ -385,7 +390,6 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             throw new QueryException("Exception during query send proposal", e);
         }
 
-        logger.debug("Get responses {}", responses);
         QueryException exc = null;
         String res = null;
         for (ProposalResponse resp : responses) {
@@ -395,10 +399,15 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
                 continue;
             }
             if (resp.getProposalResponse().getResponse().getStatus() == Status.SUCCESS.getNumber()) {
-                logger.debug("Query response status {} msg {} payload {}", resp.getProposalResponse().getResponse().getStatus(),
+                logger.debug("Query response peer {} status {} msg {} payload {}", resp.getPeer().getName(),
+                        resp.getProposalResponse().getResponse().getStatus(),
                         resp.getProposalResponse().getResponse().getMessage(),
                         resp.getProposalResponse().getResponse().getPayload().toStringUtf8());
                 res = resp.getProposalResponse().getResponse().getPayload().toStringUtf8();
+            } else {
+                logger.error("Query response peer {} status {} msg {}", resp.getPeer().getName(),
+                        resp.getProposalResponse().getResponse().getStatus(),
+                        resp.getProposalResponse().getResponse().getMessage());
             }
         }
 

@@ -3,7 +3,7 @@
 ```shell
    # 登录开发环境192.168.0.174
    go get github.com/usoftchina/usoftchain-sample
-   cd go/src/github.com/usoftchina/usoftchain-sample/chaincode-docker-devmode/
+   cd go/src/github.com/usoftchina/usoftchain-sample/dev-network/
    docker-compose -f docker-compose-simple.yaml up -d
    docker exec -it chaincode bash
      cd stock

@@ -32,6 +32,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yingp
@@ -45,8 +46,8 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "peerLocations")
     public Map<String, String> peerLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0", "grpcs://192.168.0.177:7051");
-        res.put("peer1", "grpcs://192.168.0.178:7051");
+        res.put("peer0.org1.example.com", "grpcs://192.168.0.177:7051");
+        res.put("peer1.org1.example.com", "grpcs://192.168.0.178:7051");
         return res;
     }
 
@@ -54,8 +55,8 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "eventHubLocations")
     public Map<String, String> eventHubLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0", "grpcs://192.168.0.177:7053");
-        res.put("peer1", "grpcs://192.168.0.178:7053");
+        res.put("peer0.org1.example.com", "grpcs://192.168.0.177:7053");
+        res.put("peer1.org1.example.com", "grpcs://192.168.0.178:7053");
         return res;
     }
 
@@ -63,7 +64,7 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "ordererLocations")
     public Map<String, String> ordererLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("orderer0", "grpcs://192.168.0.176:7050");
+        res.put("orderer.example.com", "grpcs://192.168.0.176:7050");
         return res;
     }
 
@@ -78,8 +79,10 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
         orderer0Properties.setProperty("hostnameOverride", "orderer.example.com");
         orderer0Properties.setProperty("sslProvider", "openSSL");
         orderer0Properties.setProperty("negotiationType", "TLS");
+        orderer0Properties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
+        orderer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {false});
 
-        propertiesMap.put("orderer0", orderer0Properties);
+        propertiesMap.put("orderer.example.com", orderer0Properties);
         return propertiesMap;
 
     }
@@ -93,6 +96,9 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
         peer0Properties.setProperty("hostnameOverride", "peer0.org1.example.com");
         peer0Properties.setProperty("sslProvider", "openSSL");
         peer0Properties.setProperty("negotiationType", "TLS");
+        peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
+        peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
+        peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
 
 
         Properties peer1Properties = new Properties();
@@ -102,13 +108,13 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
         peer1Properties.setProperty("hostnameOverride", "peer1.org1.example.com");
         peer1Properties.setProperty("sslProvider", "openSSL");
         peer1Properties.setProperty("negotiationType", "TLS");
-//		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
-//		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
-//		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
+		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
+		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
+		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
 
         final Map<String, Properties> propertiesMap = new HashMap<>();
-        propertiesMap.put("peer0", peer0Properties);
-        propertiesMap.put("peer1", peer1Properties);
+        propertiesMap.put("peer0.org1.example.com", peer0Properties);
+        propertiesMap.put("peer1.org1.example.com", peer1Properties);
         return propertiesMap;
     }
 

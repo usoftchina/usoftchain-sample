@@ -96,6 +96,54 @@ instantiateChaincode() {
   echo
 }
 
+# parsePeerConnectionParameters $@
+# Helper function that takes the parameters from a chaincode operation
+# (e.g. invoke, query, instantiate) and checks for an even number of
+# peers and associated org, then sets $PEER_CONN_PARMS and $PEERS
+parsePeerConnectionParameters() {
+        # check for uneven number of peer and org parameters
+        if [ $(( $# % 2 )) -ne 0 ]; then
+                exit 1
+        fi
+
+        PEER_CONN_PARMS=""
+        PEERS=""
+        while [ "$#" -gt 0 ]; do
+                PEER="peer$1.org$2"
+                PEERS="$PEERS $PEER"
+                PEER_CONN_PARMS="$PEER_CONN_PARMS --peerAddresses $PEER.example.com:7051"
+                if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "true" ]; then
+                        TLSINFO=$(eval echo "--tlsRootCertFiles \$PEER$1_ORG$2_CA")
+                        PEER_CONN_PARMS="$PEER_CONN_PARMS $TLSINFO"
+                fi
+                # shift by two to get the next pair of peer/org parameters
+                shift; shift
+        done
+        # remove leading space for output
+        PEERS="$(echo -e "$PEERS" | sed -e 's/^[[:space:]]*//')"
+}
+
+# chaincodeInvoke <peer> <org> ...
+# Accepts as many peer/org pairs as desired and requests endorsement from each
+chaincodeInvoke () {
+        parsePeerConnectionParameters $@
+        res=$?
+        verifyResult $res "Invoke transaction failed on channel '$CHANNEL_NAME' due to uneven number of peer and org parameters "
+
+        # while 'peer chaincode' command can get the orderer endpoint from the
+        # peer (if join was successful), let's supply it directly as we know
+        # it using the "-o" option
+        echo $PEER_CONN_PARMS
+        if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
+            peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n stockcontract $PEER_CONN_PARMS -c '{"Args":["createAccount","91440300319521190W","深圳市华商龙商务互联科技有限公司"]}' >&log.txt
+        else
+            peer chaincode invoke -o orderer.example.com:7050  --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract $PEER_CONN_PARMS -c '{"Args":["createAccount","91440300319521190W","深圳市华商龙商务互联科技有限公司"]}' >&log.txt
+        fi
+        cat log.txt
+        echo "===================== Invoke transaction successful on $PEERS on channel '$CHANNEL_NAME' ===================== "
+        echo
+}
+
 ## Create channel
 echo "Creating channel..."
 createChannel
@@ -124,6 +172,10 @@ installChaincode 1 2
 # Instantiate chaincode on peer0.org2
 echo "Instantiating chaincode on peer0.org2..."
 instantiateChaincode 0 2
+
+# Invoke on chaincode on peer0.org1 and peer1.org1
+echo "Sending invoke transaction on peer0.org1 and peer1.org1..."
+chaincodeInvoke 0 1 1 1
 
 echo
 echo "========= Completed =========== "

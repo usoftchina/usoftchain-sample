@@ -151,4 +151,9 @@ public class StandaloneNetworkConfig extends AbstractChaincodeConfiguration {
         }
         return null;
     }
+
+    @Bean
+    public ChaincodeEventsListenerComponent chaincodeEventsListenerComponent() {
+        return new ChaincodeEventsListenerComponent();
+    }
 }

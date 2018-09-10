@@ -16,23 +16,14 @@
 
 package com.usoftchina.chain.test;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.chaincode.config.AbstractChaincodeConfiguration;
+import org.springframework.data.chaincode.events.FabricEventsListenersRegistry;
 import org.springframework.data.chaincode.repository.config.EnableChaincodeRepositories;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author yingp
@@ -40,100 +31,33 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @ComponentScan
 @EnableChaincodeRepositories(basePackages = {"com.usoftchina.chain.repository"})
-public class StandaloneNetworkConfig extends AbstractChaincodeConfiguration {
+public class StandaloneNetworkConfig {
 
-    @Override
-    @Bean(name = "peerLocations")
-    public Map<String, String> peerLocations() {
-        final Map<String, String> res = new HashMap<>();
-        res.put("peer0.org1.example.com", "grpcs://192.168.0.174:7051");
-        res.put("peer1.org1.example.com", "grpcs://192.168.0.174:8051");
-        return res;
-    }
-
-    @Override
-    @Bean(name = "eventHubLocations")
-    public Map<String, String> eventHubLocations() {
-        final Map<String, String> res = new HashMap<>();
-        res.put("peer0.org1.example.com", "grpcs://192.168.0.174:7053");
-        res.put("peer1.org1.example.com", "grpcs://192.168.0.174:8053");
-        return res;
-    }
-
-    @Override
     @Bean(name = "ordererLocations")
     public Map<String, String> ordererLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("orderer.example.com", "grpcs://192.168.0.174:7050");
+        res.put("orderer0", "grpc://localhost:7050");
         return res;
     }
 
-    @Bean(name = "ordererProperties")
-    public Map<String, Properties> ordererProperties() throws IOException {
-        final Map<String, Properties> propertiesMap = new HashMap<>();
-        Properties orderer0Properties = new Properties();
-        String ordererPemFileLocation = "classpath:standalone-network/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem";
-        File ordererPemFile = ResourceUtils.getFile(ordererPemFileLocation);
-
-        orderer0Properties.setProperty("pemFile", ordererPemFile.getCanonicalPath());
-        orderer0Properties.setProperty("hostnameOverride", "orderer.example.com");
-        orderer0Properties.setProperty("sslProvider", "openSSL");
-        orderer0Properties.setProperty("negotiationType", "TLS");
-        orderer0Properties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
-        orderer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {false});
-
-        propertiesMap.put("orderer.example.com", orderer0Properties);
-        return propertiesMap;
-
+    @Bean(name = "peerLocations")
+    public Map<String, String> peerLocations() {
+        final Map<String, String> res = new HashMap<>();
+        res.put("peer0", "grpc://localhost:7051");
+        return res;
     }
 
-    @Bean(name = "peerProperties")
-    public Map<String, Properties> peerProperties() throws IOException {
-        Properties peer0Properties = new Properties();
-        String peer0PemFileLocation = "classpath:standalone-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt";
-        File peer0PemFile = ResourceUtils.getFile(peer0PemFileLocation);
-        peer0Properties.setProperty("pemFile", peer0PemFile.getCanonicalPath());
-        peer0Properties.setProperty("hostnameOverride", "peer0.org1.example.com");
-        peer0Properties.setProperty("sslProvider", "openSSL");
-        peer0Properties.setProperty("negotiationType", "TLS");
-        peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
-        peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
-        peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
-
-
-        Properties peer1Properties = new Properties();
-        String peer1PemFileLocation = "classpath:standalone-network/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.crt";
-        File peer1PemFile = ResourceUtils.getFile(peer1PemFileLocation);
-        peer1Properties.setProperty("pemFile", peer1PemFile.getCanonicalPath());
-        peer1Properties.setProperty("hostnameOverride", "peer1.org1.example.com");
-        peer1Properties.setProperty("sslProvider", "openSSL");
-        peer1Properties.setProperty("negotiationType", "TLS");
-		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
-		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
-		peer1Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
-
-        final Map<String, Properties> propertiesMap = new HashMap<>();
-        propertiesMap.put("peer0.org1.example.com", peer0Properties);
-        propertiesMap.put("peer1.org1.example.com", peer1Properties);
-        return propertiesMap;
+    @Bean(name = "eventHubLocations")
+    public Map<String, String> eventHubLocations() {
+        final Map<String, String> res = new HashMap<>();
+        res.put("peer0", "grpc://localhost:7053");
+        return res;
     }
 
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
-        return "standalone-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp"
-                + "/keystore/495e666adcb34bb52ab1d30d6366d653e69cf36ac2d495e851faf6ec381e2380_sk";
-    }
-
-    @Bean(name = "userSigningCert")
-    public String userSigningCert() {
-        final String certificateFile = "classpath:standalone-network/crypto-config/peerOrganizations/org1.example.com/users"
-                + "/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem";
-        try (final InputStream in = new FileInputStream(ResourceUtils.getFile(certificateFile))) {
-            return IOUtils.toString(in, Charset.defaultCharset());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return "standalone-network/crypto-config/peerOrganizations/org1.example.com/users"
+                + "/User1@org1.example.com/msp/keystore/c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83_sk";
     }
 
     @Bean(name = "mspId")
@@ -141,19 +65,13 @@ public class StandaloneNetworkConfig extends AbstractChaincodeConfiguration {
         return "Org1MSP";
     }
 
-    @Bean(name = "caCert")
-    public String caCert() {
-        final String certificateFile = "classpath:standalone-network/crypto-config/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem";
-        try (final InputStream in = new FileInputStream(ResourceUtils.getFile(certificateFile))) {
-            return IOUtils.toString(in, Charset.defaultCharset());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Bean(name = "keyStoreLocation")
+    public String keyStoreLocation() {
+        return "standalone-network/crypto-config/certificates.jks";
     }
 
     @Bean
-    public ChaincodeEventsListenerComponent chaincodeEventsListenerComponent() {
-        return new ChaincodeEventsListenerComponent();
+    public FabricEventsListenersRegistry fabricEventsListenersRegistry() {
+        return new FabricEventsListenersRegistry();
     }
 }

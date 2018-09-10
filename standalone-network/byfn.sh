@@ -233,9 +233,30 @@ function upgradeNetwork() {
   fi
 }
 
+function clean(){
+  rm -rf /var/hyperledger/*
+
+  if [ -e "/tmp/HFCSampletest.properties" ];then
+    rm -f "/tmp/HFCSampletest.properties"
+  fi
+
+  lines=`docker ps -a | grep 'dev-peer' | wc -l`
+
+  if [ "$lines" -gt 0 ]; then
+    docker ps -a | grep 'dev-peer' | awk '{print $1}' | xargs docker rm -f
+  fi
+
+  lines=`docker images | grep 'dev-peer' | grep 'dev-peer' | wc -l`
+  if [ "$lines" -gt 0 ]; then
+    docker images | grep 'dev-peer' | awk '{print $1}' | xargs docker rmi -f
+  fi
+
+}
+
 # Tear down running network
 function networkDown() {
   docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_COUCH down --volumes --remove-orphans
+  clean
 
   # Don't remove the generated artifacts -- note, the ledgers are always removed
   if [ "$MODE" != "restart" ]; then

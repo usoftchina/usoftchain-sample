@@ -57,7 +57,7 @@ type Stock struct {
 	// 来源
 	PreNum string `json:"preNum"`
 	// 入库日期
-	Indate int64 `json:indate`
+	Indate int64 `json:"indate"`
 	// 类型: 初始化init,交易trade,制造make
 	StockType string `json:"stockType"`
 }

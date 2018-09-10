@@ -39,12 +39,13 @@ public class StockTest {
         String stockJson = stockRepository.initStock("91440300319521190W","EMVA500ADA470MF80G","新宁","1-1","1000.00");
         System.out.println("=========" + stockJson + "=========");
         Stock stock = JSON.parseObject(stockJson, Stock.class);
+        System.out.println("=========" +stock.getIndate().toString());
 
         stockJson = stockRepository.transferStock("91440300778798789B","天派材料良品仓","1-1",stock.getNum(),"800.00");
         System.out.println("=========" + stockJson + "=========");
         Stock stock2 = JSON.parseObject(stockJson, Stock.class);
 
-        stockJson = stockRepository.queryStock(stock.getNum());
+        stockJson = stockRepository.queryStock(stock2.getPreNum());
         System.out.println("=========" + stockJson + "=========");
 
         stockJson = stockRepository.queryStock(stock2.getNum());

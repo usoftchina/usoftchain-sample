@@ -3,13 +3,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-echo
-echo " ____    _____      _      ____    _____           _____   ____    _____ "
-echo "/ ___|  |_   _|    / \    |  _ \  |_   _|         | ____| |___ \  | ____|"
-echo "\___ \    | |     / _ \   | |_) |   | |    _____  |  _|     __) | |  _|  "
-echo " ___) |   | |    / ___ \  |  _ <    | |   |_____| | |___   / __/  | |___ "
-echo "|____/    |_|   /_/   \_\ |_| \_\   |_|           |_____| |_____| |_____|"
-echo
 
 CHANNEL_NAME="$1"
 : ${CHANNEL_NAME:="mychannel"}
@@ -109,9 +102,7 @@ chaincodeInvoke () {
         else
             peer chaincode invoke -o orderer.example.com:7050  --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract $PEER_CONN_PARMS -c '{"Args":["createAccount","91440300319521190W","深圳市华商龙商务互联科技有限公司"]}' >&log.txt
         fi
-        res=$?
         cat log.txt
-        verifyResult $res "Invoke execution on PEER$PEER failed "
         echo "===================== Invoke transaction successful on $PEERS on channel '$CHANNEL_NAME' ===================== "
         echo
 }

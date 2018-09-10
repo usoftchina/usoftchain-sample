@@ -19,8 +19,10 @@ package com.usoftchina.chain.test;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.chaincode.events.FabricEventsListenersRegistry;
 import org.springframework.data.chaincode.repository.config.EnableChaincodeRepositories;
+import org.springframework.data.chaincode.sdk.client.FabricClientConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +32,7 @@ import java.util.Map;
  */
 @Configuration
 @ComponentScan
+@Import({FabricClientConfig.class})
 @EnableChaincodeRepositories(basePackages = {"com.usoftchina.chain.repository"})
 public class StandaloneNetworkConfig {
 

@@ -348,7 +348,7 @@ func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []strin
 		Quantity:      quantity,
 		WarehouseName: warehouse.Name,
 		LocationName:  locationName,
-		Indate:        time.Now().Unix(),
+		Indate:        time.Now().UnixNano(),
 		StockType:     stockType,
 	}
 	stockBytes, err := json.Marshal(stock)
@@ -449,7 +449,7 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 		Quantity:      quantity,
 		WarehouseName: toWarehouseName,
 		LocationName:  toLocationName,
-		Indate:        time.Now().Unix(),
+		Indate:        time.Now().UnixNano(),
 		PreNum:        fromStock.Num,
 		StockType:     "trade",
 	}

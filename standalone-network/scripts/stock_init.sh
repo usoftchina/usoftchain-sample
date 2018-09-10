@@ -141,10 +141,6 @@ installChaincode 1 2
 echo "Instantiating chaincode on peer0.org1..."
 instantiateChaincode 0 1
 
-# Invoke on chaincode on peer0.org1
-echo "Sending invoke transaction on peer0.org1..."
-chaincodeInvoke 0 1
-
 echo
 echo "========= Completed =========== "
 echo

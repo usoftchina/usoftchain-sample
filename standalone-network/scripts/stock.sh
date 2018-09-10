@@ -127,8 +127,6 @@ parsePeerConnectionParameters() {
 # Accepts as many peer/org pairs as desired and requests endorsement from each
 chaincodeInvoke () {
         parsePeerConnectionParameters $@
-        res=$?
-        verifyResult $res "Invoke transaction failed on channel '$CHANNEL_NAME' due to uneven number of peer and org parameters "
 
         # while 'peer chaincode' command can get the orderer endpoint from the
         # peer (if join was successful), let's supply it directly as we know

@@ -57,7 +57,7 @@ type Stock struct {
 	// 来源
 	PreNum string `json:"preNum"`
 	// 入库日期
-	Indate time.Time `json:indate`
+	Indate int64 `json:indate`
 	// 类型: 初始化init,交易trade,制造make
 	StockType string `json:"stockType"`
 }
@@ -348,7 +348,7 @@ func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []strin
 		Quantity:      quantity,
 		WarehouseName: warehouse.Name,
 		LocationName:  locationName,
-		Indate:        time.Now(),
+		Indate:        time.Now().Unix(),
 		StockType:     stockType,
 	}
 	stockBytes, err := json.Marshal(stock)
@@ -449,7 +449,7 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 		Quantity:      quantity,
 		WarehouseName: toWarehouseName,
 		LocationName:  toLocationName,
-		Indate:        time.Now(),
+		Indate:        time.Now().Unix(),
 		PreNum:        fromStock.Num,
 		StockType:     "trade",
 	}

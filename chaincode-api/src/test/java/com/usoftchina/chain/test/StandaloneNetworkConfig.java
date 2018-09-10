@@ -39,21 +39,21 @@ public class StandaloneNetworkConfig {
     @Bean(name = "ordererLocations")
     public Map<String, String> ordererLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("orderer0", "grpc://localhost:7050");
+        res.put("orderer0", "grpc://192.168.0.174:7050");
         return res;
     }
 
     @Bean(name = "peerLocations")
     public Map<String, String> peerLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0", "grpc://localhost:7051");
+        res.put("peer0", "grpc://192.168.0.174:7051");
         return res;
     }
 
     @Bean(name = "eventHubLocations")
     public Map<String, String> eventHubLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0", "grpc://localhost:7053");
+        res.put("peer0", "grpc://192.168.0.174:7053");
         return res;
     }
 

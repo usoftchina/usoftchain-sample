@@ -7,16 +7,16 @@ import java.util.Date;
  * @author yingp
  * @date 2018/9/10
  */
-public class Stock implements Serializable{
+public class Batch implements Serializable{
     private String num;
-    private String accountNum;
+    private String owner;
     private String productNum;
     private double quantity;
     private String warehouseName;
     private String locationName;
     private String preNum;
     private Date indate;
-    private String stockType;
+    private String batchType;
 
     public String getNum() {
         return num;
@@ -26,12 +26,12 @@ public class Stock implements Serializable{
         this.num = num;
     }
 
-    public String getAccountNum() {
-        return accountNum;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setAccountNum(String accountNum) {
-        this.accountNum = accountNum;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getProductNum() {
@@ -82,11 +82,11 @@ public class Stock implements Serializable{
         this.indate = indate;
     }
 
-    public String getStockType() {
-        return stockType;
+    public String getBatchType() {
+        return batchType;
     }
 
-    public void setStockType(String stockType) {
-        this.stockType = stockType;
+    public void setBatchType(String batchType) {
+        this.batchType = batchType;
     }
 }

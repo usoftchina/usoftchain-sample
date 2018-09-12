@@ -20,22 +20,21 @@ public interface StockRepository extends ChaincodeRepository {
      * @param name
      * @return
      */
-    @ChaincodeInvoke
-    String createAccount(String num, String name);
+//    @ChaincodeInvoke
+//    String createAccount(String num, String name);
 
     /**
      * 创建仓库
-     * {"Args":["createWarehouse",owner,name,desc,address]}
-     * {"Args":["createWarehouse","91441900760628116P","新宁","新宁仓","广东省东莞市长安镇乌沙第六工业区海滨路23号"]}
+     * {"Args":["createWarehouse",name,desc,address]}
+     * {"Args":["createWarehouse","新宁","新宁仓","广东省东莞市长安镇乌沙第六工业区海滨路23号"]}
      *
-     * @param owner
      * @param name
      * @param desc
      * @param address
      * @return
      */
     @ChaincodeInvoke
-    String createWarehouse(String owner, String name, String desc, String address);
+    String createWarehouse(String name, String desc, String address);
 
     /**
      * 创建仓位
@@ -68,9 +67,8 @@ public interface StockRepository extends ChaincodeRepository {
 
     /**
      * 库存初始化
-     * {"Args":["initStock","914403006658721616","NCC24","新宁","1-1","1000.00"]}
+     * {"Args":["initStock","NCC24","新宁","1-1","1000.00"]}
      *
-     * @param owner
      * @param productNum
      * @param warehouseName
      * @param locationName
@@ -78,13 +76,12 @@ public interface StockRepository extends ChaincodeRepository {
      * @return
      */
     @ChaincodeInvoke
-    String initStock(String owner, String productNum, String warehouseName, String locationName, String quantity);
+    String initStock(String productNum, String warehouseName, String locationName, String quantity);
 
     /**
      * 完工入库
-     * {"Args":["initStock","914403006658721616","NCC24","新宁","1-1","1000.00"]}
+     * {"Args":["initStock","NCC24","新宁","1-1","1000.00"]}
      *
-     * @param owner
      * @param productNum
      * @param warehouseName
      * @param locationName
@@ -92,14 +89,14 @@ public interface StockRepository extends ChaincodeRepository {
      * @return
      */
     @ChaincodeInvoke
-    String completeStock(String owner, String productNum, String warehouseName, String locationName, String quantity);
+    String completeStock(String productNum, String warehouseName, String locationName, String quantity);
 
     /**
      * 库存转移：出货、采购验收
-     * {"Args":["transferStock",toAccountNum,toWarehouseName,toLocationName,fromStockNum,quantity]}
+     * {"Args":["transferStock",toAccount,toWarehouseName,toLocationName,fromStockNum,quantity]}
      * {"Args":["transferStock","91440300MA5DC1WL1W","格力","1-1","201809039382631161","1000.00"]}
      *
-     * @param toAccountNum
+     * @param toAccount
      * @param toWarehouseName
      * @param toLocationName
      * @param fromStockNum
@@ -107,19 +104,49 @@ public interface StockRepository extends ChaincodeRepository {
      * @return
      */
     @ChaincodeInvoke
-    String transferStock(String toAccountNum, String toWarehouseName, String toLocationName, String fromStockNum, String quantity);
+    String transferStock(String toAccount, String toWarehouseName, String toLocationName, String fromStockNum, String quantity);
 
     /**
-     * 库存查询
-     * {"Args":["queryStock",stockNum]}
-     * {"Args":["queryStock","201809039382631161"]}
+     * 批次查询
+     * {"Args":["queryBatch",batchNum]}
+     * {"Args":["queryBatch","201809039382631161"]}
      *
-     * @param stockNum
+     * @param batchNum
      * @return
      */
     @ChaincodeQuery
-    String queryStock(String stockNum);
+    String queryBatch(String batchNum);
 
+    /**
+     * 批次历史操作查询
+     * {"Args":["queryBatchHistory",batchNum]}
+     * {"Args":["queryBatchHistory","201809039382631161"]}
+     *
+     * @param batchNum
+     * @return
+     */
+    @ChaincodeQuery
+    String queryBatchHistory(String batchNum);
+
+    /**
+     * 查询所属批次
+     * {"Args":["queryBatchesByOwner",owner]}
+     * {"Args":["queryBatchesByOwner","201809039382631161"]}
+     *
+     * @param owner
+     * @return
+     */
+    @ChaincodeQuery
+    String queryBatchesByOwner(String owner);
+
+    /**
+     * 查询我的批次
+     * {"Args":["queryMyBatches"]}
+     *
+     * @return
+     */
+    @ChaincodeQuery
+    String queryMyBatches();
     /**
      * 账户查询
      * {"Args":["queryAccount",num]}
@@ -128,8 +155,8 @@ public interface StockRepository extends ChaincodeRepository {
      * @param num
      * @return
      */
-    @ChaincodeQuery
-    String queryAccount(String num);
+//    @ChaincodeQuery
+//    String queryAccount(String num);
 
     /**
      * 仓库查询

@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/protos/peer"
-	"math/rand"
 	"strconv"
 	"time"
+	"github.com/usoftchina/usoftchain-sample/chaincode/utils"
 )
 
 // 库存智能合约
 type StockContract struct {
 }
 
-// 账户
-type Account struct {
-	Num  string `json:"num"`
-	Name string `json:"name"`
-}
+//// 账户
+//type Account struct {
+//	Num  string `json:"num"`
+//	Name string `json:"name"`
+//}
 
 // 物料资料
 type Product struct {
@@ -46,10 +46,10 @@ type Warehouse struct {
 	Locations map[string]string `json:"locations"`
 }
 
-// 库存交易操作
-type Stock struct {
+// 库存批次
+type Batch struct {
 	Num           string  `json:"num"`
-	AccountNum    string  `json:"accountNum"`
+	Owner         string  `json:"owner"`
 	ProductNum    string  `json:"productNum"`
 	Quantity      float64 `json:"quantity"`
 	WarehouseName string  `json:"warehouseName"`
@@ -59,11 +59,10 @@ type Stock struct {
 	// 入库日期
 	Indate int64 `json:"indate"`
 	// 类型: 初始化init,交易trade,制造make
-	StockType string `json:"stockType"`
+	BatchType string `json:"batchType"`
 }
 
 var (
-	formatDate          = "20060102"
 	defaultLocation     = "default"
 	defaultLocationDesc = "默认仓位"
 )
@@ -77,9 +76,9 @@ func (s *StockContract) Init(stub shim.ChaincodeStubInterface) peer.Response {
 func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	function, args := stub.GetFunctionAndParameters()
 	// Route to the appropriate handler function to interact with the ledger appropriately
-	if function == "createAccount" { // 创建账户
+	/*if function == "createAccount" { // 创建账户
 		return s.createAccount(stub, args)
-	} else if function == "createWarehouse" { // 创建仓库
+	} else */if function == "createWarehouse" { // 创建仓库
 		return s.createWarehouse(stub, args)
 	} else if function == "createLocation" { // 创建仓位
 		return s.createLocation(stub, args)
@@ -91,14 +90,20 @@ func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return s.initStock(stub, args, "make")
 	} else if function == "transferStock" { // 库存转移
 		return s.transferStock(stub, args)
-	} else if function == "queryStock" { // 库存查询
-		return s.queryStock(stub, args)
-	} else if function == "queryAccount" { // 账户查询
+	} else if function == "queryBatch" { // 批次查询
+		return s.queryBatch(stub, args)
+	} else if function == "queryBatchHistory" { // 批次操作历史查询
+		return s.queryBatchHistory(stub, args)
+	} else if function == "queryBatchesByOwner" { // 查询所属批次
+		return s.queryBatchesByOwner(stub, args)
+	} else if function == "queryMyBatches" { // 查询我的批次
+		return s.queryMyBatches(stub, args)
+	} /* else if function == "queryAccount" { // 账户查询
 		return s.queryAccount(stub, args)
-	} else if function == "queryWarehouse" { // 仓库查询
+	}*/else if function == "queryWarehouse" { // 仓库查询
 		return s.queryWarehouse(stub, args)
 	}
-	return shim.Error(fmt.Sprintf("Invalid Stock Contract function name %s, available functions (createAccount|createWarehouse|createLocation|createProduct|initStock|completeStock|transferStock|queryStock|queryAccount|queryWarehouse)", function))
+	return shim.Error(fmt.Sprintf("Invalid Stock Contract function name %s, available functions (createWarehouse|createLocation|createProduct|initStock|completeStock|transferStock|queryBatch|queryBatchHistory|queryWarehouse)", function))
 }
 
 /**
@@ -106,39 +111,44 @@ func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 {"Args":["createAccount",num,name]}
 {"Args":["createAccount","91441900760628116P","东莞市新宁仓储有限公司"]}
 */
-func (s *StockContract) createAccount(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
-	}
-	accountBytes, err := stub.GetState(args[0])
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	if accountBytes != nil {
-		return shim.Error(fmt.Sprintf("The account of %s already exists", args[0]))
-	}
-	account := Account{Num: args[0], Name: args[1]}
-	accountBytes, err = json.Marshal(account)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	err = stub.PutState(account.Num, accountBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	return shim.Success(nil)
-}
+//func (s *StockContract) createAccount(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+//	if len(args) != 2 {
+//		return shim.Error("Incorrect number of arguments. Expecting 2")
+//	}
+//	accountBytes, err := stub.GetState(args[0])
+//	if err != nil {
+//		return shim.Error(err.Error())
+//	}
+//	if accountBytes != nil {
+//		return shim.Error(fmt.Sprintf("The account of %s already exists", args[0]))
+//	}
+//	account := Account{Num: args[0], Name: args[1]}
+//	accountBytes, err = json.Marshal(account)
+//	if err != nil {
+//		return shim.Error(err.Error())
+//	}
+//	err = stub.PutState(account.Num, accountBytes)
+//	if err != nil {
+//		return shim.Error(err.Error())
+//	}
+//	return shim.Success(nil)
+//}
 
 /**
 创建仓库
-{"Args":["createWarehouse",owner,name,desc,address]}
-{"Args":["createWarehouse","91441900760628116P","新宁","新宁仓","广东省东莞市长安镇乌沙第六工业区海滨路23号"]}
+{"Args":["createWarehouse",name,desc,address]}
+{"Args":["createWarehouse","新宁","新宁仓","广东省东莞市长安镇乌沙第六工业区海滨路23号"]}
 */
 func (s *StockContract) createWarehouse(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
-	warehouseBytes, err := stub.GetState(args[1])
+	creator, err := utils.GetCreatorName(stub)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	key := "warehouse:" + args[0]
+	warehouseBytes, err := stub.GetState(key)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -147,17 +157,17 @@ func (s *StockContract) createWarehouse(stub shim.ChaincodeStubInterface, args [
 	}
 	defaultLocations := map[string]string{defaultLocation: defaultLocationDesc}
 	warehouse := Warehouse{
-		Owner:     args[0],
-		Name:      args[1],
-		Desc:      args[2],
-		Address:   args[3],
+		Owner:     creator,
+		Name:      args[0],
+		Desc:      args[1],
+		Address:   args[2],
 		Locations: defaultLocations,
 	}
 	warehouseBytes, err = json.Marshal(warehouse)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = stub.PutState(warehouse.Name, warehouseBytes)
+	err = stub.PutState(key, warehouseBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -173,13 +183,18 @@ func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []
 	if len(args) != 2 && len(args) != 3 {
 		return shim.Error("Incorrect number of arguments. Expecting 2 or 3")
 	}
+	creator, err := utils.GetCreatorName(stub)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 	warehouseName := args[0]
 	locationName := args[1]
 	locationDesc := locationName
 	if len(args) == 3 {
 		locationDesc = args[2]
 	}
-	warehouseBytes, err := stub.GetState(warehouseName)
+	key := "warehouse:" + warehouseName
+	warehouseBytes, err := stub.GetState(key)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -191,6 +206,9 @@ func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []
 	if err != nil {
 		return shim.Error(err.Error())
 	}
+	if warehouse.Owner != creator {
+		return shim.Error(fmt.Sprintf("You are not the owner of %s", warehouseName))
+	}
 	_, exists := warehouse.Locations[locationName]
 	if exists {
 		return shim.Error(fmt.Sprintf("The location of %s already exists", locationName))
@@ -200,7 +218,7 @@ func (s *StockContract) createLocation(stub shim.ChaincodeStubInterface, args []
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = stub.PutState(warehouse.Name, warehouseBytes)
+	err = stub.PutState(key, warehouseBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -216,7 +234,8 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 	if len(args) != 6 {
 		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
-	productBytes, err := stub.GetState(args[0])
+	key := "product:" + args[0]
+	productBytes, err := stub.GetState(key)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -235,18 +254,11 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = stub.PutState(product.Num, productBytes)
+	err = stub.PutState(key, productBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	return shim.Success(nil)
-}
-
-// 产生唯一流水号
-func randNumber() string {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	batchNum := time.Now().Format(formatDate) + strconv.FormatInt(time.Now().Unix(), 10)[4:] + strconv.Itoa(r.Intn(8999)+1000)
-	return batchNum
 }
 
 // key-value保存库存数量，方便查询
@@ -274,61 +286,99 @@ func modifyStockQuantityByKey(stub shim.ChaincodeStubInterface, key string, chan
 
 // 查询仓库物料库存
 func queryWarehouseProductStock(stub shim.ChaincodeStubInterface, warehouseName string, productNum string) (quantity float64, err error) {
-	key := fmt.Sprintf(`"warehouseName:"%s","productNum":"%s"`, warehouseName, productNum)
+	key, err := stub.CreateCompositeKey("warehouseProductStock", []string{warehouseName, productNum})
+	if err != nil {
+		return
+	}
 	return queryStockQuantityByKey(stub, key)
 }
 
 // 查询账户物料库存
-func queryAccountProductStock(stub shim.ChaincodeStubInterface, accountNum string, productNum string) (quantity float64, err error) {
-	key := fmt.Sprintf(`"accountNum:"%s","productNum":"%s"`, accountNum, productNum)
+func queryOwnerProductStock(stub shim.ChaincodeStubInterface, owner string, productNum string) (quantity float64, err error) {
+	key, err := stub.CreateCompositeKey("ownerProductStock", []string{owner, productNum})
+	if err != nil {
+		return
+	}
 	return queryStockQuantityByKey(stub, key)
 }
 
 // 修改仓库物料库存
 func modifyWarehouseProductStock(stub shim.ChaincodeStubInterface, warehouseName string, productNum string, qty float64) error {
-	key := fmt.Sprintf(`"warehouseName:"%s","productNum":"%s"`, warehouseName, productNum)
+	key, err := stub.CreateCompositeKey("warehouseProductStock", []string{warehouseName, productNum})
+	if err != nil {
+		return err
+	}
 	return modifyStockQuantityByKey(stub, key, qty)
 }
 
 // 修改账户物料库存
-func modifyAccountProductStock(stub shim.ChaincodeStubInterface, accountNum string, productNum string, qty float64) error {
-	key := fmt.Sprintf(`"accountNum:"%s","productNum":"%s"`, accountNum, productNum)
+func modifyOwnerProductStock(stub shim.ChaincodeStubInterface, owner string, productNum string, qty float64) error {
+	key, err := stub.CreateCompositeKey("ownerProductStock", []string{owner, productNum})
+	if err != nil {
+		return err
+	}
 	return modifyStockQuantityByKey(stub, key, qty)
+}
+
+// 账户批次slice
+func addOwnerBatch(stub shim.ChaincodeStubInterface, owner string, batchNum string) error {
+	key := "ownerBatches:" + owner
+	batchesBytes, err := stub.GetState(key)
+	if err != nil {
+		return err
+	}
+	var batches []string
+	if batchesBytes != nil {
+		err = json.Unmarshal(batchesBytes, &batches)
+		if err != nil {
+			return err
+		}
+	}
+	batches = append(batches, batchNum)
+	batchesBytes, err = json.Marshal(batches)
+	if err != nil {
+		return err
+	}
+	return stub.PutState(key, batchesBytes)
 }
 
 /**
 无来源入库：库存初始化、完工入库
-{"Args":["initStock","914403006658721616","NCC24","新宁","1-1","1000.00"]}
+{"Args":["initStock","NCC24","新宁","1-1","1000.00"]}
 */
-func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []string, stockType string) peer.Response {
-	if len(args) != 5 {
-		return shim.Error("Incorrect number of arguments. Expecting 5")
+func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []string, batchType string) peer.Response {
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
-	productBytes, err := stub.GetState(args[1])
+	creator, err := utils.GetCreatorName(stub)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	productBytes, err := stub.GetState("product:" + args[0])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	if productBytes == nil {
-		return shim.Error(fmt.Sprintf("The product of %s does not exist", args[1]))
+		return shim.Error(fmt.Sprintf("The product of %s does not exist", args[0]))
 	}
 	product := Product{}
 	err = json.Unmarshal(productBytes, &product)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	warehouseBytes, err := stub.GetState(args[2])
+	warehouseBytes, err := stub.GetState("warehouse:" + args[1])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	if warehouseBytes == nil {
-		return shim.Error(fmt.Sprintf("The warehouse of %s does not exist", args[2]))
+		return shim.Error(fmt.Sprintf("The warehouse of %s does not exist", args[1]))
 	}
 	warehouse := Warehouse{}
 	err = json.Unmarshal(warehouseBytes, &warehouse)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	locationName := args[3]
+	locationName := args[2]
 	if len(locationName) != 0 {
 		_, exists := warehouse.Locations[locationName]
 		if !exists {
@@ -337,61 +387,58 @@ func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []strin
 	} else {
 		locationName = defaultLocation
 	}
-	quantity, err := strconv.ParseFloat(args[4], 64)
+	quantity, err := strconv.ParseFloat(args[3], 64)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	stock := Stock{
-		Num:           randNumber(),
-		AccountNum:    args[0],
+	batch := Batch{
+		Num:           utils.RandNumber(),
+		Owner:         creator,
 		ProductNum:    product.Num,
 		Quantity:      quantity,
 		WarehouseName: warehouse.Name,
 		LocationName:  locationName,
 		Indate:        time.Now().UnixNano() / 1000000,
-		StockType:     stockType,
+		BatchType:     batchType,
 	}
-	stockBytes, err := json.Marshal(stock)
+	batchBytes, err := json.Marshal(batch)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = stub.PutState(stock.Num, stockBytes)
+	err = stub.PutState(batch.Num, batchBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = modifyWarehouseProductStock(stub, stock.WarehouseName, stock.ProductNum, quantity)
+	err = modifyWarehouseProductStock(stub, batch.WarehouseName, batch.ProductNum, quantity)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = modifyAccountProductStock(stub, stock.AccountNum, stock.ProductNum, quantity)
+	err = modifyOwnerProductStock(stub, batch.Owner, batch.ProductNum, quantity)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	return shim.Success(stockBytes)
+	err = addOwnerBatch(stub, batch.Owner, batch.Num)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(batchBytes)
 }
 
 /**
 库存转移：出货、采购验收
-{"Args":["transferStock",toAccountNum,toWarehouseName,toLocationName,fromStockNum,quantity]}
+{"Args":["transferStock",toAccount,toWarehouseName,toLocationName,fromStockNum,quantity]}
 {"Args":["transferStock","91440300MA5DC1WL1W","格力","1-1","201809039382631161","1000.00"]}
 */
 func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 5 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
-	toAccountNum := args[0]
+	toAccount := args[0]
 	toWarehouseName := args[1]
 	toLocationName := args[2]
-	fromStockNum := args[3]
+	fromBatchNum := args[3]
 	quantityStr := args[4]
-	toAccountBytes, err := stub.GetState(toAccountNum)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	if toAccountBytes == nil {
-		return shim.Error(fmt.Sprintf("The account of %s does not exist", toAccountNum))
-	}
-	toWarehouseBytes, err := stub.GetState(toWarehouseName)
+	toWarehouseBytes, err := stub.GetState("warehouse:" + toWarehouseName)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -418,105 +465,132 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 	if quantity <= 0 {
 		return shim.Error(fmt.Sprintf("Illegal argument, quantity should be greater than 0"))
 	}
-	fromStockBytes, err := stub.GetState(fromStockNum)
+	fromBatchBytes, err := stub.GetState(fromBatchNum)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	if fromStockBytes == nil {
-		return shim.Error(fmt.Sprintf("The stock of %s does not exist", fromStockNum))
+	if fromBatchBytes == nil {
+		return shim.Error(fmt.Sprintf("The batch of %s does not exist", fromBatchNum))
 	}
-	fromStock := Stock{}
-	err = json.Unmarshal(fromStockBytes, &fromStock)
+	fromBatch := Batch{}
+	err = json.Unmarshal(fromBatchBytes, &fromBatch)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	if fromStock.Quantity < quantity {
-		return shim.Error(fmt.Sprintf("Insufficient quantity of batch, %0.4f < %0.4f", fromStock.Quantity, quantity))
+	if fromBatch.Quantity < quantity {
+		return shim.Error(fmt.Sprintf("Insufficient quantity of batch, %0.4f < %0.4f", fromBatch.Quantity, quantity))
 	}
-	fromStock.Quantity = fromStock.Quantity - quantity
-	fromStockBytes, err = json.Marshal(fromStock)
+	fromBatch.Quantity = fromBatch.Quantity - quantity
+	fromBatchBytes, err = json.Marshal(fromBatch)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = stub.PutState(fromStockNum, fromStockBytes)
+	err = stub.PutState(fromBatchNum, fromBatchBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	toStock := Stock{
-		Num:           randNumber(),
-		AccountNum:    toAccountNum,
-		ProductNum:    fromStock.ProductNum,
+	toBatch := Batch{
+		Num:           utils.RandNumber(),
+		Owner:         toAccount,
+		ProductNum:    fromBatch.ProductNum,
 		Quantity:      quantity,
 		WarehouseName: toWarehouseName,
 		LocationName:  toLocationName,
 		Indate:        time.Now().UnixNano() / 1000000,
-		PreNum:        fromStock.Num,
-		StockType:     "trade",
+		PreNum:        fromBatch.Num,
+		BatchType:     "trade",
 	}
-	toStockBytes, err := json.Marshal(toStock)
+	toBatchBytes, err := json.Marshal(toBatch)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = stub.PutState(toStock.Num, toStockBytes)
+	err = stub.PutState(toBatch.Num, toBatchBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = modifyWarehouseProductStock(stub, fromStock.WarehouseName, fromStock.ProductNum, -quantity)
+	err = modifyWarehouseProductStock(stub, fromBatch.WarehouseName, fromBatch.ProductNum, -quantity)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = modifyAccountProductStock(stub, fromStock.AccountNum, fromStock.ProductNum, -quantity)
+	err = modifyOwnerProductStock(stub, fromBatch.Owner, fromBatch.ProductNum, -quantity)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = modifyWarehouseProductStock(stub, toStock.WarehouseName, toStock.ProductNum, quantity)
+	err = modifyWarehouseProductStock(stub, toBatch.WarehouseName, toBatch.ProductNum, quantity)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	err = modifyAccountProductStock(stub, toStock.AccountNum, toStock.ProductNum, quantity)
+	err = modifyOwnerProductStock(stub, toBatch.Owner, toBatch.ProductNum, quantity)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	return shim.Success(toStockBytes)
+	err = addOwnerBatch(stub, toBatch.Owner, toBatch.Num)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(toBatchBytes)
 }
 
 /**
-库存查询
-{"Args":["queryStock",stockNum]}
-{"Args":["queryStock","201809039382631161"]}
+批次查询
+{"Args":["queryBatch",batchNum]}
+{"Args":["queryBatch","201809039382631161"]}
 */
-func (s *StockContract) queryStock(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+func (s *StockContract) queryBatch(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
-	stockBytes, err := stub.GetState(args[0])
+	batchBytes, err := stub.GetState(args[0])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	if stockBytes == nil {
-		return shim.Error(fmt.Sprintf("The stock of %s does not exist", args[0]))
+	if batchBytes == nil {
+		return shim.Error(fmt.Sprintf("The batch of %s does not exist", args[0]))
 	}
-	return shim.Success(stockBytes)
+	return shim.Success(batchBytes)
 }
 
 /**
-账户查询
-{"Args":["queryAccount",num]}
-{"Args":["queryAccount","91441900760628116P"]}
+批次操作历史查询
+{"Args":["queryBatchHistory",batchNum]}
+{"Args":["queryBatchHistory","201809039382631161"]}
 */
-func (s *StockContract) queryAccount(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+func (s *StockContract) queryBatchHistory(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
-	accountBytes, err := stub.GetState(args[0])
+	it, err := stub.GetHistoryForKey(args[0])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	if accountBytes == nil {
-		return shim.Error(fmt.Sprintf("The account of %s does not exist", args[0]))
+	if it == nil {
+		return shim.Error(fmt.Sprintf("The batch of %s does not exist", args[0]))
 	}
-	return shim.Success(accountBytes)
+	hisBytes, err := utils.GetHistoryListResult(it)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(hisBytes)
 }
+
+///**
+//账户查询
+//{"Args":["queryAccount",num]}
+//{"Args":["queryAccount","91441900760628116P"]}
+//*/
+//func (s *StockContract) queryAccount(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+//	if len(args) != 1 {
+//		return shim.Error("Incorrect number of arguments. Expecting 1")
+//	}
+//	accountBytes, err := stub.GetState(args[0])
+//	if err != nil {
+//		return shim.Error(err.Error())
+//	}
+//	if accountBytes == nil {
+//		return shim.Error(fmt.Sprintf("The account of %s does not exist", args[0]))
+//	}
+//	return shim.Success(accountBytes)
+//}
 
 /**
 仓库查询
@@ -527,7 +601,7 @@ func (s *StockContract) queryWarehouse(stub shim.ChaincodeStubInterface, args []
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
-	warehouseBytes, err := stub.GetState(args[0])
+	warehouseBytes, err := stub.GetState("warehouse:" + args[0])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -535,6 +609,37 @@ func (s *StockContract) queryWarehouse(stub shim.ChaincodeStubInterface, args []
 		return shim.Error(fmt.Sprintf("The warehouse of %s does not exist", args[0]))
 	}
 	return shim.Success(warehouseBytes)
+}
+
+/**
+所属批次查询
+{"Args":["queryBatchesByOwner",owner]}
+{"Args":["queryBatchesByOwner","新宁"]}
+*/
+func (s *StockContract) queryBatchesByOwner(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+	batchesBytes, err := stub.GetState("ownerBatches:" + args[0])
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(batchesBytes)
+}
+
+/**
+我的批次查询
+{"Args":["queryMyBatches"]}
+*/
+func (s *StockContract) queryMyBatches(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 0 {
+		return shim.Error("Incorrect number of arguments. Expecting 0")
+	}
+	owner, err := utils.GetCreatorName(stub)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return s.queryBatchesByOwner(stub, []string{owner})
 }
 
 func main() {

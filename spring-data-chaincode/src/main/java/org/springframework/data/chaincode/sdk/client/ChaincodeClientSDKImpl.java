@@ -237,8 +237,10 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
         }
     }
 
-    private synchronized Channel getChannel(String name) throws InvalidArgumentException, TransactionException {
+    @Override
+    public synchronized Channel getChannel(String name) throws InvalidArgumentException, TransactionException {
         if (!channels.containsKey(name)) {
+            initUserContext();
             logger.debug("Channel {} not initiated, initiating", name);
             Channel channel = client.newChannel(name);
             for (Map.Entry<String, String> peer : peerLocations.entrySet()) {

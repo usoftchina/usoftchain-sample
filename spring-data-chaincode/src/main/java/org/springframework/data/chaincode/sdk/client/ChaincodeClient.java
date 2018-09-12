@@ -18,6 +18,9 @@ package org.springframework.data.chaincode.sdk.client;
 
 
 import com.google.protobuf.ByteString;
+import org.hyperledger.fabric.sdk.Channel;
+import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
+import org.hyperledger.fabric.sdk.exception.TransactionException;
 import org.springframework.data.chaincode.repository.Chaincode;
 
 /**
@@ -66,5 +69,14 @@ public interface ChaincodeClient {
      */
     void startBlockEventsListener(String chName);
 
+    /**
+     * Get channel
+     *
+     * @param name
+     * @return
+     * @throws InvalidArgumentException
+     * @throws TransactionException
+     */
+    Channel getChannel(String name) throws InvalidArgumentException, TransactionException;
 
 }

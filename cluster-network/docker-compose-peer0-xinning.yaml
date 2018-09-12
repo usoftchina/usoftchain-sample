@@ -14,6 +14,10 @@ services:
       service: peer0.xinning.usoftchain.com
     extra_hosts:
       - "orderer.usoftchain.com:192.168.0.176"
+      - "peer0.huasl.usoftchain.com:192.168.0.177"
+      - "peer0.skypine.usoftchain.com:192.168.0.178"
+      - "peer0.xinning.usoftchain.com:192.168.0.179"
+      - "peer0.usoft.usoftchain.com:192.168.0.180"
       - "couchdb:192.168.0.180"
 
   cli:

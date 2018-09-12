@@ -201,8 +201,8 @@ function networkUp () {
 #    else
 #      #Generate all the artifacts that includes org certs, orderer genesis block,
 #      # channel configuration transaction
-      source generateArtifacts.sh $CH_NAME
-      copyConfig
+#      source generateArtifacts.sh $CH_NAME
+#      copyConfig
 #    fi
 
     startZookeeper
@@ -227,7 +227,7 @@ function networkDown () {
 
     stopZookeeper
 
-    clearConfig
+#    clearConfig
 }
 
 validateArgs

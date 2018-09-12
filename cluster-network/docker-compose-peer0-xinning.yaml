@@ -7,18 +7,27 @@ version: '2'
 
 services:
 
+  couchdb:
+    container_name: couchdb
+    hostname: couchdb
+    extends:
+      file: base/docker-compose-base.yaml
+      service: couchdb
+
   peer0.xinning.usoftchain.com:
     container_name: peer0.xinning.usoftchain.com
     extends:
       file:  base/docker-compose-base.yaml
       service: peer0.xinning.usoftchain.com
+    depends_on:
+      - couchdb
     extra_hosts:
       - "orderer.usoftchain.com:192.168.0.176"
       - "peer0.huasl.usoftchain.com:192.168.0.177"
       - "peer0.skypine.usoftchain.com:192.168.0.178"
       - "peer0.xinning.usoftchain.com:192.168.0.179"
       - "peer0.usoft.usoftchain.com:192.168.0.180"
-      - "couchdb:192.168.0.180"
+      - "couchdb:192.168.0.179"
 
   cli:
     container_name: cli

@@ -11,7 +11,6 @@ declare -A ZOOKEEPERS=(["192.168.0.176"]="zookeeper0" ["192.168.0.177"]="zookeep
 declare -A KAFKAS=(["192.168.0.176"]="kafka0" ["192.168.0.177"]="kafka1" ["192.168.0.178"]="kafka2" ["192.168.0.179"]="kafka3")
 declare -A ORDERERS=(["192.168.0.176"]="orderer")
 declare -A PEERS=(["192.168.0.177"]="peer0-huasl" ["192.168.0.178"]="peer0-skypine" ["192.168.0.179"]="peer0-xinning" ["192.168.0.180"]="peer0-usoft")
-declare -A COUCHDBS=(["192.168.0.180"]="couchdb")
 
 function printHelp () {
 	echo "Usage: ./network_setup <up|down|restart> <\$channel-name>"
@@ -111,30 +110,6 @@ EOF
     done
 }
 
-function startCouchdb() {
-    for key in ${!COUCHDBS[@]}
-    do
-      file="docker-compose-${COUCHDBS[$key]}.yaml"
-      ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
-      docker-compose -f $file up -d
-      exit
-EOF
-    done
-}
-
-function stopCouchdb() {
-    for key in ${!COUCHDBS[@]}
-    do
-      file="docker-compose-${COUCHDBS[$key]}.yaml"
-      ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
-      docker-compose -f $file down
-      exit
-EOF
-    done
-}
-
 function startOrderer() {
     for key in ${!ORDERERS[@]}
     do
@@ -209,8 +184,6 @@ function networkUp () {
 
     startKafka
 
-    startCouchdb
-
     startOrderer
 
     startPeer
@@ -220,8 +193,6 @@ function networkDown () {
     stopPeer
 
     stopOrderer
-
-    stopCouchdb
 
     stopKafka
 

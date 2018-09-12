@@ -98,11 +98,11 @@ func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return s.queryBatchesByOwner(stub, args)
 	} else if function == "queryMyBatches" { // 查询我的批次
 		return s.queryMyBatches(stub, args)
-	} /* else if function == "queryAccount" { // 账户查询
-		return s.queryAccount(stub, args)
-	}*/else if function == "queryWarehouse" { // 仓库查询
+	} else if function == "queryWarehouse" { // 仓库查询
 		return s.queryWarehouse(stub, args)
-	}
+	}/* else if function == "queryAccount" { // 账户查询
+		return s.queryAccount(stub, args)
+	}*/
 	return shim.Error(fmt.Sprintf("Invalid Stock Contract function name %s, available functions (createWarehouse|createLocation|createProduct|initStock|completeStock|transferStock|queryBatch|queryBatchHistory|queryWarehouse)", function))
 }
 

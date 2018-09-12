@@ -203,9 +203,6 @@ installChaincode peer0.usoft
 #Instantiate chaincode
 echo "Instantiating chaincode on peer0.huasl..."
 instantiateChaincode peer0.huasl
-instantiateChaincode peer0.skypine
-instantiateChaincode peer0.xinning
-instantiateChaincode peer0.usoft
 
 echo
 echo "===================== completed ===================== "

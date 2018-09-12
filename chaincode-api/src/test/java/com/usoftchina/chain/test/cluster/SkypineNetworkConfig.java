@@ -106,7 +106,7 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
         return "cluster-network/crypto-config/peerOrganizations/skypine.usoftchain.com/users/Admin@skypine.usoftchain.com/msp"
-                + "/keystore/f1b9f735d643e49dce67e1ba435244b6e7e61b53c69643d67803f80882d5c1a4_sk";
+                + "/keystore/11c5d118c3e9e8f1c885028bca5cc0743a0847b74d0b2266ea1370a0f01ed5fb_sk";
     }
 
     @Bean(name = "userSigningCert")

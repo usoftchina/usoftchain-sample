@@ -106,7 +106,7 @@ public class HuaslNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
         return "cluster-network/crypto-config/peerOrganizations/huasl.usoftchain.com/users/Admin@huasl.usoftchain.com/msp"
-                + "/keystore/2ef95dc2a37d02659dc1de37017d578241684be3af81ce078ee4ae07dadcda1d_sk";
+                + "/keystore/73f9897d0131137c17d1cfe9615bac4a750403ef2f0f545b9740ed1f50dddc6a_sk";
     }
 
     @Bean(name = "userSigningCert")

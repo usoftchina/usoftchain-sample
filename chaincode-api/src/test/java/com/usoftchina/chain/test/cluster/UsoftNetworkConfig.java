@@ -106,7 +106,7 @@ public class UsoftNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
         return "cluster-network/crypto-config/peerOrganizations/usoft.usoftchain.com/users/Admin@usoft.usoftchain.com/msp"
-                + "/keystore/5c4e3de9d9f224107ef948a4bbac4cff99007ad98f05172bbb9265e3e7e1b9e9_sk";
+                + "/keystore/384a2b9e943214a49d895915771489a5e01d8fdfd138bb8b954589482d73fa52_sk";
     }
 
     @Bean(name = "userSigningCert")

@@ -155,14 +155,15 @@ instantiateChaincode () {
 	# while 'peer chaincode' command can get the orderer endpoint from the peer (if join was successful),
 	# lets supply it directly as we know it using the "-o" option
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer chaincode instantiate -o orderer.usoftchain.com:7050 -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "AND ('huaslMSP.peer','skypineMSP.peer','xinningMSP.peer','usoftMSP.peer')" >&log.txt
+		peer chaincode instantiate -o orderer.usoftchain.com:7050 -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "OR ('huaslMSP.peer','skypineMSP.peer','xinningMSP.peer','usoftMSP.peer')" >&log.txt
 	else
-		peer chaincode instantiate -o orderer.usoftchain.com:7050 --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "AND ('huaslMSP.peer','skypineMSP.peer','xinningMSP.peer','usoftMSP.peer')" >&log.txt
+		peer chaincode instantiate -o orderer.usoftchain.com:7050 --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "OR ('huaslMSP.peer','skypineMSP.peer','xinningMSP.peer','usoftMSP.peer')" >&log.txt
 	fi
 	res=$?
 	cat log.txt
 	verifyResult $res "Chaincode instantiation on ${PEER} on channel '$CHANNEL_NAME' failed"
 	echo "===================== Chaincode is instantiated on ${PEER} on channel '$CHANNEL_NAME' ===================== "
+	sleep 2
 	peer chaincode list -C $CHANNEL_NAME --instantiated >&log.txt
 	cat log.txt
 	echo

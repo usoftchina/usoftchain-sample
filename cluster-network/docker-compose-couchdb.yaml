@@ -1,0 +1,14 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+  couchdb:
+    container_name: couchdb
+    hostname: couchdb
+    extends:
+      file: base/docker-compose-base.yaml
+      service: couchdb

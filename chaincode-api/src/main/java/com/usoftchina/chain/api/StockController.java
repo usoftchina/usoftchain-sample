@@ -19,7 +19,7 @@ public class StockController {
 
     @GetMapping
     public void queryStock(String stockNum) {
-        System.out.println(stockRepository.queryStock(stockNum));
+        System.out.println(stockRepository.queryBatch(stockNum));
     }
 
 }

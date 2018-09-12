@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# setup e2e_cli_network
+# setup usoftchain_network
 #
 
 UP_DOWN="$1"
@@ -10,7 +10,8 @@ HOSTS=("192.168.0.176" "192.168.0.177" "192.168.0.178" "192.168.0.179" "192.168.
 declare -A ZOOKEEPERS=(["192.168.0.176"]="zookeeper0" ["192.168.0.177"]="zookeeper1" ["192.168.0.178"]="zookeeper2")
 declare -A KAFKAS=(["192.168.0.176"]="kafka0" ["192.168.0.177"]="kafka1" ["192.168.0.178"]="kafka2" ["192.168.0.179"]="kafka3")
 declare -A ORDERERS=(["192.168.0.176"]="orderer")
-declare -A PEERS=(["192.168.0.177"]="peer0-org1" ["192.168.0.178"]="peer1-org1" ["192.168.0.179"]="peer0-org2" ["192.168.0.180"]="peer1-org2")
+declare -A PEERS=(["192.168.0.177"]="peer0-huasl" ["192.168.0.178"]="peer0-skypine" ["192.168.0.179"]="peer0-xinning" ["192.168.0.180"]="peer0-usoft")
+declare -A COUCHDBS=(["192.168.0.180"]="couchdb")
 
 function printHelp () {
 	echo "Usage: ./network_setup <up|down|restart> <\$channel-name>"
@@ -48,7 +49,7 @@ function startZookeeper () {
     do
       file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
       docker-compose -f $file up -d
       exit
 EOF
@@ -60,7 +61,7 @@ function stopZookeeper () {
     do
       file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
       docker-compose -f $file down
       exit
 EOF
@@ -72,7 +73,7 @@ function startKafka () {
     do
       file="docker-compose-${KAFKAS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
       docker-compose -f $file up -d
       exit
 EOF
@@ -84,7 +85,7 @@ function stopKafka () {
     do
       file="docker-compose-${KAFKAS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
       docker-compose -f $file down
       exit
 EOF
@@ -94,8 +95,8 @@ EOF
 function copyConfig () {
     for key in ${!PEERS[@]}
     do
-      scp -rp channel-artifacts $key:go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
-      scp -rp crypto-config $key:go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+      scp -rp channel-artifacts $key:go/src/github.com/usoftchina/usoftchain-sample/cluster-network/
+      scp -rp crypto-config $key:go/src/github.com/usoftchina/usoftchain-sample/cluster-network/
     done
 }
 
@@ -103,8 +104,32 @@ function clearConfig () {
     for var in ${HOSTS[@]}
     do
       ssh -T $var <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network/
       rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
+      exit
+EOF
+    done
+}
+
+function startCouchdb() {
+    for key in ${!COUCHDBS[@]}
+    do
+      file="docker-compose-${COUCHDBS[$key]}.yaml"
+      ssh -T $key <<EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
+      docker-compose -f $file up -d
+      exit
+EOF
+    done
+}
+
+function stopCouchdb() {
+    for key in ${!COUCHDBS[@]}
+    do
+      file="docker-compose-${COUCHDBS[$key]}.yaml"
+      ssh -T $key <<EOF
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
+      docker-compose -f $file down
       exit
 EOF
     done
@@ -115,7 +140,7 @@ function startOrderer() {
     do
       file="docker-compose-${ORDERERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
       docker-compose -f $file up -d
       exit
 EOF
@@ -127,7 +152,7 @@ function stopOrderer() {
     do
       file="docker-compose-${ORDERERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
       docker-compose -f $file down
       exit
 EOF
@@ -139,7 +164,7 @@ function startPeer() {
     do
       file="docker-compose-${PEERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/e2e_cli
+      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
       docker-compose -f $file up -d
       exit
 EOF
@@ -149,7 +174,7 @@ EOF
 function stopPeer() {
     for key in ${!PEERS[@]}
     do
-      file="go/src/github.com/usoftchina/usoftchain-sample/e2e_cli/docker-compose-${PEERS[$key]}.yaml"
+      file="go/src/github.com/usoftchina/usoftchain-sample/cluster-network/docker-compose-${PEERS[$key]}.yaml"
       ssh $key "docker-compose -f $file down"
       # clear unwanted containers
       CONTAINER_IDS=$(ssh $key "docker ps -a | grep \"dev\|none\|test-vp\|peer[0-9]-\"" | awk '{print $1}')
@@ -176,13 +201,15 @@ function networkUp () {
 #    else
 #      #Generate all the artifacts that includes org certs, orderer genesis block,
 #      # channel configuration transaction
-#      source generateArtifacts.sh $CH_NAME
-#      copyConfig
+      source generateArtifacts.sh $CH_NAME
+      copyConfig
 #    fi
 
     startZookeeper
 
     startKafka
+
+    startCouchdb
 
     startOrderer
 
@@ -194,11 +221,13 @@ function networkDown () {
 
     stopOrderer
 
+    stopCouchdb
+
     stopKafka
 
     stopZookeeper
 
-#    clearConfig
+    clearConfig
 }
 
 validateArgs

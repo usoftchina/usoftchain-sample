@@ -7,11 +7,11 @@ version: '2'
 
 services:
 
-  orderer.example.com:
+  orderer.usoftchain.com:
     extends:
       file:   base/docker-compose-base.yaml
-      service: orderer.example.com
-    container_name: orderer.example.com
+      service: orderer.usoftchain.com
+    container_name: orderer.usoftchain.com
     extra_hosts:
       - "zookeeper0:192.168.0.176"
       - "zookeeper1:192.168.0.177"

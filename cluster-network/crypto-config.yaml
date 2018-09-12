@@ -11,7 +11,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: Orderer
-    Domain: example.com
+    Domain: usoftchain.com
     CA:
         Country: CN
         Province: GuangDong
@@ -28,8 +28,8 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   # Org1
   # ---------------------------------------------------------------------------
-  - Name: Org1
-    Domain: org1.example.com
+  - Name: huasl
+    Domain: huasl.usoftchain.com
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -69,7 +69,7 @@ PeerOrgs:
     # name collisions
     # ---------------------------------------------------------------------------
     Template:
-      Count: 2
+      Count: 1
       # Start: 5
       # Hostname: {{.Prefix}}{{.Index}} # default
     # ---------------------------------------------------------------------------
@@ -82,14 +82,36 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   # Org2: See "Org1" for full specification
   # ---------------------------------------------------------------------------
-  - Name: Org2
-    Domain: org2.example.com
+  - Name: skypine
+    Domain: skypine.usoftchain.com
     EnableNodeOUs: true
     CA:
         Country: CN
         Province: GuangDong
         Locality: ShenZhen
     Template:
-      Count: 2
+      Count: 1
+    Users:
+      Count: 1
+  - Name: xinning
+    Domain: xinning.usoftchain.com
+    EnableNodeOUs: true
+    CA:
+        Country: CN
+        Province: GuangDong
+        Locality: ShenZhen
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+  - Name: usoft
+    Domain: usoft.usoftchain.com
+    EnableNodeOUs: true
+    CA:
+        Country: CN
+        Province: GuangDong
+        Locality: ShenZhen
+    Template:
+      Count: 1
     Users:
       Count: 1

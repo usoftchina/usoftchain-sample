@@ -104,25 +104,39 @@ function generateChannelArtifacts() {
 	echo "##########################################################"
 	# Note: For some unknown reason (at least for now) the block file can't be
 	# named orderer.genesis.block or the orderer will fail to launch!
-	$CONFIGTXGEN -profile TwoOrgsOrdererGenesis -channelID e2e-orderer-syschan -outputBlock ./channel-artifacts/genesis.block
+	$CONFIGTXGEN -profile UsoftchainOrdererGenesis -channelID e2e-orderer-syschan -outputBlock ./channel-artifacts/genesis.block
 
 	echo
 	echo "#################################################################"
 	echo "### Generating channel configuration transaction 'channel.tx' ###"
 	echo "#################################################################"
-	$CONFIGTXGEN -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+	$CONFIGTXGEN -profile UsoftchainChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
 
 	echo
 	echo "#################################################################"
-	echo "#######    Generating anchor peer update for Org1MSP   ##########"
+	echo "#######    Generating anchor peer update for huaslMSP   ##########"
 	echo "#################################################################"
-	$CONFIGTXGEN -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+	$CONFIGTXGEN -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/huaslMSPanchors.tx -channelID $CHANNEL_NAME -asOrg huaslMSP
 
 	echo
 	echo "#################################################################"
-	echo "#######    Generating anchor peer update for Org2MSP   ##########"
+	echo "#######    Generating anchor peer update for skypineMSP   ##########"
 	echo "#################################################################"
-	$CONFIGTXGEN -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
+	$CONFIGTXGEN -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/skypineMSPanchors.tx -channelID $CHANNEL_NAME -asOrg skypineMSP
+	echo
+
+    echo
+	echo "#################################################################"
+	echo "#######    Generating anchor peer update for xinningMSP   ##########"
+	echo "#################################################################"
+	$CONFIGTXGEN -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/xinningMSPanchors.tx -channelID $CHANNEL_NAME -asOrg xinningMSP
+	echo
+
+    echo
+	echo "#################################################################"
+	echo "#######    Generating anchor peer update for usoftMSP   ##########"
+	echo "#################################################################"
+	$CONFIGTXGEN -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/usoftMSPanchors.tx -channelID $CHANNEL_NAME -asOrg usoftMSP
 	echo
 }
 

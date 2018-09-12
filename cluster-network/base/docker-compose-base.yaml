@@ -24,8 +24,17 @@ services:
     ports:
       - 9092:9092
 
-  orderer.example.com:
-    container_name: orderer.example.com
+  couchdb:
+    container_name: couchdb
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 5984:5984
+
+  orderer.usoftchain.com:
+    container_name: orderer.usoftchain.com
     image: hyperledger/fabric-orderer
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
@@ -46,93 +55,106 @@ services:
     command: orderer
     volumes:
     - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
-    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
+    - ../crypto-config/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/tls/:/var/hyperledger/orderer/tls
     ports:
       - 7050:7050
 
-  peer0.org1.example.com:
-    container_name: peer0.org1.example.com
+  peer0.huasl.usoftchain.com:
+    container_name: peer0.huasl.usoftchain.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.org1.example.com
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7052
+      - CORE_PEER_ID=peer0.huasl.usoftchain.com
+      - CORE_PEER_ADDRESS=peer0.huasl.usoftchain.com:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.huasl.usoftchain.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.huasl.usoftchain.com:7051
+      - CORE_PEER_LOCALMSPID=huaslMSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+        - ../crypto-config/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
       - 7052:7052
       - 7053:7053
 
-  peer1.org1.example.com:
-    container_name: peer1.org1.example.com
+  peer0.skypine.usoftchain.com:
+    container_name: peer0.skypine.usoftchain.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.org1.example.com
-      - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer1.org1.example.com:7052
+      - CORE_PEER_ID=peer0.skypine.usoftchain.com
+      - CORE_PEER_ADDRESS=peer0.skypine.usoftchain.com:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.skypine.usoftchain.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.skypine.usoftchain.com:7051
+      - CORE_PEER_LOCALMSPID=skypineMSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
-
+        - ../crypto-config/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
       - 7052:7052
       - 7053:7053
 
-  peer0.org2.example.com:
-    container_name: peer0.org2.example.com
+  peer0.xinning.usoftchain.com:
+    container_name: peer0.xinning.usoftchain.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.org2.example.com
-      - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.org2.example.com:7052
+      - CORE_PEER_ID=peer0.xinning.usoftchain.com
+      - CORE_PEER_ADDRESS=peer0.xinning.usoftchain.com:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.xinning.usoftchain.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.xinning.usoftchain.com:7051
+      - CORE_PEER_LOCALMSPID=xinningMSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
+        - ../crypto-config/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
       - 7052:7052
       - 7053:7053
 
-  peer1.org2.example.com:
-    container_name: peer1.org2.example.com
+  peer0.usoft.usoftchain.com:
+    container_name: peer0.usoft.usoftchain.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.org2.example.com
-      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer1.org2.example.com:7052
+      - CORE_PEER_ID=peer0.usoft.usoftchain.com
+      - CORE_PEER_ADDRESS=peer0.usoft.usoftchain.com:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.usoft.usoftchain.com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.usoft.usoftchain.com:7051
+      - CORE_PEER_LOCALMSPID=usoftMSP
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
+        - ../crypto-config/peerOrganizations/usoft.usoftchain.com/peers/peer0.usoft.usoftchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/usoft.usoftchain.com/peers/peer0.usoft.usoftchain.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
       - 7052:7052

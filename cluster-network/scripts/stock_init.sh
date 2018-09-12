@@ -163,6 +163,8 @@ instantiateChaincode () {
 	cat log.txt
 	verifyResult $res "Chaincode instantiation on ${PEER} on channel '$CHANNEL_NAME' failed"
 	echo "===================== Chaincode is instantiated on ${PEER} on channel '$CHANNEL_NAME' ===================== "
+	peer chaincode list -C $CHANNEL_NAME --instantiated >&log.txt
+	cat log.txt
 	echo
 }
 

@@ -30,16 +30,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('OrdererMSP.member')"
-            Writers:
-                Type: Signature
-                Rule: "OR('OrdererMSP.member')"
-            Admins:
-                Type: Signature
-                Rule: "OR('OrdererMSP.admin')"
+#        Policies:
+#            Readers:
+#                Type: Signature
+#                Rule: "OR('OrdererMSP.member')"
+#            Writers:
+#                Type: Signature
+#                Rule: "OR('OrdererMSP.member')"
+#            Admins:
+#                Type: Signature
+#                Rule: "OR('OrdererMSP.admin')"
 
     - &huasl
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -54,16 +54,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('huaslMSP.admin', 'huaslMSP.peer', 'huaslMSP.client')"
-            Writers:
-                Type: Signature
-                Rule: "OR('huaslMSP.admin', 'huaslMSP.client')"
-            Admins:
-                Type: Signature
-                Rule: "OR('huaslMSP.admin')"
+#        Policies:
+#            Readers:
+#                Type: Signature
+#                Rule: "OR('huaslMSP.admin', 'huaslMSP.peer', 'huaslMSP.client')"
+#            Writers:
+#                Type: Signature
+#                Rule: "OR('huaslMSP.admin', 'huaslMSP.client')"
+#            Admins:
+#                Type: Signature
+#                Rule: "OR('huaslMSP.admin')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used

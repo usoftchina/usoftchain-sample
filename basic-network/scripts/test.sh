@@ -7,7 +7,7 @@ export FABRIC_START_TIMEOUT=5
 sleep ${FABRIC_START_TIMEOUT}
 
 # Create the channel
-peer channel create -o orderer.usoftchain.com:7050 -c mychannel -f ./channel-artifacts/channel.tx
+peer channel create -o orderer.usoftchain.com:7050 -c mychannel -f /etc/hyperledger/configtx/channel.tx
 # Join peer to the channel.
 peer channel join -b mychannel.block
 # install chaincode

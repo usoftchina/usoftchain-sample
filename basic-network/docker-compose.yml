@@ -1,0 +1,162 @@
+version: '2'
+networks:
+  basic: null
+services:
+    
+  orderer.usoftchain.com:
+    container_name: orderer.usoftchain.com
+    image: hyperledger/fabric-orderer
+    environment:
+    - ORDERER_GENERAL_LOGLEVEL=debug
+    - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+    - ORDERER_GENERAL_GENESISMETHOD=file
+    - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
+    - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+    - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+    command: orderer
+    ports:
+    - 7050:7050
+    volumes:
+    - ./config/:/etc/hyperledger/configtx
+    - ./crypto-config/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/:/etc/hyperledger/msp/orderer
+    - ./crypto-config/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/:/etc/hyperledger/msp/peerhuasl
+    networks:
+    - basic
+    
+  peer0.huasl.usoftchain.com:
+    container_name: peer0.huasl.usoftchain.com
+    image: hyperledger/fabric-peer
+    environment:
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - CORE_PEER_ID=peer0.huasl.usoftchain.com
+    - CORE_LOGGING_PEER=debug
+    - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+    - CORE_PEER_LOCALMSPID=huaslMSP
+    - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+    - CORE_PEER_ADDRESS=peer0.huasl.usoftchain.com:7051
+    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+    - 7051:7051
+    - 7053:7053
+    volumes:
+    - /var/run/:/host/var/run/
+    - ./crypto-config/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/msp:/etc/hyperledger/msp/peer
+    - ./crypto-config/peerOrganizations/huasl.usoftchain.com/users:/etc/hyperledger/msp/users
+    - ./config:/etc/hyperledger/configtx
+    depends_on:
+    - orderer.usoftchain.com
+    networks:
+    - basic
+
+  peer0.skypine.usoftchain.com:
+    container_name: peer0.skypine.usoftchain.com
+    image: hyperledger/fabric-peer
+    environment:
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - CORE_PEER_ID=peer0.skypine.usoftchain.com
+    - CORE_LOGGING_PEER=debug
+    - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+    - CORE_PEER_LOCALMSPID=skypineMSP
+    - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+    - CORE_PEER_ADDRESS=peer0.skypine.usoftchain.com:8051
+    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+    - 8051:7051
+    - 8053:7053
+    volumes:
+    - /var/run/:/host/var/run/
+    - ./crypto-config/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/msp:/etc/hyperledger/msp/peer
+    - ./crypto-config/peerOrganizations/skypine.usoftchain.com/users:/etc/hyperledger/msp/users
+    - ./config:/etc/hyperledger/configtx
+    depends_on:
+    - orderer.usoftchain.com
+    networks:
+    - basic
+
+  peer0.xinning.usoftchain.com:
+    container_name: peer0.xinning.usoftchain.com
+    image: hyperledger/fabric-peer
+    environment:
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - CORE_PEER_ID=peer0.xinning.usoftchain.com
+    - CORE_LOGGING_PEER=debug
+    - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+    - CORE_PEER_LOCALMSPID=xinningMSP
+    - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+    - CORE_PEER_ADDRESS=peer0.xinning.usoftchain.com:9051
+    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+    - 9051:7051
+    - 9053:7053
+    volumes:
+    - /var/run/:/host/var/run/
+    - ./crypto-config/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/msp:/etc/hyperledger/msp/peer
+    - ./crypto-config/peerOrganizations/xinning.usoftchain.com/users:/etc/hyperledger/msp/users
+    - ./config:/etc/hyperledger/configtx
+    depends_on:
+    - orderer.usoftchain.com
+    networks:
+    - basic
+
+  peer0.usoft.usoftchain.com:
+    container_name: peer0.usoft.usoftchain.com
+    image: hyperledger/fabric-peer
+    environment:
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - CORE_PEER_ID=peer0.usoft.usoftchain.com
+    - CORE_LOGGING_PEER=debug
+    - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+    - CORE_PEER_LOCALMSPID=usoftMSP
+    - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+    - CORE_PEER_ADDRESS=peer0.usoft.usoftchain.com:10051
+    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+    - 10051:7051
+    - 10053:7053
+    volumes:
+    - /var/run/:/host/var/run/
+    - ./crypto-config/peerOrganizations/usoft.usoftchain.com/peers/peer0.usoft.usoftchain.com/msp:/etc/hyperledger/msp/peer
+    - ./crypto-config/peerOrganizations/usoft.usoftchain.com/users:/etc/hyperledger/msp/users
+    - ./config:/etc/hyperledger/configtx
+    depends_on:
+    - orderer.usoftchain.com
+    networks:
+    - basic
+    
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+    - GOPATH=/opt/gopath
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - CORE_LOGGING_LEVEL=DEBUG
+    - CORE_PEER_ID=cli
+    - CORE_PEER_ADDRESS=peer0.xinning.usoftchain.com:9051
+    - CORE_PEER_LOCALMSPID=xinningMSP
+    - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.usoftchain.com/users/Admin@xinning.usoftchain.com/msp
+    - CORE_CHAINCODE_KEEPALIVE=10
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    volumes:
+    - /var/run/:/host/var/run/
+    - ./../chaincode/:/opt/gopath/src/github.com/usoftchina/usoftchain-sample/chaincode/
+    - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+    - ./scripts/:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+    - ./config:/etc/hyperledger/configtx
+    networks:
+    - basic
+    depends_on:
+    - orderer.usoftchain.com
+    - peer0.huasl.usoftchain.com
+    - peer0.skypine.usoftchain.com
+    - peer0.xinning.usoftchain.com
+    - peer0.usoft.usoftchain.com

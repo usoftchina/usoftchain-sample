@@ -106,7 +106,7 @@ public class XinningNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
         return "cluster-network/crypto-config/peerOrganizations/xinning.example.com/users/Admin@xinning.example.com/msp"
-                + "/keystore/41fbdfe5bda19695a8030a0ab5f105d62f9172dd78607c0d02282bb3f1cd5240_sk";
+                + "/keystore/5c9a24e514064989225d22e1290a195f8699fb2d24640a9363dbcb689aef473a_sk";
     }
 
     @Bean(name = "userSigningCert")

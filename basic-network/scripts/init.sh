@@ -55,9 +55,7 @@ createChannel() {
 	else
 		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls --cafile $ORDERER_CA >&log.txt
 	fi
-	res=$?
 	cat log.txt
-	verifyResult $res "Channel creation failed"
 	echo "===================== Channel '$CHANNEL_NAME' created ===================== "
 	echo
 }

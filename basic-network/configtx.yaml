@@ -28,30 +28,30 @@ Organizations:
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: crypto-config/ordererOrganizations/usoftchain.com/msp
 
-    - &huasl
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
-        Name: huaslMSP
+#    - &huasl
+#        # DefaultOrg defines the organization which is used in the sampleconfig
+#        # of the fabric.git development environment
+#        Name: huaslMSP
+#
+#        # ID to load the MSP definition as
+#        ID: huaslMSP
+#
+#        MSPDir: crypto-config/peerOrganizations/huasl.usoftchain.com/msp
+#
+#        AnchorPeers:
+#            # AnchorPeers defines the location of peers which can be used
+#            # for cross org gossip communication.  Note, this value is only
+#            # encoded in the genesis block in the Application section context
+#            - Host: peer0.huasl.usoftchain.com
+#              Port: 7051
 
-        # ID to load the MSP definition as
-        ID: huaslMSP
-
-        MSPDir: crypto-config/peerOrganizations/huasl.usoftchain.com/msp
-
-        AnchorPeers:
-            # AnchorPeers defines the location of peers which can be used
-            # for cross org gossip communication.  Note, this value is only
-            # encoded in the genesis block in the Application section context
-            - Host: peer0.huasl.usoftchain.com
-              Port: 7051
-
-    - &skypine
-        Name: skypineMSP
-        ID: skypineMSP
-        MSPDir: crypto-config/peerOrganizations/skypine.usoftchain.com/msp
-        AnchorPeers:
-            - Host: peer0.skypine.usoftchain.com
-              Port: 7051
+#    - &skypine
+#        Name: skypineMSP
+#        ID: skypineMSP
+#        MSPDir: crypto-config/peerOrganizations/skypine.usoftchain.com/msp
+#        AnchorPeers:
+#            - Host: peer0.skypine.usoftchain.com
+#              Port: 7051
     - &xinning
         Name: xinningMSP
         ID: xinningMSP
@@ -59,13 +59,13 @@ Organizations:
         AnchorPeers:
             - Host: peer0.xinning.usoftchain.com
               Port: 7051
-    - &usoft
-        Name: usoftMSP
-        ID: usoftMSP
-        MSPDir: crypto-config/peerOrganizations/usoft.usoftchain.com/msp
-        AnchorPeers:
-            - Host: peer0.usoft.usoftchain.com
-              Port: 7051
+#    - &usoft
+#        Name: usoftMSP
+#        ID: usoftMSP
+#        MSPDir: crypto-config/peerOrganizations/usoft.usoftchain.com/msp
+#        AnchorPeers:
+#            - Host: peer0.usoft.usoftchain.com
+#              Port: 7051
 ################################################################################
 #
 #   SECTION: Orderer
@@ -143,16 +143,16 @@ Profiles:
         Consortiums:
             SampleConsortium:
                 Organizations:
-                    - *huasl
-                    - *skypine
+#                    - *huasl
+#                    - *skypine
                     - *xinning
-                    - *usoft
+#                    - *usoft
     UsoftchainChannel:
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *huasl
-                - *skypine
+#                - *huasl
+#                - *skypine
                 - *xinning
-                - *usoft
+#                - *usoft

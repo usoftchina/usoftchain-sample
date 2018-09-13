@@ -60,22 +60,6 @@ createChannel() {
 	echo
 }
 
-updateAnchorPeers() {
-	setGlobals $1
-
-	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
-	else
-		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
-	fi
-	res=$?
-	cat log.txt
-	verifyResult $res "Anchor peer update failed"
-	echo "===================== Anchor peers updated for org '$CORE_PEER_LOCALMSPID' on channel '$CHANNEL_NAME' ===================== "
-	sleep 5
-	echo
-}
-
 ## Sometimes Join takes time hence RETRY atleast for 5 times
 joinChannelWithRetry () {
     PEER=$1
@@ -144,29 +128,21 @@ createChannel
 echo "Having all peers join the channel..."
 joinChannel
 
-# Set the anchor peers for each org in the channel
-#echo "Updating anchor peers for huasl..."
-#updateAnchorPeers peer0.huasl
-#echo "Updating anchor peers for skypine..."
-#updateAnchorPeers peer0.skypine
-#echo "Updating anchor peers for xinning..."
-#updateAnchorPeers peer0.xinning
-#echo "Updating anchor peers for usoft..."
-#updateAnchorPeers peer0.usoft
-
 #Install chaincode
-echo "Installing chaincode on peer0.huasl..."
-installChaincode peer0.huasl
-echo "Install chaincode on peer0.skypine..."
-installChaincode peer0.skypine
+#echo "Installing chaincode on peer0.huasl..."
+#installChaincode peer0.huasl
+#echo "Install chaincode on peer0.skypine..."
+#installChaincode peer0.skypine
 echo "Installing chaincode on peer0.xinning..."
 installChaincode peer0.xinning
-echo "Installing chaincode on peer0.usoft..."
-installChaincode peer0.usoft
+#echo "Installing chaincode on peer0.usoft..."
+#installChaincode peer0.usoft
 
 #Instantiate chaincode
-echo "Instantiating chaincode on peer0.huasl..."
-instantiateChaincode peer0.huasl
+#echo "Instantiating chaincode on peer0.huasl..."
+#instantiateChaincode peer0.huasl
+echo "Instantiating chaincode on peer0.xinning..."
+instantiateChaincode peer0.xinning
 
 echo
 echo "===================== completed ===================== "

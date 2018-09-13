@@ -367,11 +367,14 @@ Channel: &ChannelDefaults
 Profiles:
 
     UsoftchainOrdererGenesis:
-        <<: *ChannelDefaults
+        Capabilities:
+            <<: *ChannelCapabilities
         Orderer:
             <<: *OrdererDefaults
             Organizations:
                 - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
         Consortiums:
             SampleConsortium:
                 Organizations:
@@ -388,3 +391,5 @@ Profiles:
                 - *skypine
                 - *xinning
                 - *usoft
+            Capabilities:
+                <<: *ApplicationCapabilities

@@ -37,6 +37,7 @@ services:
       - CORE_PEER_ADDRESS=peer0.huasl.usoftchain.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.huasl.usoftchain.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.huasl.usoftchain.com:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
       - CORE_LOGGING_PEER=DEBUG
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_LOCALMSPID=huaslMSP
@@ -53,6 +54,7 @@ services:
     command: peer node start
     ports:
       - 7051:7051
+      - 7052:7052
       - 7053:7053
     volumes:
       - /var/run/:/host/var/run/
@@ -72,6 +74,7 @@ services:
       - CORE_PEER_ADDRESS=peer0.skypine.usoftchain.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.skypine.usoftchain.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.skypine.usoftchain.com:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
       - CORE_LOGGING_PEER=DEBUG
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_LOCALMSPID=skypineMSP
@@ -88,6 +91,7 @@ services:
     command: peer node start
     ports:
       - 8051:7051
+      - 8052:7052
       - 8053:7053
     volumes:
       - /var/run/:/host/var/run/
@@ -107,6 +111,7 @@ services:
       - CORE_PEER_ADDRESS=peer0.xinning.usoftchain.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.xinning.usoftchain.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.xinning.usoftchain.com:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
       - CORE_LOGGING_PEER=DEBUG
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_LOCALMSPID=xinningMSP
@@ -123,6 +128,7 @@ services:
     command: peer node start
     ports:
       - 9051:7051
+      - 9052:7052
       - 9053:7053
     volumes:
       - /var/run/:/host/var/run/
@@ -142,6 +148,7 @@ services:
       - CORE_PEER_ADDRESS=peer0.usoft.usoftchain.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.usoft.usoftchain.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.usoft.usoftchain.com:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
       - CORE_LOGGING_PEER=DEBUG
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_LOCALMSPID=usoftMSP
@@ -158,6 +165,7 @@ services:
     command: peer node start
     ports:
       - 10051:7051
+      - 10052:7052
       - 10053:7053
     volumes:
       - /var/run/:/host/var/run/

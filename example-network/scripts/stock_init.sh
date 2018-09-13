@@ -170,8 +170,8 @@ instantiateChaincode () {
 }
 
 # Check for orderering service availablility
-echo "Check orderering service availability..."
-checkOSNAvailability
+#echo "Check orderering service availability..."
+#checkOSNAvailability
 
 # Create channel
 echo "Creating channel..."

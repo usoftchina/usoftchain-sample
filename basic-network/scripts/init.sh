@@ -51,7 +51,7 @@ setGlobals () {
 }
 
 createChannel() {
-	setGlobals 0 1
+	setGlobals peer0.huasl
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
 		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
 	else

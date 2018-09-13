@@ -46,7 +46,7 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "peerLocations")
     public Map<String, String> peerLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0.skypine.usoftchain.com", "grpcs://192.168.0.178:7051");
+        res.put("peer0.skypine.example.com", "grpcs://192.168.0.178:7051");
         return res;
     }
 
@@ -54,7 +54,7 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "eventHubLocations")
     public Map<String, String> eventHubLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0.skypine.usoftchain.com", "grpcs://192.168.0.178:7053");
+        res.put("peer0.skypine.example.com", "grpcs://192.168.0.178:7053");
         return res;
     }
 
@@ -62,7 +62,7 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "ordererLocations")
     public Map<String, String> ordererLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("orderer.usoftchain.com", "grpcs://192.168.0.176:7050");
+        res.put("orderer.example.com", "grpcs://192.168.0.176:7050");
         return res;
     }
 
@@ -70,17 +70,17 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     public Map<String, Properties> ordererProperties() throws IOException {
         final Map<String, Properties> propertiesMap = new HashMap<>();
         Properties orderer0Properties = new Properties();
-        String ordererPemFileLocation = "classpath:cluster-network/crypto-config/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/tls/server.crt";
+        String ordererPemFileLocation = "classpath:cluster-network/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem";
         File ordererPemFile = ResourceUtils.getFile(ordererPemFileLocation);
 
         orderer0Properties.setProperty("pemFile", ordererPemFile.getCanonicalPath());
-        orderer0Properties.setProperty("hostnameOverride", "orderer.usoftchain.com");
+        orderer0Properties.setProperty("hostnameOverride", "orderer.example.com");
         orderer0Properties.setProperty("sslProvider", "openSSL");
         orderer0Properties.setProperty("negotiationType", "TLS");
         orderer0Properties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
         orderer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {false});
 
-        propertiesMap.put("orderer.usoftchain.com", orderer0Properties);
+        propertiesMap.put("orderer.example.com", orderer0Properties);
         return propertiesMap;
 
     }
@@ -88,10 +88,10 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "peerProperties")
     public Map<String, Properties> peerProperties() throws IOException {
         Properties peer0Properties = new Properties();
-        String peer0PemFileLocation = "classpath:cluster-network/crypto-config/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/server.crt";
+        String peer0PemFileLocation = "classpath:cluster-network/crypto-config/peerOrganizations/skypine.example.com/peers/peer0.skypine.example.com/tls/server.crt";
         File peer0PemFile = ResourceUtils.getFile(peer0PemFileLocation);
         peer0Properties.setProperty("pemFile", peer0PemFile.getCanonicalPath());
-        peer0Properties.setProperty("hostnameOverride", "peer0.skypine.usoftchain.com");
+        peer0Properties.setProperty("hostnameOverride", "peer0.skypine.example.com");
         peer0Properties.setProperty("sslProvider", "openSSL");
         peer0Properties.setProperty("negotiationType", "TLS");
         peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
@@ -99,20 +99,20 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
         peer0Properties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
 
         final Map<String, Properties> propertiesMap = new HashMap<>();
-        propertiesMap.put("peer0.skypine.usoftchain.com", peer0Properties);
+        propertiesMap.put("peer0.skypine.example.com", peer0Properties);
         return propertiesMap;
     }
 
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
-        return "cluster-network/crypto-config/peerOrganizations/skypine.usoftchain.com/users/Admin@skypine.usoftchain.com/msp"
-                + "/keystore/11c5d118c3e9e8f1c885028bca5cc0743a0847b74d0b2266ea1370a0f01ed5fb_sk";
+        return "cluster-network/crypto-config/peerOrganizations/skypine.example.com/users/Admin@skypine.example.com/msp"
+                + "/keystore/44d879194fd225da3e040705b9dcb8d682f5c7214b6305aa5611dfbda8bbc841_sk";
     }
 
     @Bean(name = "userSigningCert")
     public String userSigningCert() {
-        final String certificateFile = "classpath:cluster-network/crypto-config/peerOrganizations/skypine.usoftchain.com/users"
-                + "/Admin@skypine.usoftchain.com/msp/signcerts/Admin@skypine.usoftchain.com-cert.pem";
+        final String certificateFile = "classpath:cluster-network/crypto-config/peerOrganizations/skypine.example.com/users"
+                + "/Admin@skypine.example.com/msp/signcerts/Admin@skypine.example.com-cert.pem";
         try (final InputStream in = new FileInputStream(ResourceUtils.getFile(certificateFile))) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {
@@ -128,7 +128,7 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
 
     @Bean(name = "caCert")
     public String caCert() {
-        final String certificateFile = "classpath:cluster-network/crypto-config/peerOrganizations/skypine.usoftchain.com/ca/ca.skypine.usoftchain.com-cert.pem";
+        final String certificateFile = "classpath:cluster-network/crypto-config/peerOrganizations/skypine.example.com/ca/ca.skypine.example.com-cert.pem";
         try (final InputStream in = new FileInputStream(ResourceUtils.getFile(certificateFile))) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {

@@ -30,16 +30,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-#        Policies:
-#            Readers:
-#                Type: Signature
-#                Rule: "OR('OrdererMSP.member')"
-#            Writers:
-#                Type: Signature
-#                Rule: "OR('OrdererMSP.member')"
-#            Admins:
-#                Type: Signature
-#                Rule: "OR('OrdererMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"
 
     - &huasl
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -54,16 +54,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-#        Policies:
-#            Readers:
-#                Type: Signature
-#                Rule: "OR('huaslMSP.admin', 'huaslMSP.peer', 'huaslMSP.client')"
-#            Writers:
-#                Type: Signature
-#                Rule: "OR('huaslMSP.admin', 'huaslMSP.client')"
-#            Admins:
-#                Type: Signature
-#                Rule: "OR('huaslMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('huaslMSP.admin', 'huaslMSP.peer', 'huaslMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('huaslMSP.admin', 'huaslMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('huaslMSP.admin')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
@@ -85,16 +85,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-#        Policies:
-#            Readers:
-#                Type: Signature
-#                Rule: "OR('skypineMSP.admin', 'skypineMSP.peer', 'skypineMSP.client')"
-#            Writers:
-#                Type: Signature
-#                Rule: "OR('skypineMSP.admin', 'skypineMSP.client')"
-#            Admins:
-#                Type: Signature
-#                Rule: "OR('skypineMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('skypineMSP.admin', 'skypineMSP.peer', 'skypineMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('skypineMSP.admin', 'skypineMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('skypineMSP.admin')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
@@ -116,16 +116,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-#        Policies:
-#            Readers:
-#                Type: Signature
-#                Rule: "OR('xinningMSP.admin', 'xinningMSP.peer', 'xinningMSP.client')"
-#            Writers:
-#                Type: Signature
-#                Rule: "OR('xinningMSP.admin', 'xinningMSP.client')"
-#            Admins:
-#                Type: Signature
-#                Rule: "OR('xinningMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('xinningMSP.admin', 'xinningMSP.peer', 'xinningMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('xinningMSP.admin', 'xinningMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('xinningMSP.admin')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
@@ -147,16 +147,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-#        Policies:
-#            Readers:
-#                Type: Signature
-#                Rule: "OR('usoftMSP.admin', 'usoftMSP.peer', 'usoftMSP.client')"
-#            Writers:
-#                Type: Signature
-#                Rule: "OR('usoftMSP.admin', 'usoftMSP.client')"
-#            Admins:
-#                Type: Signature
-#                Rule: "OR('usoftMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('usoftMSP.admin', 'usoftMSP.peer', 'usoftMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('usoftMSP.admin', 'usoftMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('usoftMSP.admin')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used

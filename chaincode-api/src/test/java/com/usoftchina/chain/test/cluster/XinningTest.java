@@ -19,9 +19,17 @@ public class XinningTest {
     private StockRepository stockRepository;
 
     @Test
-    public void test() throws Exception {
+    public void testInvoke() throws Exception {
         Assert.assertNotNull(stockRepository);
         stockRepository.createWarehouse("新宁", "新宁仓", "广东省东莞市长安镇乌沙第六工业区海滨路23号");
         stockRepository.createLocation("新宁", "1-1", "1-1");
+    }
+
+    @Test
+    public void testQuery() throws Exception {
+        Assert.assertNotNull(stockRepository);
+        String json = stockRepository.queryWarehouse("新宁");
+        System.out.println(">>>>>>>>>>" + json);
+        // {"address":"广东省东莞市长安镇乌沙第六工业区海滨路23号","desc":"新宁仓","locations":{"1-1":"1-1","default":"默认仓位"},"name":"新宁","owner":"xinning"}
     }
 }

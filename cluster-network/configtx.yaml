@@ -25,7 +25,7 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/usoftchain.com/msp
+        MSPDir: crypto-config/ordererOrganizations/example.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -49,7 +49,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: huaslMSP
 
-        MSPDir: crypto-config/peerOrganizations/huasl.usoftchain.com/msp
+        MSPDir: crypto-config/peerOrganizations/huasl.example.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -69,7 +69,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.huasl.usoftchain.com
+            - Host: peer0.huasl.example.com
               Port: 7051
 
     - &skypine
@@ -80,7 +80,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: skypineMSP
 
-        MSPDir: crypto-config/peerOrganizations/skypine.usoftchain.com/msp
+        MSPDir: crypto-config/peerOrganizations/skypine.example.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -100,7 +100,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.skypine.usoftchain.com
+            - Host: peer0.skypine.example.com
               Port: 7051
 
     - &xinning
@@ -111,7 +111,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: xinningMSP
 
-        MSPDir: crypto-config/peerOrganizations/xinning.usoftchain.com/msp
+        MSPDir: crypto-config/peerOrganizations/xinning.example.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -131,7 +131,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.xinning.usoftchain.com
+            - Host: peer0.xinning.example.com
               Port: 7051
 
     - &usoft
@@ -142,7 +142,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: usoftMSP
 
-        MSPDir: crypto-config/peerOrganizations/usoft.usoftchain.com/msp
+        MSPDir: crypto-config/peerOrganizations/usoft.example.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -162,7 +162,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.usoft.usoftchain.com
+            - Host: peer0.usoft.example.com
               Port: 7051
 
 ################################################################################
@@ -264,7 +264,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer.usoftchain.com:7050
+        - orderer.example.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s

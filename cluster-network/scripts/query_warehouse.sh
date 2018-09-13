@@ -8,9 +8,9 @@ echo "Channel name : "$CHANNEL_NAME
 
 setGlobals () {
 	CORE_PEER_LOCALMSPID="huaslMSP"
-    CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/tls/ca.crt
-    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.usoftchain.com/users/Admin@huasl.usoftchain.com/msp
-    CORE_PEER_ADDRESS=peer0.huasl.usoftchain.com:7051
+    CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.example.com/peers/peer0.huasl.example.com/tls/ca.crt
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.example.com/users/Admin@huasl.example.com/msp
+    CORE_PEER_ADDRESS=peer0.huasl.example.com:7051
 
 	env |grep CORE
 }

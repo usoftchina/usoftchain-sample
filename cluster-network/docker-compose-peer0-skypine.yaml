@@ -14,19 +14,19 @@ services:
       file: base/docker-compose-base.yaml
       service: couchdb
 
-  peer0.skypine.usoftchain.com:
-    container_name: peer0.skypine.usoftchain.com
+  peer0.skypine.example.com:
+    container_name: peer0.skypine.example.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.skypine.usoftchain.com
+      service: peer0.skypine.example.com
     depends_on:
       - couchdb
     extra_hosts:
-      - "orderer.usoftchain.com:192.168.0.176"
-      - "peer0.huasl.usoftchain.com:192.168.0.177"
-      - "peer0.skypine.usoftchain.com:192.168.0.178"
-      - "peer0.xinning.usoftchain.com:192.168.0.179"
-      - "peer0.usoft.usoftchain.com:192.168.0.180"
+      - "orderer.example.com:192.168.0.176"
+      - "peer0.huasl.example.com:192.168.0.177"
+      - "peer0.skypine.example.com:192.168.0.178"
+      - "peer0.xinning.example.com:192.168.0.179"
+      - "peer0.usoft.example.com:192.168.0.180"
       - "couchdb:192.168.0.178"
 
   cli:
@@ -38,13 +38,13 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.skypine.usoftchain.com:7051
+      - CORE_PEER_ADDRESS=peer0.skypine.example.com:7051
       - CORE_PEER_LOCALMSPID=skypineMSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/users/Admin@skypine.usoftchain.com/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.example.com/peers/peer0.skypine.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.example.com/peers/peer0.skypine.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.example.com/peers/peer0.skypine.example.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.example.com/users/Admin@skypine.example.com/msp
       - LANG=C.UTF-8
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
@@ -54,10 +54,10 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - peer0.skypine.usoftchain.com
+      - peer0.skypine.example.com
     extra_hosts:
-    - "orderer.usoftchain.com:192.168.0.176"
-    - "peer0.huasl.usoftchain.com:192.168.0.177"
-    - "peer0.skypine.usoftchain.com:192.168.0.178"
-    - "peer0.xinning.usoftchain.com:192.168.0.179"
-    - "peer0.usoft.usoftchain.com:192.168.0.180"
+    - "orderer.example.com:192.168.0.176"
+    - "peer0.huasl.example.com:192.168.0.177"
+    - "peer0.skypine.example.com:192.168.0.178"
+    - "peer0.xinning.example.com:192.168.0.179"
+    - "peer0.usoft.example.com:192.168.0.180"

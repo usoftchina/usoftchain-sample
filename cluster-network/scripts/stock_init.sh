@@ -5,11 +5,11 @@ CHANNEL_NAME="$1"
 : ${TIMEOUT:="60"}
 COUNTER=1
 MAX_RETRY=5
-ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/msp/tlscacerts/tlsca.usoftchain.com-cert.pem
-PEER0_HUASL_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/tls/ca.crt
-PEER0_SKYPINE_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/ca.crt
-PEER0_XINNING_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/tls/ca.crt
-PEER0_USOFT_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/usoft.usoftchain.com/peers/peer0.usoft.usoftchain.com/tls/ca.crt
+ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+PEER0_HUASL_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.example.com/peers/peer0.huasl.example.com/tls/ca.crt
+PEER0_SKYPINE_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.example.com/peers/peer0.skypine.example.com/tls/ca.crt
+PEER0_XINNING_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.example.com/peers/peer0.xinning.example.com/tls/ca.crt
+PEER0_USOFT_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/usoft.example.com/peers/peer0.usoft.example.com/tls/ca.crt
 ORDERER_SYSCHAN_ID=e2e-orderer-syschan
 
 echo "Channel name : "$CHANNEL_NAME
@@ -28,23 +28,23 @@ setGlobals () {
 	if [ "$PEER" == "peer0.huasl" ] ; then
 		CORE_PEER_LOCALMSPID="huaslMSP"
 		CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_HUASL_CA
-		CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.usoftchain.com/users/Admin@huasl.usoftchain.com/msp
-		CORE_PEER_ADDRESS=peer0.huasl.usoftchain.com:7051
+		CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.example.com/users/Admin@huasl.example.com/msp
+		CORE_PEER_ADDRESS=peer0.huasl.example.com:7051
 	elif [ "$PEER" == "peer0.skypine" ] ; then
 		CORE_PEER_LOCALMSPID="skypineMSP"
 		CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_SKYPINE_CA
-        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/users/Admin@skypine.usoftchain.com/msp
-        CORE_PEER_ADDRESS=peer0.skypine.usoftchain.com:7051
+        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.example.com/users/Admin@skypine.example.com/msp
+        CORE_PEER_ADDRESS=peer0.skypine.example.com:7051
 	elif [ "$PEER" == "peer0.xinning" ] ; then
     	CORE_PEER_LOCALMSPID="xinningMSP"
     	CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_XINNING_CA
-        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.usoftchain.com/users/Admin@xinning.usoftchain.com/msp
-        CORE_PEER_ADDRESS=peer0.xinning.usoftchain.com:7051
+        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.example.com/users/Admin@xinning.example.com/msp
+        CORE_PEER_ADDRESS=peer0.xinning.example.com:7051
     else
     	CORE_PEER_LOCALMSPID="usoftMSP"
     	CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_USOFT_CA
-        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/usoft.usoftchain.com/users/Admin@usoft.usoftchain.com/msp
-        CORE_PEER_ADDRESS=peer0.usoft.usoftchain.com:7051
+        CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/usoft.example.com/users/Admin@usoft.example.com/msp
+        CORE_PEER_ADDRESS=peer0.usoft.example.com:7051
 	fi
 
 	env |grep CORE
@@ -54,7 +54,7 @@ checkOSNAvailability() {
 	# Use orderer's MSP for fetching system channel config block
 	CORE_PEER_LOCALMSPID="OrdererMSP"
 	CORE_PEER_TLS_ROOTCERT_FILE=$ORDERER_CA
-	CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/msp
+	CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp
 
 	local rc=1
 	local starttime=$(date +%s)
@@ -66,9 +66,9 @@ checkOSNAvailability() {
 		 sleep 3
 		 echo "Attempting to fetch system channel '$ORDERER_SYSCHAN_ID' ...$(($(date +%s)-starttime)) secs"
 		 if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-			 peer channel fetch 0 -o orderer.usoftchain.com:7050 -c "$ORDERER_SYSCHAN_ID" >&log.txt
+			 peer channel fetch 0 -o orderer.example.com:7050 -c "$ORDERER_SYSCHAN_ID" >&log.txt
 		 else
-			 peer channel fetch 0 0_block.pb -o orderer.usoftchain.com:7050 -c "$ORDERER_SYSCHAN_ID" --tls --cafile $ORDERER_CA >&log.txt
+			 peer channel fetch 0 0_block.pb -o orderer.example.com:7050 -c "$ORDERER_SYSCHAN_ID" --tls --cafile $ORDERER_CA >&log.txt
 		 fi
 		 test $? -eq 0 && VALUE=$(cat log.txt | awk '/Received block/ {print $NF}')
 		 test "$VALUE" = "0" && let rc=0
@@ -82,9 +82,9 @@ checkOSNAvailability() {
 createChannel() {
 	setGlobals 0 1
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
+		peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
 	else
-		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls --cafile $ORDERER_CA >&log.txt
+		peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls --cafile $ORDERER_CA >&log.txt
 	fi
 	res=$?
 	cat log.txt
@@ -97,9 +97,9 @@ updateAnchorPeers() {
 	setGlobals $1
 
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
+		peer channel update -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
 	else
-		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
+		peer channel update -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
 	fi
 	res=$?
 	cat log.txt
@@ -155,9 +155,9 @@ instantiateChaincode () {
 	# while 'peer chaincode' command can get the orderer endpoint from the peer (if join was successful),
 	# lets supply it directly as we know it using the "-o" option
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer chaincode instantiate -o orderer.usoftchain.com:7050 -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "OR ('huaslMSP.member','skypineMSP.member','xinningMSP.member','usoftMSP.member')" >&log.txt
+		peer chaincode instantiate -o orderer.example.com:7050 -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "OR ('huaslMSP.member','skypineMSP.member','xinningMSP.member','usoftMSP.member')" >&log.txt
 	else
-		peer chaincode instantiate -o orderer.usoftchain.com:7050 --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "OR ('huaslMSP.member','skypineMSP.member','xinningMSP.member','usoftMSP.member')" >&log.txt
+		peer chaincode instantiate -o orderer.example.com:7050 --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n stockcontract -v 1.0 -c '{"Args":["init"]}' -P "OR ('huaslMSP.member','skypineMSP.member','xinningMSP.member','usoftMSP.member')" >&log.txt
 	fi
 	res=$?
 	cat log.txt

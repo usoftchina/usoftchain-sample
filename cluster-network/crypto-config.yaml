@@ -11,7 +11,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: Orderer
-    Domain: usoftchain.com
+    Domain: example.com
     CA:
         Country: CN
         Province: GuangDong
@@ -29,7 +29,7 @@ PeerOrgs:
   # Org1
   # ---------------------------------------------------------------------------
   - Name: huasl
-    Domain: huasl.usoftchain.com
+    Domain: huasl.example.com
 #    EnableNodeOUs: true
     CA:
         Country: CN
@@ -83,7 +83,7 @@ PeerOrgs:
   # Org2: See "Org1" for full specification
   # ---------------------------------------------------------------------------
   - Name: skypine
-    Domain: skypine.usoftchain.com
+    Domain: skypine.example.com
 #    EnableNodeOUs: true
     CA:
         Country: CN
@@ -94,7 +94,7 @@ PeerOrgs:
     Users:
       Count: 1
   - Name: xinning
-    Domain: xinning.usoftchain.com
+    Domain: xinning.example.com
 #    EnableNodeOUs: true
     CA:
         Country: CN
@@ -105,7 +105,7 @@ PeerOrgs:
     Users:
       Count: 1
   - Name: usoft
-    Domain: usoft.usoftchain.com
+    Domain: usoft.example.com
 #    EnableNodeOUs: true
     CA:
         Country: CN

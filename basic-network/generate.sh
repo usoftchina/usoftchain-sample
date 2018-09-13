@@ -22,36 +22,36 @@ if [ "$?" -ne 0 ]; then
 fi
 
 # generate genesis block for orderer
-configtxgen -profile UsoftchainOrdererGenesis -outputBlock ./config/genesis.block
+configtxgen -profile UsoftchainOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate orderer genesis block..."
   exit 1
 fi
 
 # generate channel configuration transaction
-configtxgen -profile UsoftchainChannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
+configtxgen -profile UsoftchainChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
 # generate anchor peer transaction
-configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./config/huaslMSPanchors.tx -channelID $CHANNEL_NAME -asOrg huaslMSP
+configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/huaslMSPanchors.tx -channelID $CHANNEL_NAME -asOrg huaslMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for huaslMSP..."
   exit 1
 fi
-configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./config/skypineMSPanchors.tx -channelID $CHANNEL_NAME -asOrg skypineMSP
+configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/skypineMSPanchors.tx -channelID $CHANNEL_NAME -asOrg skypineMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for skypineMSP..."
   exit 1
 fi
-configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./config/xinningMSPanchors.tx -channelID $CHANNEL_NAME -asOrg xinningMSP
+configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/xinningMSPanchors.tx -channelID $CHANNEL_NAME -asOrg xinningMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for xinningMSP..."
   exit 1
 fi
-configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./config/usoftMSPanchors.tx -channelID $CHANNEL_NAME -asOrg usoftMSP
+configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/usoftMSPanchors.tx -channelID $CHANNEL_NAME -asOrg usoftMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for usoftMSP..."
   exit 1

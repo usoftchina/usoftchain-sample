@@ -10,7 +10,6 @@ PEER0_HUASL_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrg
 PEER0_SKYPINE_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/ca.crt
 PEER0_XINNING_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/tls/ca.crt
 PEER0_USOFT_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/usoft.usoftchain.com/peers/peer0.usoft.usoftchain.com/tls/ca.crt
-ORDERER_SYSCHAN_ID=e2e-orderer-syschan
 
 echo "Channel name : "$CHANNEL_NAME
 
@@ -51,7 +50,6 @@ setGlobals () {
 }
 
 createChannel() {
-	setGlobals peer0.huasl
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
 		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
 	else

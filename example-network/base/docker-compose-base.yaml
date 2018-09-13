@@ -6,26 +6,6 @@
 version: '2'
 
 services:
-  zookeeper:
-    image: hyperledger/fabric-zookeeper
-    restart: always
-    environment:
-      - quorumListenOnAllIPs=true
-    ports:
-      - 2181:2181
-      - 2888:2888
-      - 3888:3888
-
-  kafka:
-    image: hyperledger/fabric-kafka
-    restart: always
-    environment:
-      - KAFKA_MESSAGE_MAX_BYTES=103809024 # 99 * 1024 * 1024 B
-      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024 # 99 * 1024 * 1024 B
-      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
-      - KAFKA_LOG_RETENTION_MS=-1
-    ports:
-      - 9092:9092
 
   couchdb:
     container_name: couchdb
@@ -51,9 +31,6 @@ services:
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
-      - ORDERER_KAFKA_RETRY_SHORTTOTAL=30s
-      - ORDERER_KAFKA_VERBOSE=true
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:

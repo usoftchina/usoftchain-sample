@@ -7,8 +7,6 @@ UP_DOWN="$1"
 CH_NAME="$2"
 
 HOSTS=("192.168.0.176" "192.168.0.177" "192.168.0.178" "192.168.0.179" "192.168.0.180")
-declare -A ZOOKEEPERS=(["192.168.0.176"]="zookeeper0" ["192.168.0.177"]="zookeeper1" ["192.168.0.178"]="zookeeper2")
-declare -A KAFKAS=(["192.168.0.176"]="kafka0" ["192.168.0.177"]="kafka1" ["192.168.0.178"]="kafka2" ["192.168.0.179"]="kafka3")
 declare -A ORDERERS=(["192.168.0.176"]="orderer")
 declare -A PEERS=(["192.168.0.177"]="peer0-huasl" ["192.168.0.178"]="peer0-skypine" ["192.168.0.179"]="peer0-xinning" ["192.168.0.180"]="peer0-usoft")
 
@@ -38,54 +36,6 @@ function gitPull () {
       ssh -T $key <<EOF
       rm -rf go/src/github.com/usoftchina/usoftchain-sample
       go get github.com/usoftchina/usoftchain-sample
-      exit
-EOF
-    done
-}
-
-function startZookeeper () {
-    for key in ${!ZOOKEEPERS[@]}
-    do
-      file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
-      ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
-      docker-compose -f $file up -d
-      exit
-EOF
-    done
-}
-
-function stopZookeeper () {
-    for key in ${!ZOOKEEPERS[@]}
-    do
-      file="docker-compose-${ZOOKEEPERS[$key]}.yaml"
-      ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
-      docker-compose -f $file down
-      exit
-EOF
-    done
-}
-
-function startKafka () {
-    for key in ${!KAFKAS[@]}
-    do
-      file="docker-compose-${KAFKAS[$key]}.yaml"
-      ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
-      docker-compose -f $file up -d
-      exit
-EOF
-    done
-}
-
-function stopKafka () {
-    for key in ${!KAFKAS[@]}
-    do
-      file="docker-compose-${KAFKAS[$key]}.yaml"
-      ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
-      docker-compose -f $file down
       exit
 EOF
     done
@@ -180,10 +130,6 @@ function networkUp () {
 #      copyConfig
 #    fi
 
-    startZookeeper
-
-    startKafka
-
     startOrderer
 
     startPeer
@@ -193,10 +139,6 @@ function networkDown () {
     stopPeer
 
     stopOrderer
-
-    stopKafka
-
-    stopZookeeper
 
 #    clearConfig
 }

@@ -12,13 +12,3 @@ services:
       file:   base/docker-compose-base.yaml
       service: orderer.usoftchain.com
     container_name: orderer.usoftchain.com
-#    environment:
-#      - ORDERER_KAFKA_BROKERS=[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
-    extra_hosts:
-      - "zookeeper0:192.168.0.176"
-      - "zookeeper1:192.168.0.177"
-      - "zookeeper2:192.168.0.178"
-      - "kafka0:192.168.0.176"
-      - "kafka1:192.168.0.177"
-      - "kafka2:192.168.0.178"
-      - "kafka3:192.168.0.179"

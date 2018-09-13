@@ -53,9 +53,9 @@ setGlobals () {
 createChannel() {
 	setGlobals 0 1
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
+		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./config/channel.tx >&log.txt
 	else
-		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls --cafile $ORDERER_CA >&log.txt
+		peer channel create -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./config/channel.tx --tls --cafile $ORDERER_CA >&log.txt
 	fi
 	res=$?
 	cat log.txt
@@ -68,9 +68,9 @@ updateAnchorPeers() {
 	setGlobals $1
 
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
+		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./config/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
 	else
-		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
+		peer channel update -o orderer.usoftchain.com:7050 -c $CHANNEL_NAME -f ./config/${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
 	fi
 	res=$?
 	cat log.txt

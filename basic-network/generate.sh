@@ -46,9 +46,9 @@ fi
 #  echo "Failed to generate anchor peer update for skypineMSP..."
 #  exit 1
 #fi
-configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/xinningMSPanchors.tx -channelID $CHANNEL_NAME -asOrg xinningMSP
+configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/XinningMSPanchors.tx -channelID $CHANNEL_NAME -asOrg XinningMSP
 if [ "$?" -ne 0 ]; then
-  echo "Failed to generate anchor peer update for xinningMSP..."
+  echo "Failed to generate anchor peer update for XinningMSP..."
   exit 1
 fi
 #configtxgen -profile UsoftchainChannel -outputAnchorPeersUpdate ./channel-artifacts/usoftMSPanchors.tx -channelID $CHANNEL_NAME -asOrg usoftMSP

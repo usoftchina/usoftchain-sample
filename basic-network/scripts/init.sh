@@ -35,7 +35,7 @@ setGlobals () {
         CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/users/Admin@skypine.usoftchain.com/msp
         CORE_PEER_ADDRESS=peer0.skypine.usoftchain.com:7051
 	elif [ "$PEER" == "peer0.xinning" ] ; then
-    	CORE_PEER_LOCALMSPID="xinningMSP"
+    	CORE_PEER_LOCALMSPID="XinningMSP"
     	CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_XINNING_CA
         CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.usoftchain.com/users/Admin@xinning.usoftchain.com/msp
         CORE_PEER_ADDRESS=peer0.xinning.usoftchain.com:7051

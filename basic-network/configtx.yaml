@@ -52,9 +52,9 @@ Organizations:
 #        AnchorPeers:
 #            - Host: peer0.skypine.usoftchain.com
 #              Port: 7051
-    - &xinning
-        Name: xinningMSP
-        ID: xinningMSP
+    - &Xinning
+        Name: XinningMSP
+        ID: XinningMSP
         MSPDir: crypto-config/peerOrganizations/xinning.usoftchain.com/msp
         AnchorPeers:
             - Host: peer0.xinning.usoftchain.com
@@ -145,7 +145,7 @@ Profiles:
                 Organizations:
 #                    - *huasl
 #                    - *skypine
-                    - *xinning
+                    - *Xinning
 #                    - *usoft
     UsoftchainChannel:
         Consortium: SampleConsortium
@@ -154,5 +154,5 @@ Profiles:
             Organizations:
 #                - *huasl
 #                - *skypine
-                - *xinning
+                - *Xinning
 #                - *usoft

@@ -114,7 +114,7 @@ services:
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
       - CORE_LOGGING_PEER=DEBUG
       - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_LOCALMSPID=xinningMSP
+      - CORE_PEER_LOCALMSPID=XinningMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
       - CORE_PEER_TLS_ENABLED=true
@@ -187,7 +187,7 @@ services:
       - CORE_CHAINCODE_KEEPALIVE=10
       - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.xinning.usoftchain.com:7051
-      - CORE_PEER_LOCALMSPID=xinningMSP
+      - CORE_PEER_LOCALMSPID=XinningMSP
       - CORE_PEER_LOCALMSPTYPE=bccsp
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/tls/server.crt

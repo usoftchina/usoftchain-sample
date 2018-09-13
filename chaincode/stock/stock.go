@@ -40,8 +40,8 @@ type Product struct {
 type Warehouse struct {
 	Name    string `json:"name"`
 	Desc    string `json:"desc"`
-	Address string `json:address`
-	Owner   string `json:owner`
+	Address string `json:"address"`
+	Owner   string `json:"owner"`
 	// 仓位
 	Locations map[string]string `json:"locations"`
 }

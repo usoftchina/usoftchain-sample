@@ -30,7 +30,7 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   - Name: huasl
     Domain: huasl.usoftchain.com
-    EnableNodeOUs: true
+#    EnableNodeOUs: true
     CA:
         Country: CN
         Province: GuangDong
@@ -84,7 +84,7 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   - Name: skypine
     Domain: skypine.usoftchain.com
-    EnableNodeOUs: true
+#    EnableNodeOUs: true
     CA:
         Country: CN
         Province: GuangDong
@@ -95,7 +95,7 @@ PeerOrgs:
       Count: 1
   - Name: xinning
     Domain: xinning.usoftchain.com
-    EnableNodeOUs: true
+#    EnableNodeOUs: true
     CA:
         Country: CN
         Province: GuangDong
@@ -106,7 +106,7 @@ PeerOrgs:
       Count: 1
   - Name: usoft
     Domain: usoft.usoftchain.com
-    EnableNodeOUs: true
+#    EnableNodeOUs: true
     CA:
         Country: CN
         Province: GuangDong

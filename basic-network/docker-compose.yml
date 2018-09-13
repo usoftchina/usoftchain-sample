@@ -33,7 +33,7 @@ services:
     ports:
     - 7050:7050
     volumes:
-    - ./config/:/etc/hyperledger/configtx
+    - ./channel-artifacts/:/etc/hyperledger/configtx
     - ./crypto-config/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/:/etc/hyperledger/msp/orderer
     - ./crypto-config/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/:/etc/hyperledger/msp/peerXinning
     networks:
@@ -64,7 +64,7 @@ services:
     - /var/run/:/host/var/run/
     - ./crypto-config/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/msp:/etc/hyperledger/msp/peer
     - ./crypto-config/peerOrganizations/xinning.usoftchain.com/users:/etc/hyperledger/msp/users
-    - ./config:/etc/hyperledger/configtx
+    - ./channel-artifacts:/etc/hyperledger/configtx
     depends_on:
     - orderer.usoftchain.com
     - couchdb
@@ -101,7 +101,7 @@ services:
     - ./../chaincode/:/opt/gopath/src/github.com/usoftchina/usoftchain-sample/chaincode/
     - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     - ./scripts/:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
-    - ./config:/etc/hyperledger/configtx
+    - ./channel-artifacts:/etc/hyperledger/configtx
     networks:
     - basic
     depends_on:

@@ -145,14 +145,14 @@ echo "Having all peers join the channel..."
 joinChannel
 
 # Set the anchor peers for each org in the channel
-echo "Updating anchor peers for huasl..."
-updateAnchorPeers peer0.huasl
-echo "Updating anchor peers for skypine..."
-updateAnchorPeers peer0.skypine
-echo "Updating anchor peers for xinning..."
-updateAnchorPeers peer0.xinning
-echo "Updating anchor peers for usoft..."
-updateAnchorPeers peer0.usoft
+#echo "Updating anchor peers for huasl..."
+#updateAnchorPeers peer0.huasl
+#echo "Updating anchor peers for skypine..."
+#updateAnchorPeers peer0.skypine
+#echo "Updating anchor peers for xinning..."
+#updateAnchorPeers peer0.xinning
+#echo "Updating anchor peers for usoft..."
+#updateAnchorPeers peer0.usoft
 
 #Install chaincode
 echo "Installing chaincode on peer0.huasl..."

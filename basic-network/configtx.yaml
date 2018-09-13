@@ -25,23 +25,23 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/usoftchain.com/msp
+        MSPDir: crypto-config/ordererOrganizations/example.com/msp
 
-    - &Org1
+    - &Xinning
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: Org1MSP
+        Name: XinningMSP
 
         # ID to load the MSP definition as
-        ID: Org1MSP
+        ID: XinningMSP
 
-        MSPDir: crypto-config/peerOrganizations/org1.usoftchain.com/msp
+        MSPDir: crypto-config/peerOrganizations/xinning.example.com/msp
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.org1.usoftchain.com
+            - Host: peer0.xinning.example.com
               Port: 7051
 
 ################################################################################
@@ -59,7 +59,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer.usoftchain.com:7050
+        - orderer.example.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
@@ -121,10 +121,10 @@ Profiles:
         Consortiums:
             SampleConsortium:
                 Organizations:
-                    - *Org1
+                    - *Xinning
     OneOrgChannel:
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Org1
+                - *Xinning

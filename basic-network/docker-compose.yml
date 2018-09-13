@@ -2,24 +2,24 @@ version: '2'
 networks:
   basic: null
 services:
-  ca.usoftchain.com:
+  ca.example.com:
     image: hyperledger/fabric-ca
     environment:
     - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-    - FABRIC_CA_SERVER_CA_NAME=ca.usoftchain.com
-    - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.usoftchain.com-cert.pem
+    - FABRIC_CA_SERVER_CA_NAME=ca.example.com
+    - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
     - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/4239aa0dcd76daeeb8ba0cda701851d14504d31aad1b2ddddbac6a57365e497c_sk
     ports:
     - 7054:7054
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-    - ./crypto-config/peerOrganizations/org1.usoftchain.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca.usoftchain.com
+    - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.example.com
     networks:
     - basic
 
-  orderer.usoftchain.com:
-    container_name: orderer.usoftchain.com
+  orderer.example.com:
+    container_name: orderer.example.com
     image: hyperledger/fabric-orderer
     environment:
     - ORDERER_GENERAL_LOGLEVEL=debug
@@ -34,22 +34,22 @@ services:
     - 7050:7050
     volumes:
     - ./config/:/etc/hyperledger/configtx
-    - ./crypto-config/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/:/etc/hyperledger/msp/orderer
-    - ./crypto-config/peerOrganizations/org1.usoftchain.com/peers/peer0.org1.usoftchain.com/:/etc/hyperledger/msp/peerOrg1
+    - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
+    - ./crypto-config/peerOrganizations/xinning.example.com/peers/peer0.xinning.example.com/:/etc/hyperledger/msp/peerXinning
     networks:
     - basic
 
-  peer0.org1.usoftchain.com:
-    container_name: peer0.org1.usoftchain.com
+  peer0.xinning.example.com:
+    container_name: peer0.xinning.example.com
     image: hyperledger/fabric-peer
     environment:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    - CORE_PEER_ID=peer0.org1.usoftchain.com
+    - CORE_PEER_ID=peer0.xinning.example.com
     - CORE_LOGGING_PEER=debug
     - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
-    - CORE_PEER_LOCALMSPID=Org1MSP
+    - CORE_PEER_LOCALMSPID=XinningMSP
     - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
-    - CORE_PEER_ADDRESS=peer0.org1.usoftchain.com:7051
+    - CORE_PEER_ADDRESS=peer0.xinning.example.com:7051
     - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
     - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
     - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
@@ -62,11 +62,11 @@ services:
     - 7053:7053
     volumes:
     - /var/run/:/host/var/run/
-    - ./crypto-config/peerOrganizations/org1.usoftchain.com/peers/peer0.org1.usoftchain.com/msp:/etc/hyperledger/msp/peer
-    - ./crypto-config/peerOrganizations/org1.usoftchain.com/users:/etc/hyperledger/msp/users
+    - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.xinning.example.com/msp:/etc/hyperledger/msp/peer
+    - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
     - ./config:/etc/hyperledger/configtx
     depends_on:
-    - orderer.usoftchain.com
+    - orderer.example.com
     - couchdb
     networks:
     - basic
@@ -91,9 +91,9 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_LOGGING_LEVEL=DEBUG
     - CORE_PEER_ID=cli
-    - CORE_PEER_ADDRESS=peer0.org1.usoftchain.com:7051
-    - CORE_PEER_LOCALMSPID=Org1MSP
-    - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.usoftchain.com/users/Admin@org1.usoftchain.com/msp
+    - CORE_PEER_ADDRESS=peer0.xinning.example.com:7051
+    - CORE_PEER_LOCALMSPID=XinningMSP
+    - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.example.com/users/Admin@xinning.example.com/msp
     - CORE_CHAINCODE_KEEPALIVE=10
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
@@ -105,6 +105,6 @@ services:
     networks:
     - basic
     depends_on:
-    - orderer.usoftchain.com
-    - peer0.org1.usoftchain.com
+    - orderer.example.com
+    - peer0.xinning.example.com
     - couchdb

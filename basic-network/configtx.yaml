@@ -51,21 +51,21 @@ Organizations:
         MSPDir: crypto-config/peerOrganizations/skypine.usoftchain.com/msp
         AnchorPeers:
             - Host: peer0.skypine.usoftchain.com
-              Port: 8051
+              Port: 7051
     - &xinning
         Name: xinningMSP
         ID: xinningMSP
         MSPDir: crypto-config/peerOrganizations/xinning.usoftchain.com/msp
         AnchorPeers:
             - Host: peer0.xinning.usoftchain.com
-              Port: 9051
+              Port: 7051
     - &usoft
         Name: usoftMSP
         ID: usoftMSP
         MSPDir: crypto-config/peerOrganizations/usoft.usoftchain.com/msp
         AnchorPeers:
             - Host: peer0.usoft.usoftchain.com
-              Port: 10051
+              Port: 7051
 ################################################################################
 #
 #   SECTION: Orderer

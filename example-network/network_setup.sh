@@ -44,8 +44,8 @@ EOF
 function copyConfig () {
     for key in ${!PEERS[@]}
     do
-      scp -rp channel-artifacts $key:go/src/github.com/usoftchina/usoftchain-sample/cluster-network/
-      scp -rp crypto-config $key:go/src/github.com/usoftchina/usoftchain-sample/cluster-network/
+      scp -rp channel-artifacts $key:go/src/github.com/usoftchina/usoftchain-sample/example-network/
+      scp -rp crypto-config $key:go/src/github.com/usoftchina/usoftchain-sample/example-network/
     done
 }
 
@@ -53,7 +53,7 @@ function clearConfig () {
     for var in ${HOSTS[@]}
     do
       ssh -T $var <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network/
+      cd go/src/github.com/usoftchina/usoftchain-sample/example-network/
       rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
       exit
 EOF
@@ -65,7 +65,7 @@ function startOrderer() {
     do
       file="docker-compose-${ORDERERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
+      cd go/src/github.com/usoftchina/usoftchain-sample/example-network
       docker-compose -f $file up -d
       exit
 EOF
@@ -77,7 +77,7 @@ function stopOrderer() {
     do
       file="docker-compose-${ORDERERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
+      cd go/src/github.com/usoftchina/usoftchain-sample/example-network
       docker-compose -f $file down
       exit
 EOF
@@ -89,7 +89,7 @@ function startPeer() {
     do
       file="docker-compose-${PEERS[$key]}.yaml"
       ssh -T $key <<EOF
-      cd go/src/github.com/usoftchina/usoftchain-sample/cluster-network
+      cd go/src/github.com/usoftchina/usoftchain-sample/example-network
       docker-compose -f $file up -d
       exit
 EOF
@@ -99,7 +99,7 @@ EOF
 function stopPeer() {
     for key in ${!PEERS[@]}
     do
-      file="go/src/github.com/usoftchina/usoftchain-sample/cluster-network/docker-compose-${PEERS[$key]}.yaml"
+      file="go/src/github.com/usoftchina/usoftchain-sample/example-network/docker-compose-${PEERS[$key]}.yaml"
       ssh $key "docker-compose -f $file down"
       # clear unwanted containers
       CONTAINER_IDS=$(ssh $key "docker ps -a | grep \"dev\|none\|test-vp\|peer[0-9]-\"" | awk '{print $1}')

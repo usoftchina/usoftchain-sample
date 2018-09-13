@@ -6,10 +6,10 @@ CHANNEL_NAME="$1"
 COUNTER=1
 MAX_RETRY=5
 ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/usoftchain.com/orderers/orderer.usoftchain.com/msp/tlscacerts/tlsca.usoftchain.com-cert.pem
-PEER0_HUASL_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/tls/ca.crt
-PEER0_SKYPINE_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/ca.crt
+#PEER0_HUASL_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/huasl.usoftchain.com/peers/peer0.huasl.usoftchain.com/tls/ca.crt
+#PEER0_SKYPINE_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/skypine.usoftchain.com/peers/peer0.skypine.usoftchain.com/tls/ca.crt
 PEER0_XINNING_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/xinning.usoftchain.com/peers/peer0.xinning.usoftchain.com/tls/ca.crt
-PEER0_USOFT_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/usoft.usoftchain.com/peers/peer0.usoft.usoftchain.com/tls/ca.crt
+#PEER0_USOFT_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/usoft.usoftchain.com/peers/peer0.usoft.usoftchain.com/tls/ca.crt
 
 echo "Channel name : "$CHANNEL_NAME
 
@@ -80,13 +80,16 @@ joinChannelWithRetry () {
 }
 
 joinChannel () {
-    for i in peer0.huasl peer0.skypine peer0.xinning peer0.usoft ;
-    do
-        joinChannelWithRetry $i
-        echo "===================== $i joined channel '$CHANNEL_NAME' ===================== "
-        sleep 2
-        echo
-    done
+#    for i in peer0.huasl peer0.skypine peer0.xinning peer0.usoft ;
+#    do
+#        joinChannelWithRetry $i
+#        echo "===================== $i joined channel '$CHANNEL_NAME' ===================== "
+#        sleep 2
+#        echo
+#    done
+    joinChannelWithRetry peer0.xinning
+    echo "===================== peer0.xinning joined channel '$CHANNEL_NAME' ===================== "
+    sleep 2
 }
 
 installChaincode () {

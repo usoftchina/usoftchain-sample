@@ -70,7 +70,7 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     public Map<String, Properties> ordererProperties() throws IOException {
         final Map<String, Properties> propertiesMap = new HashMap<>();
         Properties orderer0Properties = new Properties();
-        String ordererPemFileLocation = "classpath:cluster-network/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem";
+        String ordererPemFileLocation = "classpath:cluster-network/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt";
         File ordererPemFile = ResourceUtils.getFile(ordererPemFileLocation);
 
         orderer0Properties.setProperty("pemFile", ordererPemFile.getCanonicalPath());
@@ -106,7 +106,7 @@ public class SkypineNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
         return "cluster-network/crypto-config/peerOrganizations/skypine.example.com/users/Admin@skypine.example.com/msp"
-                + "/keystore/44d879194fd225da3e040705b9dcb8d682f5c7214b6305aa5611dfbda8bbc841_sk";
+                + "/keystore/43142c519a03c1c0376ed0b99d6c4a7ada7d8aef2164c54cc95fd662b72887c5_sk";
     }
 
     @Bean(name = "userSigningCert")

@@ -70,7 +70,7 @@ public class XinningNetworkConfig extends AbstractChaincodeConfiguration {
     public Map<String, Properties> ordererProperties() throws IOException {
         final Map<String, Properties> propertiesMap = new HashMap<>();
         Properties orderer0Properties = new Properties();
-        String ordererPemFileLocation = "classpath:cluster-network/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem";
+        String ordererPemFileLocation = "classpath:cluster-network/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt";
         File ordererPemFile = ResourceUtils.getFile(ordererPemFileLocation);
 
         orderer0Properties.setProperty("pemFile", ordererPemFile.getCanonicalPath());

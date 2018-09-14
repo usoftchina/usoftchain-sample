@@ -21,8 +21,8 @@ public class SkypineTest {
     @Test
     public void testInvoke() throws Exception {
         Assert.assertNotNull(stockRepository);
-        stockRepository.createWarehouse("天派材料良品仓", "天派材料良品仓", "深圳市宝安区福永镇新和村新兴工业园6区A1栋");
-        stockRepository.createLocation("天派材料良品仓", "1-1", "1-1");
+//        stockRepository.createWarehouse("天派材料良品仓", "天派材料良品仓", "深圳市宝安区福永镇新和村新兴工业园6区A1栋");
+        stockRepository.createLocation("天派材料良品仓", "1-5", "1-5");
     }
 
     @Test

@@ -22,7 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Fabric -->
-        <fabric-sdk.version>1.2.0</fabric-sdk.version>
+        <fabric-sdk.version>1.2.1-SNAPSHOT</fabric-sdk.version>
 
         <!-- Logging -->
         <logback.version>1.0.13</logback.version>

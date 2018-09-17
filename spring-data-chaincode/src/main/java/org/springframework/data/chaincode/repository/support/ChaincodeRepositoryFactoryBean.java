@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.chaincode.repository.ChaincodeRepository;
 import org.springframework.data.chaincode.sdk.client.ChaincodeClient;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.core.support.RepositoryComposition.RepositoryFragments;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 
@@ -38,13 +37,7 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
 
     Class<? extends T> repositoryInterface;
 
-    private RepositoryFactorySupport factory;
-
-    private T repository;
-
     private ChaincodeClient chaincodeClient;
-
-    private RepositoryFragments repositoryFragments;
 
     /**
      * Create new {@link ChaincodeRepositoryFactoryBean} for given repository interface
@@ -64,18 +57,6 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
     }
 
     @Override
-    public void afterPropertiesSet() {
-        logger.debug("After properties set for factory bean " + repositoryInterface.getName());
-        factory = createRepositoryFactory();
-        repository = factory.getRepository(repositoryInterface, repositoryFragments);
-    }
-
-    @Override
-    public T getObject() {
-        return repository;
-    }
-
-    @Override
     public Class<? extends T> getObjectType() {
         return repositoryInterface;
     }
@@ -83,13 +64,4 @@ public class ChaincodeRepositoryFactoryBean<T extends Repository<S, ID>, S, ID e
     public void setChaincodeClient(ChaincodeClient chaincodeClient) {
         this.chaincodeClient = chaincodeClient;
     }
-
-    @Override
-    public void setRepositoryFragments(RepositoryFragments repositoryFragments) {
-        logger.debug("Set repository fragments for {} fragments {}", repositoryInterface.getName(), repositoryFragments);
-        this.repositoryFragments = repositoryFragments;
-        super.setRepositoryFragments(repositoryFragments);
-    }
-
-
 }

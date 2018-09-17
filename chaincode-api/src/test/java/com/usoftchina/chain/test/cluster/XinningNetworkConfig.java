@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 @ComponentScan
-@EnableChaincodeRepositories(basePackages = {"com.usoftchina.chain.repository"})
+@EnableChaincodeRepositories(basePackages = {"com.usoftchina.chaincode.repository"})
 public class XinningNetworkConfig extends AbstractChaincodeConfiguration {
 
     @Override
@@ -54,7 +54,7 @@ public class XinningNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "eventHubLocations")
     public Map<String, String> eventHubLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0.xinning.example.com", "grpcs://192.168.0.179:7053");
+//        res.put("peer0.xinning.example.com", "grpcs://192.168.0.179:7053");
         return res;
     }
 

@@ -1,6 +1,7 @@
 package org.springframework.fabric.query;
 
 import org.hyperledger.fabric.sdk.BlockInfo;
+import org.springframework.fabric.query.util.AsciiUtils;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -25,9 +26,15 @@ public class TransactionActionInfo {
         this.responseMessage = info.getResponseMessage();
         this.endorsementsCount = info.getEndorsementsCount();
         this.status = info.getProposalResponseStatus();
-        this.payload = new String(info.getProposalResponsePayload(), Charset.defaultCharset());
+        boolean isDeploy = "deploy".equals(new String(info.getChaincodeInputArgs(0)));
+        if (isDeploy) {
+            // 初始化的payload不处理
+            this.payload = "";
+        } else {
+            this.payload = new String(info.getProposalResponsePayload(), Charset.defaultCharset());
+        }
 
-        int count = info.getChaincodeInputArgsCount();
+        int count = isDeploy ? 2 : info.getChaincodeInputArgsCount();
         this.args = new String[count];
         for (int i = 0; i < count; i++) {
             this.args[i] = new String(info.getChaincodeInputArgs(i), Charset.defaultCharset());

@@ -23,6 +23,9 @@ public class ChannelQuery {
      * @throws InvalidArgumentException
      */
     public static BlockchainHexInfo queryBlockchainInfo(Channel channel) throws ProposalException, InvalidArgumentException {
+        if (channel.getPeers().isEmpty()) {
+            return null;
+        }
         return new BlockchainHexInfo(channel.queryBlockchainInfo());
     }
 

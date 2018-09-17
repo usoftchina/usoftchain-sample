@@ -1,8 +1,8 @@
 package com.usoftchina.chain.test.standalone;
 
 import com.alibaba.fastjson.JSON;
-import com.usoftchina.chain.repository.StockRepository;
-import com.usoftchina.chain.struct.Batch;
+import com.usoftchina.chaincode.repository.StockRepository;
+import com.usoftchina.chaincode.struct.Batch;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

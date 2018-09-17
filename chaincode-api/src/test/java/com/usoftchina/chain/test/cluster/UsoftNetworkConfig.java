@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 @ComponentScan
-@EnableChaincodeRepositories(basePackages = {"com.usoftchina.chain.repository"})
+@EnableChaincodeRepositories(basePackages = {"com.usoftchina.chaincode.repository"})
 public class UsoftNetworkConfig extends AbstractChaincodeConfiguration {
 
     @Override
@@ -54,7 +54,7 @@ public class UsoftNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "eventHubLocations")
     public Map<String, String> eventHubLocations() {
         final Map<String, String> res = new HashMap<>();
-        res.put("peer0.usoft.example.com", "grpcs://192.168.0.180:7053");
+//        res.put("peer0.usoft.example.com", "grpcs://192.168.0.180:7053");
         return res;
     }
 
@@ -106,7 +106,7 @@ public class UsoftNetworkConfig extends AbstractChaincodeConfiguration {
     @Bean(name = "privateKeyLocation")
     public String privateKeyLocation() {
         return "cluster-network/crypto-config/peerOrganizations/usoft.example.com/users/Admin@usoft.example.com/msp"
-                + "/keystore/c860dfb4b3e84983d5fcd02aa15dcc132c4c452b9e8d430599637bc8f89cab3c_sk";
+                + "/keystore/4ad2d980d264b2db657a33d75b71616e301af604621c6a15ab37829ce6b3ced6_sk";
     }
 
     @Bean(name = "userSigningCert")

@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: usoft
+  datasource:
+    url: jdbc:mysql://192.168.253.12:3306/chain_sample?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: select111***
+    driverClassName: com.mysql.jdbc.Driver

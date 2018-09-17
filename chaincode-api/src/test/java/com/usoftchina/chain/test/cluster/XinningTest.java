@@ -1,6 +1,6 @@
 package com.usoftchina.chain.test.cluster;
 
-import com.usoftchina.chain.repository.StockRepository;
+import com.usoftchina.chaincode.repository.StockRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

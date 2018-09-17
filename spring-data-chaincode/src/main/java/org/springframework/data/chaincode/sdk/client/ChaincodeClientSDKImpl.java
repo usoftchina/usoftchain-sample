@@ -328,9 +328,6 @@ public class ChaincodeClientSDKImpl implements ChaincodeClient {
             logger.warn("Exception during send transaction", e);
             throw new InvokeException("During send transaction", e);
         }
-        System.err.println("-------------------before get isDone " + txFuture.isDone());
-        System.err.println("-------------------before get isCancelled " + txFuture.isCancelled());
-        System.err.println("-------------------before get isCompletedExceptionally " + txFuture.isCompletedExceptionally());
         BlockEvent.TransactionEvent event = null;
         try {
             event = txFuture.get(30000, TimeUnit.MILLISECONDS);

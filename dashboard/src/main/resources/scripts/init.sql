@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `cc_transaction`
 `validation_code` char,
 `timestamp` datetime,
 `block_hash` varchar(255),
+`channel` varchar(255),
 PRIMARY KEY(`transaction_id`)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /

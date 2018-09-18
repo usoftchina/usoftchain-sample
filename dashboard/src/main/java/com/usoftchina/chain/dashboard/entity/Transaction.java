@@ -16,6 +16,7 @@ public class Transaction implements Serializable{
     private Date timestamp;
     public List<TransactionAction> transactionActions;
     private String blockHash;
+    private String channel;
 
     public String getTransactionID() {
         return transactionID;
@@ -71,5 +72,13 @@ public class Transaction implements Serializable{
 
     public void setBlockHash(String blockHash) {
         this.blockHash = blockHash;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 }

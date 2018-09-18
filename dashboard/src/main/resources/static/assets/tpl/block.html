@@ -1,0 +1,20 @@
+<div class="container-fluid" ng-controller="BlockCtl">
+    <div id="block-panel" class="panel panel-default">
+        <table class="table table-bordered" ng-table="tabelParams">
+            <thead>
+            <tr>
+                <td>区块高度</td>
+                <td>区块哈希</td>
+                <td>交易次数</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in $data">
+                <td>{{item.blockNumber + 1}}</td>
+                <td>{{item.blockHash}}</td>
+                <td>{{item.transactionCount}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="container-fluid" ng-controller="TransactionCtl">
+    <div id="block-panel" class="panel panel-default">
+        <table class="table table-bordered" ng-table="tabelParams">
+            <thead>
+            <tr>
+                <td>交易时间</td>
+                <td>交易ID</td>
+                <td>交易详情</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in $data">
+                <td>{{item.timestamp | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+                <td>{{item.transactionID}}</td>
+                <td>
+                    <a ng-click="showTransactionActions(item)" class="btn btn-link"
+                       data-toggle="modal" data-target="#actions-modal">详情</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="actions-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="actionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="actionsModalLabel">
+                        交易详情
+                        <a class="anchorjs-link" href="#actionsModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td>输入参数</td>
+                            <td>输出状态</td>
+                            <td>输出内容</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in activeTransaction.transactionActions">
+                            <td style="word-wrap:break-word;max-width:100px;">{{item.args}}</td>
+                            <td>{{item.responseStatus}}</td>
+                            <td style="word-wrap:break-word;max-width:300px;">{{item.payload}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

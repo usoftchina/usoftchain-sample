@@ -3,11 +3,13 @@ package org.springframework.fabric.query;
 import org.bouncycastle.util.encoders.Hex;
 import org.hyperledger.fabric.sdk.BlockInfo;
 
+import java.io.Serializable;
+
 /**
  * @author yingp
  * @date 2018/9/11
  */
-public class EndorserHexInfo {
+public class EndorserHexInfo implements Serializable {
 
     private String id;
     private String mspId;

@@ -6,3 +6,11 @@ spring:
     username: root
     password: select111***
     driverClassName: com.mysql.jdbc.Driver
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+server:
+  tomcat:
+    uri-encoding: UTF-8

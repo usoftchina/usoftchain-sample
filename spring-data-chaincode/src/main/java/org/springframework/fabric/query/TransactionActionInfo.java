@@ -1,8 +1,8 @@
 package org.springframework.fabric.query;
 
 import org.hyperledger.fabric.sdk.BlockInfo;
-import org.springframework.fabric.query.util.AsciiUtils;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author yingp
  * @date 2018/9/11
  */
-public class TransactionActionInfo {
+public class TransactionActionInfo implements Serializable {
 
     private int responseStatus;
     private String responseMessage;
@@ -31,13 +31,13 @@ public class TransactionActionInfo {
             // 初始化的payload不处理
             this.payload = "";
         } else {
-            this.payload = new String(info.getProposalResponsePayload(), Charset.defaultCharset());
+            this.payload = new String(info.getProposalResponsePayload(), Charset.forName("UTF-8"));
         }
 
         int count = isDeploy ? 2 : info.getChaincodeInputArgsCount();
         this.args = new String[count];
         for (int i = 0; i < count; i++) {
-            this.args[i] = new String(info.getChaincodeInputArgs(i), Charset.defaultCharset());
+            this.args[i] = new String(info.getChaincodeInputArgs(i), Charset.forName("UTF-8"));
         }
 
         count = info.getEndorsementsCount();

@@ -3,6 +3,8 @@ package com.usoftchina.chain.dashboard.dao;
 import com.usoftchina.chain.dashboard.entity.Block;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -55,13 +57,15 @@ public class BlockRepository {
      * @param pageable
      * @return
      */
-    public List<Block> pagingByChannel(String channel, Pageable pageable) {
+    public Page<Block> pagingByChannel(String channel, Pageable pageable) {
         try {
-            return jdbcTemplate.query("select `block_hash` as blockHash,`previous_hash` as previousHash," +
+            int total = jdbcTemplate.queryForObject("select count(1) from `cc_block` where `channel`=?", Integer.class, channel);
+            List<Block> content = jdbcTemplate.query("select `block_hash` as blockHash,`previous_hash` as previousHash," +
                             "`data_hash` as dataHash,`block_number` as blockNumber,`transaction_count` as transactionCount," +
                             "`channel` from `cc_block` where `channel`=? order by `block_number` desc limit ?,?",
-                    new BeanPropertyRowMapper<>(Block.class), channel, (pageable.getPageNumber() - 1) * pageable.getPageSize(),
+                    new BeanPropertyRowMapper<>(Block.class), channel, pageable.getPageNumber() * pageable.getPageSize(),
                     pageable.getPageSize());
+            return new PageImpl<>(content, pageable, total);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

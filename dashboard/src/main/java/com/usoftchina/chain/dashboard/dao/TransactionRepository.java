@@ -1,9 +1,13 @@
 package com.usoftchina.chain.dashboard.dao;
 
+import com.usoftchina.chain.dashboard.entity.Block;
 import com.usoftchina.chain.dashboard.entity.Transaction;
 import com.usoftchina.chain.dashboard.entity.TransactionAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,7 +37,7 @@ public class TransactionRepository {
     public Transaction findOne(String transactionID) {
         try {
             Transaction tx = jdbcTemplate.queryForObject("select `transaction_id` as transactionID,`nonce`,`valid`," +
-                            "`validation_code` as validationCode,`timestamp`,`block_hash` as blockHash " +
+                            "`validation_code` as validationCode,`timestamp`,`block_hash` as blockHash,`channel` " +
                             "from `cc_transaction` where `transaction_id`=?",
                     new BeanPropertyRowMapper<>(Transaction.class), transactionID);
             tx.setTransactionActions(findTransactionActions(transactionID));
@@ -52,7 +56,7 @@ public class TransactionRepository {
     public List<Transaction> findByBlockHash(String blockHash) {
         try {
             List<Transaction> txs = jdbcTemplate.query("select `transaction_id` as transactionID,`nonce`,`valid`," +
-                            "`validation_code` as validationCode,`timestamp`,`block_hash` as blockHash " +
+                            "`validation_code` as validationCode,`timestamp`,`block_hash` as blockHash,`channel` " +
                             "from `cc_transaction` where `block_hash`=? order by `timestamp` desc",
                     new BeanPropertyRowMapper<>(Transaction.class), blockHash);
             if (!CollectionUtils.isEmpty(txs)) {
@@ -82,8 +86,8 @@ public class TransactionRepository {
      */
     public void save(Transaction tx) {
         jdbcTemplate.update("insert into `cc_transaction`(`transaction_id`,`nonce`,`valid`,`validation_code`," +
-                        "`timestamp`,`block_hash`) values (?,?,?,?,?,?)", tx.getTransactionID(), tx.getNonce(), tx.isValid(),
-                tx.getValidationCode(), tx.getTimestamp(), tx.getBlockHash());
+                        "`timestamp`,`block_hash`,`channel`) values (?,?,?,?,?,?,?)", tx.getTransactionID(), tx.getNonce(), tx.isValid(),
+                tx.getValidationCode(), tx.getTimestamp(), tx.getBlockHash(), tx.getChannel());
         if (!CollectionUtils.isEmpty(tx.getTransactionActions())) {
             saveTransactionActions(tx.getTransactionActions());
         }
@@ -109,5 +113,26 @@ public class TransactionRepository {
                 return actions.size();
             }
         });
+    }
+
+    /**
+     * 按channel分页查找
+     *
+     * @param channel
+     * @param pageable
+     * @return
+     */
+    public Page<Transaction> pagingByChannel(String channel, Pageable pageable) {
+        try {
+            int total = jdbcTemplate.queryForObject("select count(1) from `cc_transaction` where `channel`=?", Integer.class, channel);
+            List<Transaction> content = jdbcTemplate.query("select `transaction_id` as transactionID,`nonce`,`valid`," +
+                            "`validation_code` as validationCode,`timestamp`,`block_hash` as blockHash,`channel` " +
+                            "from `cc_transaction` where `channel`=? order by `timestamp` desc limit ?,?",
+                    new BeanPropertyRowMapper<>(Transaction.class), channel, pageable.getPageNumber() * pageable.getPageSize(),
+                    pageable.getPageSize());
+            return new PageImpl<>(content, pageable, total);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.springframework.fabric.query;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.hyperledger.fabric.sdk.Channel;
+import org.hyperledger.fabric.sdk.Orderer;
 import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
@@ -27,6 +28,22 @@ public class ChannelQuery {
             return null;
         }
         return new BlockchainHexInfo(channel.queryBlockchainInfo());
+    }
+
+    /**
+     * Get all orderers info
+     *
+     * @param channel
+     * @return
+     * @throws ProposalException
+     * @throws InvalidArgumentException
+     */
+    public static List<OrdererInfo> queryOrderersInfo(Channel channel) throws ProposalException, InvalidArgumentException {
+        List<OrdererInfo> list = new ArrayList<>();
+        for (Orderer orderer : channel.getOrderers()) {
+            list.add(new OrdererInfo(orderer));
+        }
+        return list;
     }
 
     /**

@@ -1,0 +1,55 @@
+<div class="container-fluid" ng-controller="BlockchainCtl">
+    <div id="blockchain-panel" class="panel panel-default">
+        <div class="panel-heading">区块链</div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>子网：</dt>
+                <dd>{{activeBlockchain.channel}}</dd>
+                <dt>当前区块哈希：</dt>
+                <dd>{{activeBlockchain.currentBlockHash}}</dd>
+                <dt>上一区块哈希：</dt>
+                <dd>{{activeBlockchain.previousBlockHash}}</dd>
+                <dt>区块高度：</dt>
+                <dd>{{activeBlockchain.height}}</dd>
+            </dl>
+        </div>
+    </div>
+    <div id="orderer-panel" class="panel panel-default">
+        <div class="panel-heading">排序节点</div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td>名称</td>
+                <td>地址</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in channel.orderers">
+                <td style="white-space:nowrap">{{item.name}}</td>
+                <td>{{item.url}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="peer-panel" class="panel panel-default">
+        <div class="panel-heading">记账节点</div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td>名称</td>
+                <td>地址</td>
+                <td>区块哈希</td>
+                <td>区块高度</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in channel.peers">
+                <td style="white-space:nowrap">{{item.name}}</td>
+                <td>{{item.url}}</td>
+                <td>{{item.blockchain.currentBlockHash}}</td>
+                <td>{{item.blockchain.height}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

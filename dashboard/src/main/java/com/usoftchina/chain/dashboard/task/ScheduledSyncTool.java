@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -99,11 +100,11 @@ public class ScheduledSyncTool {
             }
 
             blockRepository.save(block);
-            checkTransaction(blockHash, blockHexInfo);
+            checkTransaction(channel, blockHash, blockHexInfo);
         }
     }
 
-    private void checkTransaction(String blockHash, BlockHexInfo blockHexInfo) {
+    private void checkTransaction(Channel channel, String blockHash, BlockHexInfo blockHexInfo) {
         if (!CollectionUtils.isEmpty(blockHexInfo.getEnvelopes())) {
             blockHexInfo.getEnvelopes().stream()
                     .filter(envelope -> null != envelope.getTransactionEnvelope())
@@ -117,6 +118,7 @@ public class ScheduledSyncTool {
                             transaction.setValid(envelope.isValid());
                             transaction.setValidationCode(envelope.getValidationCode());
                             transaction.setBlockHash(blockHash);
+                            transaction.setChannel(channel.getName());
                             if (!CollectionUtils.isEmpty(envelope.getTransactionEnvelope().getTransactionActions())) {
                                 List<TransactionAction> actions = new ArrayList<>();
                                 envelope.getTransactionEnvelope().getTransactionActions().forEach(ac -> {

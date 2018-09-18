@@ -2,6 +2,7 @@ package org.springframework.fabric.query;
 
 import org.hyperledger.fabric.sdk.BlockInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author yingp
  * @date 2018/9/11
  */
-public class TransactionEnvelopeInfo {
+public class TransactionEnvelopeInfo implements Serializable {
 
     private byte validationCode;
     private boolean valid;

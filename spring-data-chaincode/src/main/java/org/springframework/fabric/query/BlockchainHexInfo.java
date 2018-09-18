@@ -3,11 +3,13 @@ package org.springframework.fabric.query;
 import org.bouncycastle.util.encoders.Hex;
 import org.hyperledger.fabric.sdk.BlockchainInfo;
 
+import java.io.Serializable;
+
 /**
  * @author yingp
  * @date 2018/9/11
  */
-public class BlockchainHexInfo {
+public class BlockchainHexInfo implements Serializable{
     private long height;
     private String currentBlockHash;
     private String previousBlockHash;

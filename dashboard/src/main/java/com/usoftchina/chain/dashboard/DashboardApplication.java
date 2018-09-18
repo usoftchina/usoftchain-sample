@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author yingp
  * @date 2018/9/5
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.usoftchina.chaincode", "com.usoftchina.chain"})
 @EnableScheduling
 public class DashboardApplication {
 

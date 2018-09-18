@@ -10,6 +10,7 @@ import java.util.Date;
  * @date 2018/9/10
  */
 public class Batch implements Serializable {
+    private String docType;
     private String num;
     private String owner;
     private String productNum;
@@ -28,6 +29,14 @@ public class Batch implements Serializable {
      * 类型: 初始化init,交易trade,制造make
      */
     private String batchType;
+
+    public String getDocType() {
+        return docType;
+    }
+
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
 
     public String getNum() {
         return num;

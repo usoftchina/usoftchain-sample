@@ -9,6 +9,7 @@ import java.util.Map;
  * @date 2018/9/14
  */
 public class Warehouse {
+    private String docType;
     private String name;
     private String desc;
     private String address;
@@ -17,6 +18,14 @@ public class Warehouse {
      * 仓位
      */
     private Map<String, String> locations;
+
+    public String getDocType() {
+        return docType;
+    }
+
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
 
     public String getName() {
         return name;

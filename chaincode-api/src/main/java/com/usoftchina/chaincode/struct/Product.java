@@ -7,6 +7,11 @@ package com.usoftchina.chaincode.struct;
  * @date 2018/9/14
  */
 public class Product {
+    private String docType;
+    /**
+     * 创建者
+     */
+    private String creator;
     /**
      * 编号、原厂型号
      */
@@ -31,6 +36,22 @@ public class Product {
      * 单位
      */
     private String unit;
+
+    public String getDocType() {
+        return docType;
+    }
+
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
     public String getNum() {
         return num;

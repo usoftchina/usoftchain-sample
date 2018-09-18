@@ -259,6 +259,10 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 	if productBytes != nil {
 		return shim.Error("The product already exists")
 	}
+	creator, err := utils.GetCreatorName(stub)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 	product := Product{
 		Num:     args[0],
 		Spec:    args[1],
@@ -266,7 +270,7 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 		Desc:    args[3],
 		Brand:   args[4],
 		Unit:    args[5],
-		Creator: utils.GetCreatorName(stub),
+		Creator: creator,
 		DocType: "product",
 	}
 	productBytes, err = json.Marshal(product)

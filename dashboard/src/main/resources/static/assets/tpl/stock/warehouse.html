@@ -1,0 +1,24 @@
+<div class="container-fluid" ng-controller="WarehouseCtl">
+    <div id="warehouse-panel" class="panel panel-default">
+        <table class="table table-bordered" ng-table="tabelParams">
+            <thead>
+            <tr>
+                <td>名称</td>
+                <td>所属组织</td>
+                <td>描述</td>
+                <td>地址</td>
+                <td>仓位</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in warehouses">
+                <td>{{item.name}}</td>
+                <td>{{item.owner}}</td>
+                <td>{{item.desc}}</td>
+                <td>{{item.address}}</td>
+                <td>{{item.locations}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

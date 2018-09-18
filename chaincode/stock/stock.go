@@ -34,6 +34,10 @@ type Product struct {
 	Brand string `json:"brand"`
 	// 单位
 	Unit string `json:"unit"`
+	// 创建者
+	Creator string `json:"creator"`
+	// docType
+	DocType string `json:"docType"`
 }
 
 // 仓库
@@ -44,6 +48,8 @@ type Warehouse struct {
 	Owner   string `json:"owner"`
 	// 仓位
 	Locations map[string]string `json:"locations"`
+	// docType
+	DocType string `json:"docType"`
 }
 
 // 库存批次
@@ -60,6 +66,8 @@ type Batch struct {
 	Indate int64 `json:"indate"`
 	// 类型: 初始化init,交易trade,制造make
 	BatchType string `json:"batchType"`
+	// docType
+	DocType string `json:"docType"`
 }
 
 var (
@@ -98,12 +106,20 @@ func (s *StockContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return s.queryBatchesByOwner(stub, args)
 	} else if function == "queryMyBatches" { // 查询我的批次
 		return s.queryMyBatches(stub, args)
+	} else if function == "queryAllBatches" { // 全部批次查询
+		return s.queryAllBatches(stub)
 	} else if function == "queryWarehouse" { // 仓库查询
 		return s.queryWarehouse(stub, args)
+	} else if function == "queryAllWarehouses" { // 全部仓库查询
+		return s.queryAllWarehouses(stub)
+	} else if function == "queryProduct" { // 物料查询
+		return s.queryProduct(stub, args)
+	} else if function == "queryAllProducts" { // 全部物料查询
+		return s.queryAllProducts(stub)
 	}/* else if function == "queryAccount" { // 账户查询
 		return s.queryAccount(stub, args)
 	}*/
-	return shim.Error(fmt.Sprintf("Invalid Stock Contract function name %s, available functions (createWarehouse|createLocation|createProduct|initStock|completeStock|transferStock|queryBatch|queryBatchHistory|queryWarehouse)", function))
+	return shim.Error(fmt.Sprintf("Invalid Stock Contract function name %s, available functions (createWarehouse|createLocation|createProduct|initStock|completeStock|transferStock|queryBatch|queryBatchHistory|queryAllBatches|queryWarehouse|queryAllWarehouses|queryProduct|queryAllProducts)", function))
 }
 
 /**
@@ -162,6 +178,7 @@ func (s *StockContract) createWarehouse(stub shim.ChaincodeStubInterface, args [
 		Desc:      args[1],
 		Address:   args[2],
 		Locations: defaultLocations,
+		DocType:   "warehouse",
 	}
 	warehouseBytes, err = json.Marshal(warehouse)
 	if err != nil {
@@ -243,12 +260,14 @@ func (s *StockContract) createProduct(stub shim.ChaincodeStubInterface, args []s
 		return shim.Error("The product already exists")
 	}
 	product := Product{
-		Num:   args[0],
-		Spec:  args[1],
-		Group: args[2],
-		Desc:  args[3],
-		Brand: args[4],
-		Unit:  args[5],
+		Num:     args[0],
+		Spec:    args[1],
+		Group:   args[2],
+		Desc:    args[3],
+		Brand:   args[4],
+		Unit:    args[5],
+		Creator: utils.GetCreatorName(stub),
+		DocType: "product",
 	}
 	productBytes, err = json.Marshal(product)
 	if err != nil {
@@ -400,6 +419,7 @@ func (s *StockContract) initStock(stub shim.ChaincodeStubInterface, args []strin
 		LocationName:  locationName,
 		Indate:        time.Now().UnixNano() / 1000000,
 		BatchType:     batchType,
+		DocType:       "batch",
 	}
 	batchBytes, err := json.Marshal(batch)
 	if err != nil {
@@ -499,6 +519,7 @@ func (s *StockContract) transferStock(stub shim.ChaincodeStubInterface, args []s
 		Indate:        time.Now().UnixNano() / 1000000,
 		PreNum:        fromBatch.Num,
 		BatchType:     "trade",
+		DocType:       "batch",
 	}
 	toBatchBytes, err := json.Marshal(toBatch)
 	if err != nil {
@@ -612,6 +633,51 @@ func (s *StockContract) queryWarehouse(stub shim.ChaincodeStubInterface, args []
 }
 
 /**
+全部仓库查询
+{"Args":["queryAllWarehouses"]}
+{"Args":["queryAllWarehouses"]}
+*/
+func (s *StockContract) queryAllWarehouses(stub shim.ChaincodeStubInterface) peer.Response {
+	warehouseBytes, err := utils.GetListResultByDocType(stub, "warehouse")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(warehouseBytes)
+}
+
+/**
+物料查询
+{"Args":["queryProduct",num]}
+{"Args":["queryProduct","EMVA500ADA470MF80G"]}
+*/
+func (s *StockContract) queryProduct(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+	productBytes, err := stub.GetState("product:" + args[0])
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	if productBytes == nil {
+		return shim.Error(fmt.Sprintf("The product of %s does not exist", args[0]))
+	}
+	return shim.Success(productBytes)
+}
+
+/**
+全部物料查询
+{"Args":["queryAllProducts"]}
+{"Args":["queryAllProducts"]}
+*/
+func (s *StockContract) queryAllProducts(stub shim.ChaincodeStubInterface) peer.Response {
+	productBytes, err := utils.GetListResultByDocType(stub, "product")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(productBytes)
+}
+
+/**
 所属批次查询
 {"Args":["queryBatchesByOwner",owner]}
 {"Args":["queryBatchesByOwner","新宁"]}
@@ -640,6 +706,19 @@ func (s *StockContract) queryMyBatches(stub shim.ChaincodeStubInterface, args []
 		return shim.Error(err.Error())
 	}
 	return s.queryBatchesByOwner(stub, []string{owner})
+}
+
+/**
+全部批次查询
+{"Args":["queryAllBatches"]}
+{"Args":["queryAllBatches"]}
+*/
+func (s *StockContract) queryAllBatches(stub shim.ChaincodeStubInterface) peer.Response {
+	batchBytes, err := utils.GetListResultByDocType(stub, "batch")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(batchBytes)
 }
 
 func main() {

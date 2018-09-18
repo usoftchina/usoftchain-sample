@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"fmt"
 	"bytes"
 	"errors"
 	"encoding/pem"
@@ -11,6 +12,7 @@ import (
 	"time"
 	"strconv"
 	"encoding/json"
+	"github.com/hyperledger/fabric/vendor/gopkg.in/cheggaaa/pb.v1"
 )
 
 var (
@@ -89,4 +91,43 @@ func GetHistoryListResult(resultsIterator shim.HistoryQueryIteratorInterface) ([
 	}
 	buffer.WriteString("]")
 	return buffer.Bytes(), nil
+}
+
+func GetListResult(resultsIterator shim.StateQueryIteratorInterface) ([]byte, error) {
+	defer resultsIterator.Close()
+	var buffer bytes.Buffer
+	buffer.WriteString("[")
+
+	bArrayMemberAlreadyWritten := false
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+		// Add a comma before array members, suppress it for the first array member
+		if bArrayMemberAlreadyWritten {
+			buffer.WriteString(",")
+		}
+		item, err := json.Marshal(queryResponse)
+		if err != nil {
+			return nil, err
+		}
+		buffer.Write(item)
+		bArrayMemberAlreadyWritten = true
+	}
+	buffer.WriteString("]")
+	return buffer.Bytes(), nil
+}
+
+/**
+按DocType查询全部
+必须是CouchDB才行
+ */
+func GetListResultByDocType(stub shim.ChaincodeStubInterface, docType string) ([]byte, error) {
+	queryString := fmt.Sprintf("{\"selector\":{\"DocType\":\"%s\"}}", docType)
+	resultsIterator, err := stub.GetQueryResult(queryString)
+	if err != nil {
+		return nil, err
+	}
+	return GetListResult(resultsIterator)
 }

@@ -23,6 +23,14 @@
                     <li ui-sref='index' ui-sref-active="active"><a class="sf-house">首页</a></li>
                     <li ui-sref='block' ui-sref-active="active"><a class="sf-brick">区块列表</a></li>
                     <li ui-sref='transaction' ui-sref-active="active"><a class="sf-basket">交易列表</a></li>
+                    <li class="cm-submenu">
+                        <a class="sf-window-layout">库存交易 <span class="caret"></span></a>
+                        <ul>
+                            <li ui-sref='stock_warehouse' ui-sref-active="active"><a>仓库资料</a></li>
+                            <li ui-sref='stock_product' ui-sref-active="active"><a>物料资料</a></li>
+                            <li ui-sref='stock_batch' ui-sref-active="active"><a>批次信息</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -33,6 +41,13 @@
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
             <h1 ng-bind="activeTabName"></h1>
+            <div class="cm-breadcrumb-container">
+                <ol class="breadcrumb">
+                    <li ng-repeat="bc in breadcrumb" ng-class="{'active': $index == breadcrumb.length - 1}">
+                        <a href="#" ng-bind="bc"></a>
+                    </li>
+                </ol>
+            </div>
             <form id="cm-search">
                 <input type="search" name="q" autocomplete="off" placeholder="搜索...">
             </form>

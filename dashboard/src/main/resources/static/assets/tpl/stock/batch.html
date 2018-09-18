@@ -1,0 +1,26 @@
+<div class="container-fluid" ng-controller="BatchCtl">
+    <div id="batch-panel" class="panel panel-default">
+        <table class="table table-bordered" ng-table="tabelParams">
+            <thead>
+            <tr>
+                <td>批次号</td>
+                <td>所属组织</td>
+                <td>物料型号</td>
+                <td>数量</td>
+                <td>仓库</td>
+                <td>仓位</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in batches">
+                <td>{{item.num}}</td>
+                <td>{{item.owner}}</td>
+                <td>{{item.productNum}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.warehouseName}}</td>
+                <td>{{item.locationName}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

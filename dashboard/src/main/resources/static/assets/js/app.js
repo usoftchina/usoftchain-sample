@@ -11,25 +11,43 @@ define(['ui.router', 'ngTable', 'toaster'], function () {
             views: {
                 'global-view': {templateUrl: 'assets/tpl/blockchain.html'}
             },
-            title: "首页"
+            breadcrumb: ["首页"]
         }).state('block', {
             url: "/block",
             views: {
                 'global-view': {templateUrl: 'assets/tpl/block.html'}
             },
-            title: "区块列表"
+            breadcrumb: ["区块列表"]
         }).state('transaction', {
             url: "/transaction",
             views: {
                 'global-view': {templateUrl: 'assets/tpl/transaction.html'}
             },
-            title: "交易列表"
+            breadcrumb: ["交易列表"]
+        }).state('stock_warehouse', {
+            url: "/stock/warehouse",
+            views: {
+                'global-view': {templateUrl: 'assets/tpl/stock/warehouse.html'}
+            },
+            breadcrumb: ["库存交易", "仓库资料"]
+        }).state('stock_product', {
+            url: "/stock/product",
+            views: {
+                'global-view': {templateUrl: 'assets/tpl/stock/product.html'}
+            },
+            breadcrumb: ["库存交易", "物料资料"]
+        }).state('stock_batch', {
+            url: "/stock/batch",
+            views: {
+                'global-view': {templateUrl: 'assets/tpl/stock/batch.html'}
+            },
+            breadcrumb: ["库存交易", "批次信息"]
         });
     }]);
     app.controller('MyCtrl', ['$scope', '$rootScope', '$http', 'toaster', function ($scope, $rootScope, $http, toaster) {
         $scope.blockchains = [];
         $scope.activeBlockchain = {};
-        $scope.activeTabName = '首页';
+        $scope.breadcrumb = ['首页'];
         $http.get('/blockchain').success(function (data) {
             if (data.success) {
                 $scope.blockchains = data.content;
@@ -43,7 +61,7 @@ define(['ui.router', 'ngTable', 'toaster'], function () {
         };
 
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-            $scope.activeTabName = toState.title;
+            $scope.breadcrumb = toState.breadcrumb;
         });
     }]);
     app.controller('BlockchainCtl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
@@ -128,6 +146,46 @@ define(['ui.router', 'ngTable', 'toaster'], function () {
             $http.get('/transaction?transactionID=' + item.transactionID).success(function(data){
                 if (data.success) {
                     $scope.activeTransaction = data.content;
+                }
+            });
+        };
+    }]);
+    app.controller('WarehouseCtl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
+        $scope.warehouses = [];
+        $http.get('/stock/warehouse').success(function (data) {
+            if (data.success) {
+                $scope.warehouses = data.content;
+            } else {
+                toaster.pop('error', '错误', data.message);
+            }
+        });
+    }]);
+    app.controller('ProductCtl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
+        $scope.products = [];
+        $http.get('/stock/product').success(function (data) {
+            if (data.success) {
+                $scope.products = data.content;
+            } else {
+                toaster.pop('error', '错误', data.message);
+            }
+        });
+    }]);
+    app.controller('BatchCtl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
+        $scope.batches = [];
+        $scope.batchHistory = [];
+        $http.get('/stock/batch').success(function (data) {
+            if (data.success) {
+                $scope.batches = data.content;
+            } else {
+                toaster.pop('error', '错误', data.message);
+            }
+        });
+        $scope.getHistory = function(item) {
+            $http.get('/stock/batch/history?batchNum=' + item.num).success(function (data) {
+                if (data.success) {
+                    $scope.batchHistory = data.content;
+                } else {
+                    toaster.pop('error', '错误', data.message);
                 }
             });
         };

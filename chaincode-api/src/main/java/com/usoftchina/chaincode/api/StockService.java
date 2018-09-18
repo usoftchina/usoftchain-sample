@@ -162,4 +162,57 @@ public class StockService {
         return null;
     }
 
+    /**
+     * 查询全部批次
+     *
+     * @return
+     */
+    public List<Batch> queryAllBatches() {
+        String json = stockRepository.queryAllBatches();
+        if (null != json) {
+            return JSON.parseArray(json, Batch.class);
+        }
+        return null;
+    }
+
+    /**
+     * 查询全部仓库
+     *
+     * @return
+     */
+    public List<Warehouse> queryAllWarehouses() {
+        String json = stockRepository.queryAllWarehouses();
+        if (null != json) {
+            return JSON.parseArray(json, Warehouse.class);
+        }
+        return null;
+    }
+
+    /**
+     * 查询全部物料
+     *
+     * @return
+     */
+    public List<Product> queryAllProducts() {
+        String json = stockRepository.queryAllProducts();
+        if (null != json) {
+            return JSON.parseArray(json, Product.class);
+        }
+        return null;
+    }
+
+    /**
+     * 物料查询
+     *
+     * @param num
+     * @return
+     */
+    public Product queryProduct(String num) {
+        String json = stockRepository.queryProduct(num);
+        if (null != json) {
+            return JSON.parseObject(json, Product.class);
+        }
+        return null;
+    }
+
 }

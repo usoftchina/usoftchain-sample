@@ -1,0 +1,26 @@
+<div class="container-fluid" ng-controller="ProductCtl">
+    <div id="product-panel" class="panel panel-default">
+        <table class="table table-bordered" ng-table="tabelParams">
+            <thead>
+            <tr>
+                <td>型号</td>
+                <td>规格</td>
+                <td>类目</td>
+                <td>描述</td>
+                <td>品牌</td>
+                <td>单位</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in products">
+                <td>{{item.num}}</td>
+                <td>{{item.spec}}</td>
+                <td>{{item.group}}</td>
+                <td>{{item.desc}}</td>
+                <td>{{item.brand}}</td>
+                <td>{{item.unit}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

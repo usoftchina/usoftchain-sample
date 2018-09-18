@@ -147,6 +147,15 @@ public interface StockRepository extends ChaincodeRepository {
      */
     @ChaincodeQuery
     String queryMyBatches();
+
+    /**
+     * 查询全部批次
+     * {"Args":["queryAllBatches"]}
+     *
+     * @return
+     */
+    @ChaincodeQuery
+    String queryAllBatches();
     /**
      * 账户查询
      * {"Args":["queryAccount",num]}
@@ -168,4 +177,33 @@ public interface StockRepository extends ChaincodeRepository {
      */
     @ChaincodeQuery
     String queryWarehouse(String name);
+
+    /**
+     * 全部仓库查询
+     * {"Args":["queryAllWarehouses"]}
+     *
+     * @return
+     */
+    @ChaincodeQuery
+    String queryAllWarehouses();
+
+    /**
+     * 物料查询
+     * {"Args":["queryProduct",num]}
+     * {"Args":["queryProduct","NCC24"]}
+     *
+     * @param num
+     * @return
+     */
+    @ChaincodeQuery
+    String queryProduct(String num);
+
+    /**
+     * 全部物料查询
+     * {"Args":["queryAllProducts"]}
+     *
+     * @return
+     */
+    @ChaincodeQuery
+    String queryAllProducts();
 }

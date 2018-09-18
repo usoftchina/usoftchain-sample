@@ -12,7 +12,6 @@ import (
 	"time"
 	"strconv"
 	"encoding/json"
-	"github.com/hyperledger/fabric/vendor/gopkg.in/cheggaaa/pb.v1"
 )
 
 var (

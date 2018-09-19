@@ -3,6 +3,7 @@ package com.usoftchina.chaincode.api;
 import com.alibaba.fastjson.JSON;
 import com.usoftchina.chaincode.bean.BatchHistory;
 import com.usoftchina.chaincode.bean.History;
+import com.usoftchina.chaincode.bean.Record;
 import com.usoftchina.chaincode.repository.StockRepository;
 import com.usoftchina.chaincode.struct.Batch;
 import com.usoftchina.chaincode.struct.Product;
@@ -170,7 +171,9 @@ public class StockService {
     public List<Batch> queryAllBatches() {
         String json = stockRepository.queryAllBatches();
         if (null != json) {
-            return JSON.parseArray(json, Batch.class);
+            return JSON.parseArray(json, Record.class).stream()
+                    .map(record -> record.parseObject(Batch.class))
+                    .collect(Collectors.toList());
         }
         return null;
     }
@@ -183,7 +186,9 @@ public class StockService {
     public List<Warehouse> queryAllWarehouses() {
         String json = stockRepository.queryAllWarehouses();
         if (null != json) {
-            return JSON.parseArray(json, Warehouse.class);
+            return JSON.parseArray(json, Record.class).stream()
+                    .map(record -> record.parseObject(Warehouse.class))
+                    .collect(Collectors.toList());
         }
         return null;
     }
@@ -196,7 +201,9 @@ public class StockService {
     public List<Product> queryAllProducts() {
         String json = stockRepository.queryAllProducts();
         if (null != json) {
-            return JSON.parseArray(json, Product.class);
+            return JSON.parseArray(json, Record.class).stream()
+                    .map(record -> record.parseObject(Product.class))
+                    .collect(Collectors.toList());
         }
         return null;
     }

@@ -38,6 +38,6 @@ public class XinningTest {
         Assert.assertNotNull(stockRepository);
         String json = stockRepository.queryAllWarehouses();
         System.out.println(">>>>>>>>>>" + json);
-        // [{"address":"广东省东莞市长安镇乌沙第六工业区海滨路23号","desc":"新宁仓","locations":{"1-1":"1-1","default":"默认仓位"},"name":"新宁","owner":"xinning"}]
+        // [{"namespace":"stockcontract","key":"warehouse:新宁","value":"eyJhZGRyZXNzIjoi5bm/5Lic55yB5Lic6I6e5biC6ZW/5a6J6ZWH5LmM5rKZ56ys5YWt5bel5Lia5Yy65rW35ruo6LevMjPlj7ciLCJkZXNjIjoi5paw5a6B5LuTIiwiZG9jVHlwZSI6IndhcmVob3VzZSIsImxvY2F0aW9ucyI6eyIxLTEiOiIxLTEiLCJkZWZhdWx0Ijoi6buY6K6k5LuT5L2NIn0sIm5hbWUiOiLmlrDlroEiLCJvd25lciI6Inhpbm5pbmcifQ=="}]
     }
 }

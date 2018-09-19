@@ -123,7 +123,7 @@ func GetListResult(resultsIterator shim.StateQueryIteratorInterface) ([]byte, er
 必须是CouchDB才行
  */
 func GetListResultByDocType(stub shim.ChaincodeStubInterface, docType string) ([]byte, error) {
-	queryString := fmt.Sprintf("{\"selector\":{\"DocType\":\"%s\"}}", docType)
+	queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"%s\"}}", docType)
 	resultsIterator, err := stub.GetQueryResult(queryString)
 	if err != nil {
 		return nil, err

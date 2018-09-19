@@ -32,4 +32,12 @@ public class XinningTest {
         System.out.println(">>>>>>>>>>" + json);
         // {"address":"广东省东莞市长安镇乌沙第六工业区海滨路23号","desc":"新宁仓","locations":{"1-1":"1-1","default":"默认仓位"},"name":"新宁","owner":"xinning"}
     }
+
+    @Test
+    public void testQueryAll() throws Exception {
+        Assert.assertNotNull(stockRepository);
+        String json = stockRepository.queryAllWarehouses();
+        System.out.println(">>>>>>>>>>" + json);
+        // [{"address":"广东省东莞市长安镇乌沙第六工业区海滨路23号","desc":"新宁仓","locations":{"1-1":"1-1","default":"默认仓位"},"name":"新宁","owner":"xinning"}]
+    }
 }

@@ -89,7 +89,8 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
      */
     private File copyToTempDirectory(String srcFileName) throws IOException {
         ClassPathResource resource = new ClassPathResource(srcFileName);
-        Path destFile = Paths.get(FileUtils.getTempDirectoryPath(), DigestUtils.md5DigestAsHex(srcFileName.getBytes()));
+        Path destFile = Paths.get(FileUtils.getTempDirectoryPath(), srcFileName);
+        FileUtils.forceMkdirParent(destFile.toFile());
         Files.copy(resource.getInputStream(), destFile);
         return destFile.toFile();
     }

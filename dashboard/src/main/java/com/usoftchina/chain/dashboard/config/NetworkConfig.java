@@ -17,6 +17,7 @@
 package com.usoftchina.chain.dashboard.config;
 
 import com.usoftchina.chain.dashboard.util.IteratorUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,8 +27,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.chaincode.config.AbstractChaincodeConfiguration;
 import org.springframework.data.chaincode.repository.config.EnableChaincodeRepositories;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.ResourceUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,6 +79,20 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
         return res;
     }
 
+    /**
+     * fabric sdk必须传文件绝对路径
+     *
+     * @param srcFileName
+     * @return
+     * @throws IOException
+     */
+    private File copyToTempDirectory(String srcFileName) throws IOException {
+        File srcFile = ResourceUtils.getFile(srcFileName);
+        File destFile = new File(FileUtils.getTempDirectory(), DigestUtils.md5DigestAsHex(srcFileName.getBytes()));
+        FileUtils.copyFile(srcFile, destFile);
+        return destFile;
+    }
+
     @Bean(name = "ordererProperties")
     public Map<String, Properties> ordererProperties() throws IOException {
         final Map<String, Properties> propertiesMap = new HashMap<>(6);
@@ -83,12 +100,12 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
         if (!CollectionUtils.isEmpty(networkProperties.getOrderers())) {
             networkProperties.getOrderers().forEach(IteratorUtils.throwingConsumer((name, config) -> {
                 Properties ordererProperties = new Properties();
-                ordererProperties.setProperty("pemFile", ResourceUtils.getFile(config.getPemFile()).getCanonicalPath());
+                ordererProperties.setProperty("pemFile", copyToTempDirectory(config.getPemFile()).getCanonicalPath());
                 ordererProperties.setProperty("hostnameOverride", config.getHostnameOverride());
                 ordererProperties.setProperty("sslProvider", config.getSslProvider());
                 ordererProperties.setProperty("negotiationType", config.getNegotiationType());
                 ordererProperties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
-                ordererProperties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {false});
+                ordererProperties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[]{false});
 
                 propertiesMap.put(name, ordererProperties);
             }));
@@ -104,13 +121,13 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
         if (!CollectionUtils.isEmpty(networkProperties.getPeers())) {
             networkProperties.getPeers().forEach(IteratorUtils.throwingConsumer((name, config) -> {
                 Properties peerProperties = new Properties();
-                peerProperties.setProperty("pemFile", ResourceUtils.getFile(config.getPemFile()).getCanonicalPath());
+                peerProperties.setProperty("pemFile", copyToTempDirectory(config.getPemFile()).getCanonicalPath());
                 peerProperties.setProperty("hostnameOverride", config.getHostnameOverride());
                 peerProperties.setProperty("sslProvider", config.getSslProvider());
                 peerProperties.setProperty("negotiationType", config.getNegotiationType());
-                peerProperties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
-                peerProperties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
-                peerProperties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
+                peerProperties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[]{5L, TimeUnit.MINUTES});
+                peerProperties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[]{8L, TimeUnit.SECONDS});
+                peerProperties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[]{true});
 
                 propertiesMap.put(name, peerProperties);
             }));
@@ -119,8 +136,8 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
     }
 
     @Bean(name = "privateKeyLocation")
-    public String privateKeyLocation() {
-        return networkProperties.getCli().getPrivateKey();
+    public String privateKeyLocation() throws IOException{
+        return copyToTempDirectory(networkProperties.getCli().getPrivateKey()).getCanonicalPath();
     }
 
     @Bean(name = "userSigningCert")

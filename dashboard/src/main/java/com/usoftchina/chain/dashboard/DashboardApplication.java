@@ -12,7 +12,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class DashboardApplication {
 
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(DashboardApplication.class, args);
+    public static void main(String[] args) {
+        try {
+            SpringApplication.run(DashboardApplication.class, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

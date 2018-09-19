@@ -24,18 +24,19 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.chaincode.config.AbstractChaincodeConfiguration;
 import org.springframework.data.chaincode.repository.config.EnableChaincodeRepositories;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Collections;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -87,10 +88,10 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
      * @throws IOException
      */
     private File copyToTempDirectory(String srcFileName) throws IOException {
-        File srcFile = ResourceUtils.getFile(srcFileName);
-        File destFile = new File(FileUtils.getTempDirectory(), DigestUtils.md5DigestAsHex(srcFileName.getBytes()));
-        FileUtils.copyFile(srcFile, destFile);
-        return destFile;
+        ClassPathResource resource = new ClassPathResource(srcFileName);
+        Path destFile = Paths.get(FileUtils.getTempDirectoryPath(), DigestUtils.md5DigestAsHex(srcFileName.getBytes()));
+        Files.copy(resource.getInputStream(), destFile);
+        return destFile.toFile();
     }
 
     @Bean(name = "ordererProperties")
@@ -136,13 +137,13 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
     }
 
     @Bean(name = "privateKeyLocation")
-    public String privateKeyLocation() throws IOException{
+    public String privateKeyLocation() throws IOException {
         return copyToTempDirectory(networkProperties.getCli().getPrivateKey()).getCanonicalPath();
     }
 
     @Bean(name = "userSigningCert")
     public String userSigningCert() {
-        try (final InputStream in = new FileInputStream(ResourceUtils.getFile(networkProperties.getCli().getUserSigningCert()))) {
+        try (final InputStream in = new ClassPathResource(networkProperties.getCli().getUserSigningCert()).getInputStream()) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();
@@ -157,7 +158,7 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
 
     @Bean(name = "caCert")
     public String caCert() {
-        try (final InputStream in = new FileInputStream(ResourceUtils.getFile(networkProperties.getCli().getCaCert()))) {
+        try (final InputStream in = new ClassPathResource(networkProperties.getCli().getCaCert()).getInputStream()) {
             return IOUtils.toString(in, Charset.defaultCharset());
         } catch (IOException e) {
             e.printStackTrace();

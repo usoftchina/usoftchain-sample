@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -46,7 +45,7 @@ public class ScheduledSyncTool {
     @Autowired
     private NetworkProperties networkProperties;
 
-    @Scheduled(fixedDelay = 20000)
+    @Scheduled(initialDelay = 15000, fixedDelay = 30000)
     @Transactional(rollbackFor = Exception.class)
     public void syncBlockInfo() throws Exception {
         Assert.notNull(client, "chaincode client not initialized");

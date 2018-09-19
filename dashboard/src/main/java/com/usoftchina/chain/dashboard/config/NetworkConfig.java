@@ -1,19 +1,3 @@
-/*
- *
- *  Copyright 2017 IBM - All Rights Reserved.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- */
-
 package com.usoftchina.chain.dashboard.config;
 
 import com.usoftchina.chain.dashboard.util.IteratorUtils;
@@ -28,7 +12,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.chaincode.config.AbstractChaincodeConfiguration;
 import org.springframework.data.chaincode.repository.config.EnableChaincodeRepositories;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.DigestUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * @author yingp
@@ -91,7 +76,7 @@ public class NetworkConfig extends AbstractChaincodeConfiguration {
         ClassPathResource resource = new ClassPathResource(srcFileName);
         Path destFile = Paths.get(FileUtils.getTempDirectoryPath(), srcFileName);
         FileUtils.forceMkdirParent(destFile.toFile());
-        Files.copy(resource.getInputStream(), destFile);
+        Files.copy(resource.getInputStream(), destFile, REPLACE_EXISTING);
         return destFile.toFile();
     }
 
